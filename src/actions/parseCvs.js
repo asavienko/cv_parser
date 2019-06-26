@@ -1,6 +1,5 @@
 const connectDb = require("./connectMongoDb");
 const searchRequest = require("../constants/userData").searchRequest;
-const _ = require("lodash");
 
 let errorCounter = 0;
 let parsedPage = null;
@@ -31,23 +30,14 @@ const parseDocument = async (collection, cv) => {
 const parseResponse = async (collection, response) => {
   if (response.request().resourceType() === "xhr") {
     console.log("parsing xhr");
-    const isListPage =
-      (await response.url().includes("https://rabota.ua/api/resume/search")) ||
-      (await response
-        .url()
-        .includes("https://api.rabota.ua/account/employer/loguser"));
+    const isListPage = await response
+      .url()
+      .includes("https://rabota.ua/api/resume/search");
     if (isListPage) {
-      let documentsObject = null;
-      try {
-        const responseObject = response.json();
-        documentsObject = await responseObject.Documents;
-      } catch {
-        const responseObject = response.text();
-        documentsObject = await responseObject.Documents;
-      } finally {
-        documentsObject &&
-          (await documentsObject.forEach(parseDocument.bind(null, collection)));
-      }
+      const responseObject = await response.json();
+      const documentsObject = await responseObject.Documents;
+      documentsObject &&
+        (await documentsObject.forEach(parseDocument.bind(null, collection)));
     }
   }
 };
@@ -62,9 +52,8 @@ const parseEachPage = async (page, collection) => {
     const lastPage = await page.url();
     await page.click("a.pager__button-next");
     await page.waitFor(lastPage => lastPage !== document.URL, {}, lastPage);
-
-    console.log(`listening the URL ${lastPage}`);
-    parsedPage = await document.URL;
+    parsedPage = await page.url();
+    console.log(`listening the URL ${parsedPage}`);
     errorCounter = 0;
     await parseEachPage(page, collection);
   } catch (e) {
@@ -81,17 +70,17 @@ const parseCvs = async page => {
   const client = await connectDb();
   const collection = await client.db("rabotaua").collection("cvs");
   try {
-    await page.on("response", parseResponse.bind(null, collection));
     await console.log("going to search page");
     await page.goto(searchRequest); //todo generate page from request
-
+    await page.on("response", parseResponse.bind(null, collection));
+    await page.waitFor(".cvdb-search-form__find-button");
+    await page.click(".cvdb-search-form__find-button");
+    await page.waitForNavigation();
     //todo now is parsing all pages except first
     await parseEachPage(page, collection);
   } catch (e) {
-    console.log(
-      `something went wrong with navigation or it's the last page: ${e}`
-    );
-    return page;
+    errorCounter++;
+    await parseEachPage(page, collection);
   } finally {
     client.close();
   }
