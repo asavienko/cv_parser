@@ -5,21 +5,22 @@ let errorCounter = 0;
 let parsedPage = null;
 
 const parseDocument = async (collection, cv) => {
+  let photo = cv.Photo.includes("non-photo.png") ? "" : cv.Photo;
+
   const data = {
-    Age: cv.Age,
-    CityName: cv.CityName,
-    DisplayName: cv.DisplayName,
-    Experience: cv.Experience,
-    Photo: cv.Photo,
-    ResumeId: cv.ResumeId,
-    Salary: cv.Salary,
-    Speciality: cv.Speciality,
-    UpdatedDate: cv.UpdatedDate,
-    Url: `https://rabota.ua${cv.Url}`,
-    AddedDate: new Date()
+    age: cv.Age,
+    cityName: cv.CityName,
+    displayName: cv.DisplayName,
+    experience: cv.Experience,
+    photo,
+    resumeId: cv.ResumeId,
+    salary: cv.Salary,
+    speciality: cv.Speciality,
+    url: `https://rabota.ua${cv.Url}`,
+    $currentDate: { lastModified: true }
   };
   if ("ResumeId" in cv) {
-    collection.findOne({ ResumeId: cv.ResumeId }).then(result => {
+    collection.findOne({ resumeId: cv.resumeId }).then(result => {
       if (!result) {
         collection.insertOne(data);
       }
@@ -57,7 +58,7 @@ const parseEachPage = async (page, collection) => {
     errorCounter = 0;
     await parseEachPage(page, collection);
   } catch (e) {
-    if (errorCounter > 5) {
+    if (errorCounter > 3) {
       return console.log(e);
     }
     errorCounter++;
@@ -79,8 +80,7 @@ const parseCvs = async page => {
     //todo now is parsing all pages except first
     await parseEachPage(page, collection);
   } catch (e) {
-    errorCounter++;
-    await parseEachPage(page, collection);
+    return console.log(e);
   } finally {
     client.close();
   }

@@ -12,4 +12,4 @@ const connectDb = () => {
   return client;
 };
 
-module.exports = connectDb
+module.exports = connectDb;
