@@ -17,10 +17,10 @@ const parseDocument = async (collection, cv) => {
     salary: cv.Salary,
     speciality: cv.Speciality,
     url: `https://rabota.ua${cv.Url}`,
-    $currentDate: { lastModified: true }
+    lastModified: new Date(),
   };
   if ("ResumeId" in cv) {
-    collection.findOne({ resumeId: cv.resumeId }).then(result => {
+    collection.findOne({ resumeId: cv.ResumeId }).then(result => {
       if (!result) {
         collection.insertOne(data);
       }

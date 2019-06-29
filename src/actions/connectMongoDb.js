@@ -1,7 +1,7 @@
 const MongoClient = require("mongodb").MongoClient;
 const uri = require("../constants/userData").mongoDb;
 
-const connectDb = () => {
+const connectDb = (db, collection) => {
   console.log("connecting MongoClient");
 
   const client = new MongoClient.connect(uri, {
@@ -12,4 +12,4 @@ const connectDb = () => {
   return client;
 };
 
-module.exports = connectDb;
+module.exports = connectDb.db("abc").collection("abc");
