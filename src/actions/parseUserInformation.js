@@ -15,7 +15,7 @@ const observedXhr = async ({ target, resumeId }) => {
     })
   );*/
 };
-//todo not usage 
+//todo not usage
 
 const parseCvResponse = async ({
   collection,
@@ -94,7 +94,7 @@ const getUserInformation = async ({
       console.log("user information has been already opened");
       console.log(e.message);
     } finally {
-      await console.log("closing page");
+      console.log("closing page");
       await target.close();
     }
   }

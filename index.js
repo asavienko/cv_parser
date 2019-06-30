@@ -1,9 +1,9 @@
-const initBrowser = require("./actions/initBrowser");
-const parseUserInformation = require("./actions/parseUserInformation");
-const parseCvs = require("./actions/parseCvs");
-const login = require("./actions/login");
-const connectDb = require("./actions/connectMongoDb");
-const connectDropBox = require("./actions/connectDropbox");
+const initBrowser = require("./src/actions/initBrowser");
+const parseUserInformation = require("./src/actions/parseUserInformation");
+const parseCvs = require("./src/actions/parseCvs");
+const login = require("./src/actions/login");
+const connectDb = require("./src/actions/connectMongoDb");
+const connectDropBox = require("./src/actions/connectDropbox");
 
 /*[
           14102536,
