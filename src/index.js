@@ -1,12 +1,8 @@
-const initBrowser = require("./actions/initBrowser")
-const getUserLinks = require("../toDellete/getUserLinks");
-const parseUserInformation = require("./actions/parseUserInformation");
-const parseCvs = require("./actions/parseCvs");
-const login = require("./actions/login");
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import 'antd/dist/antd.css';
+import App from './App';
 
+ReactDOM.render(<App />, document.getElementById('root'));
 
-(async () => {
-  const page = await initBrowser();
-  const enteredPage = await login(page);
-  await parseCvs(enteredPage);
-})();
