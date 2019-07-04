@@ -25,4 +25,6 @@ const login = async page => {
   return await page;
 };
 
+//todo improve login, if error try again
+
 module.exports = login;
