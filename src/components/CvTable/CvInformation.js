@@ -3,28 +3,25 @@ import { Button, Col, Drawer, Row, Timeline } from "antd";
 import styled from "styled-components";
 
 const StyledDrawer = styled(Drawer)`
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
   .ant-drawer-body {
     padding: 0;
+  }
+  .ant-drawer-content-wrapper {
+    width: 50% !important;
   }
 `;
 const StyledRow = styled(Row)`
   position: fixed;
-  overflow: hidden;
-  overflow-y: auto;
+  overflow: auto;
   padding: 24px;
   height: calc(100% - 108px);
 `;
 const StyledFooter = styled.div`
   position: absolute;
   bottom: 0;
-  left: 0;
   width: 100%;
   border-top: 1px solid #e9e9e9;
   padding: 10px 16px;
-  background: #fff;
   display: flex;
   justify-content: space-around;
 `;
@@ -34,14 +31,16 @@ const ColStyledSpeciality = styled(Col)`
   margin-top: 10px;
 `;
 const StyledSalary = styled.span`
-  color: #d0d0d0;
+  color: RGBA(208, 208, 208, 1);
   white-space: nowrap;
 `;
 const CenteredCol = styled(Col)`
   text-align: center;
 `;
-const StyledTitle = styled.h3`
-  margin: 0;
+const StyledTitle = styled.div`
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 17px;
+  font-weight: 500;
 `;
 const StyledBlockTitle = styled.div`
   border-bottom: 1px solid #e9e9e9;
@@ -56,7 +55,7 @@ const StyledDescrEl = styled.div`
 const StyledAdditionalInfo = styled.span`
   display: block;
   font-size: 12px;
-  color: #d0d0d0;
+  color: RGBA(208, 208, 208, 1);
 `;
 const StyledTimeline = styled(Timeline)`
   margin-top: 10px;
@@ -64,13 +63,23 @@ const StyledTimeline = styled(Timeline)`
 const StyledDatesDiff = styled.span`
   white-space: nowrap;
 `;
+const StyledBoldSpan = styled.span`
+  font-weight: 700;
+`;
 
 const DescrBlock = ({ description, name, location, yearOfEnding, comment }) => (
   <StyledDescrEl>
-    {(name || location) && (
-      <span>
-        <b>{name}</b> {location && `(${location})`}
-      </span>
+    {name ? (
+      location ? (
+        <React.Fragment>
+          <StyledBoldSpan>{name}</StyledBoldSpan>
+          <span> {location && `(${location})`}</span>
+        </React.Fragment>
+      ) : (
+        <StyledBoldSpan>{name}</StyledBoldSpan>
+      )
+    ) : (
+      <span>{location && `(${location})`}</span>
     )}
     {yearOfEnding && (
       <StyledAdditionalInfo>Год окончания: {yearOfEnding}</StyledAdditionalInfo>
@@ -80,9 +89,8 @@ const DescrBlock = ({ description, name, location, yearOfEnding, comment }) => (
   </StyledDescrEl>
 );
 
-function CvInformation({
-  cvInfo,
-  cvInfo: {
+function CvInformation({ cvInfo, onCvInformationClose }) {
+  const {
     visible,
     cvInformation: {
       displayName,
@@ -102,15 +110,13 @@ function CvInformation({
       experience,
       skills
     }
-  },
-  onCvInformationClose
-}) {
+  } = cvInfo && cvInfo.cvInformation && cvInfo;
+
   return (
     <StyledDrawer
       title={displayName}
       visible={visible}
       onClose={onCvInformationClose}
-      width="50%"
     >
       <StyledRow justify="centre">
         <Col span={24}>
@@ -118,12 +124,12 @@ function CvInformation({
             <Col span={10}>{photo && <img src={photo} />}</Col>
             <Col span={14}>
               <p>
-                <b>
-                  {surname} {name}
-                </b>
+                <StyledBoldSpan>{`${surname} ${name}`}</StyledBoldSpan>
               </p>
               {birthDate && (
-                <p>Дата рождения: {new Date(birthDate).toLocaleDateString()}</p>
+                <p>{`Дата рождения: ${new Date(
+                  birthDate
+                ).toLocaleDateString()}`}</p>
               )}
               {cityName && <p>Регион: {cityName}</p>}
               {phone && <p>Телефон: {phone}</p>}
@@ -139,8 +145,8 @@ function CvInformation({
         {lastModified && (
           <CenteredCol span={24}>
             <StyledSalary>
-              (обновленно на работа.юа:{" "}
-              {new Date(lastModified).toLocaleDateString()})
+              обновленно на работа.юа:{" "}
+              {new Date(lastModified).toLocaleDateString()}
             </StyledSalary>
           </CenteredCol>
         )}
@@ -151,13 +157,13 @@ function CvInformation({
               {experience.map(item => (
                 <Timeline.Item>
                   <Row>
-                    <b>
+                    <StyledBoldSpan>
                       {item.Position[0].toUpperCase() + item.Position.slice(1)}
-                    </b>
+                    </StyledBoldSpan>
                   </Row>
                   <Row>
                     <StyledAdditionalInfo>
-                      {item.StartDate} - {item.EndDate}{" "}
+                      `{item.StartDate} - {item.EndDate} `
                       <StyledDatesDiff>({item.DatesDiff})</StyledDatesDiff>
                     </StyledAdditionalInfo>
                   </Row>

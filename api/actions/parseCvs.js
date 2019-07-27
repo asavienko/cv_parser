@@ -39,7 +39,6 @@ const parseDocument = async ({ collection, cv }) => {
 };
 
 const parseResponse = async ({ collection, response }) => {
-  console.log("parsing xhr");
   const { Documents } = await response.json();
   Documents && Documents.forEach(cv => parseDocument({ collection, cv }));
 };
@@ -47,8 +46,6 @@ const parseResponse = async ({ collection, response }) => {
 const parseEachPage = async ({ page, collection }) => {
   //todo how to improve this function, so don't pass collection in each implementing
   try {
-    console.log("before catch response url is: " + page.url());
-    console.log("waiting for the new search page");
     const response = await page.waitForResponse(
       response =>
         response.request().resourceType() === "xhr" &&
@@ -58,7 +55,6 @@ const parseEachPage = async ({ page, collection }) => {
     await page.waitFor("a.pager__button-next");
     await page.click("a.pager__button-next");
     parsedPage = page.url();
-    console.log(`listening the URL ${parsedPage}`);
     errorCounter = 0;
     parseEachPage({ page, collection });
   } catch (e) {
@@ -75,7 +71,6 @@ const parseCvs = async page => {
   const client = await connectDb();
   const collection = await client.db("rabotaua").collection("cvs");
   try {
-    console.log("going to search page");
     await page.goto(searchRequest); //todo generate page from request
     await page.waitFor(".cvdb-search-form__find-button");
     await page.click(".cvdb-search-form__find-button");

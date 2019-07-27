@@ -9,19 +9,20 @@ import styled from "styled-components";
 const { Header, Content } = Layout;
 
 const StyledHeader = styled(Header)`
-  background: white;
+  background: RGBA(255, 255, 255, 1);
   padding: 0;
   height: 48px;
 `;
 const StyledDiv = styled.div`
-  background: #ececec;
+  background: RGBA(236, 236, 236, 1);
 `;
 const StyledContent = styled(Content)`
-    background: #fff;
-    margin: 8px 12px;
-    padding: 8px 12px;
-    overflow: auto;
-`
+  background: RGBA(255, 255, 255, 1);
+  margin: 8px 12px;
+  padding: 8px 12px;
+  overflow: auto;
+  height: calc(100vh - 64px);
+`;
 
 function App() {
   return (
@@ -29,7 +30,6 @@ function App() {
       <Layout>
         <StyledHeader
           theme="light"
-          style={{ background: "#fff", padding: 0, height: 48 }}
         >
           <TopMenu />
         </StyledHeader>
@@ -39,7 +39,6 @@ function App() {
               <Route exact path="/" component={Home} />
               <Route path="/favorites" />
               <Route path="/list" component={CvTable} />
-              <Route component={() => <div>Hello world...</div>} />
             </Switch>
           </StyledContent>
         </StyledDiv>

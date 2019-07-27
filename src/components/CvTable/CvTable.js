@@ -8,7 +8,7 @@ import styled from "styled-components";
 
 const StyledTable = styled(Table)`
   .ant-table-body {
-    overflow: scroll !important;
+    overflow: auto !important;
   }
   .ant-table-body::-webkit-scrollbar {
     width: 7px;
@@ -79,9 +79,7 @@ function CvTable() {
   };
   const onSalaryRangeSet = () => {
     const [min, max] = salaryRange;
-    console.log(salaryRange);
     const filteredArray = rawList.filter(({ salary }) => {
-      console.log(min);
       return numeral(salary).value() >= min && numeral(salary).value() <= max;
     });
     setCvList(filteredArray);
@@ -167,7 +165,7 @@ function CvTable() {
         dataSource={cvList}
         onChange={handleChange}
         columns={columns}
-        scroll={{ x: 1200, y: "65vh" }}
+        scroll={{ x: 1200, y: "calc(100vh - 219px)" }}
       />
       <CvInformation
         cvInfo={cvInfo}

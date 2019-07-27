@@ -19,11 +19,11 @@ const StyledButtonsDiv = styled.div`
 `;
 const StyledLeftButton = styled.a`
   float: left;
-  color: #1890ff;
+  color: RGBA(24, 144, 255, 1);
 `;
 const StyledRightButton = styled.a`
   float: right;
-  color: #1890ff;
+  color: RGBA(24, 144, 255, 1);
 `;
 
 function RangeSlider({
@@ -34,6 +34,10 @@ function RangeSlider({
   salaryRang
 }) {
   const [min = 0, max = 100] = salaryFilterRange;
+  const tipFormatter = value => {
+    const formattedPopulation = numeral(value).format("0.0a");
+    return formattedPopulation;
+  };
   return (
     <StyledWrapper>
       <Row type="flex" align="middle" gutter={10}>
@@ -50,11 +54,8 @@ function RangeSlider({
             defaultValue={salaryFilterRange}
             min={min}
             max={max}
-            tipFormatter={value => {
-              const formattedPopulation = numeral(value).format("0.0a");
-              return formattedPopulation;
-            }}
-            onChange={range => onSalaryRangeChange(range)}
+            tipFormatter={tipFormatter}
+            onChange={onSalaryRangeChange}
             value={salaryRang}
           />
         </Col>

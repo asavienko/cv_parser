@@ -39,7 +39,7 @@ const options = [
   },
 ];
 
-const selectAfter = (  <Select defaultValue=".com" style={{ width: 80 }}>
+const selectAfter = (  <Select defaultValue=".com" style={{ width: 80 }} showSearch>
   <Option value=".com">.com</Option>
   <Option value=".jp">.jp</Option>
   <Option value=".cn">.cn</Option>

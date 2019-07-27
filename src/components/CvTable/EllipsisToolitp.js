@@ -18,7 +18,6 @@ function EllipsisTooltip({ title }) {
       setVisible(visible);
   };
   const stopPropagation = (e) => {
-    console.log(e);
     e.stopPropagation();
   };
 
