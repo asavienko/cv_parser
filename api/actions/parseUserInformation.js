@@ -3,7 +3,7 @@ const connectDb = require("./connectMongoDb");
 const openContactsSelector =
   'div[id*="ctl00_centerZone_BriefResume1_CvView1_cvHeader_plhBuyResume"] a.btn-primary-new';
 
-const checkFetch = ({ response, resumeId }) =>
+const checkResponse = ({ response, resumeId }) =>
   response.request().resourceType() === "xhr" &&
   response.request().url() ===
     `https://employer-api.rabota.ua/resume/${resumeId}` &&
@@ -12,7 +12,6 @@ const checkFetch = ({ response, resumeId }) =>
 
 const parseCvResponse = async ({ collection, resumeId, response }) => {
   const responseObject = await response.json();
-  console.log(responseObject);
   const {
     additionals,
     addDate,
@@ -40,18 +39,15 @@ const parseCvResponse = async ({ collection, resumeId, response }) => {
     surname,
     lastModified: new Date()
   };
-  if (phone || responseObject.email) {
-    console.log(phone || responseObject.email);
+  if (phone || email) {
     await collection.updateOne({ resumeId }, { $set: data });
   }
 };
 
 const evaluateResponse = async ({ target, collection, resumeId }) => {
-  console.log("waiting for response");
-  const response = await target.waitForResponse(response =>
-    checkFetch({ response, resumeId })
-  );
-  console.log(response)
+  const response = await target.waitForResponse(response => {
+    return checkResponse({ response, resumeId });
+  });
   await parseCvResponse({ collection, resumeId, response });
 };
 
@@ -61,37 +57,60 @@ const getUserInformation = async ({
   cv: { url, resumeId }
 }) => {
   if (url) {
-    console.log("starting parse information");
     const context = page.browserContext();
     const target = await context.newPage();
-    console.log("going to url");
+
+    target.on("response", async response => {
+      const isResponseExist = await checkResponse({ response, resumeId });
+      isResponseExist &&
+        parseCvResponse({
+          collection,
+          resumeId,
+          response
+        });
+    });
     await target.goto(url);
-    await evaluateResponse({ target, collection, resumeId });
     try {
-      console.log("waiting for button");
       await target.waitFor(openContactsSelector);
       await target.click(openContactsSelector);
-      console.log("button clicked");
       await evaluateResponse({ target, collection, resumeId });
-    } catch (e) {
-      console.log("user information has been already opened", e.message);
     } finally {
-      console.log("closing page");
       await target.close();
     }
   }
 };
 
+const multiFlowParse = ({ page, collection, list }) => {
+  const wait = ms => new Promise((r, j) => setTimeout(r, ms));
+  const maxFlows = 8;
+  let flowsCounter = 0;
+  async function loopArray({ page, collection, cv }) {
+    while (flowsCounter >= maxFlows) {
+      await wait(5000);
+    }
+    flowsCounter++;
+
+    try {
+      await getUserInformation({ page, collection, cv });
+      flowsCounter--;
+      return "successful";
+    } catch (e) {
+      flowsCounter--;
+      return e.name;
+    }
+  }
+
+  let promises = [];
+  for (let i = 0; i < list.length; i++) {
+    wait(2000).then(()=> promises.push(loopArray({ page, collection, cv: list[i] })));
+  }
+  Promise.all(promises);
+};
+
 const parseUserInformation = async ({ enteredPage: page, list }) => {
   const client = await connectDb();
   const collection = await client.db("rabotaua").collection("cvs");
-  // const promises = list.map(cv => getUserInformation({ page, collection, cv }));
-  const start = new Date();
-  for (let i = 0; i < list.length; i++) {
-    await getUserInformation({ page, collection, cv: list[i] });
-  }
-  const stop = new Date();
-  console.log((stop - start) / 1000);
+  await multiFlowParse({ page, collection, list });
 };
 
 module.exports = parseUserInformation;

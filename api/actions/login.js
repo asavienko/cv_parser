@@ -2,10 +2,7 @@ const userName = require("../constants/userData").userName;
 const userPassword = require("../constants/userData").userPassword;
 
 const login = async page => {
-  await console.log("browser has initialized");
-  await console.log("going to the employer page");
-  await page.goto("https://rabota.ua/employer");
-  console.log("trying to enter");
+  await page.goto("https://rabota.ua/employer/");
   await page.waitFor(
     "#ctl00_Header_header > div > header > div > div:nth-child(2) > ul > li:nth-child(3) > a.f-header-menu-list-link-with-border > label"
   );
