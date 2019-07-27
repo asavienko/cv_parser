@@ -121,7 +121,7 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
       <StyledRow justify="centre">
         <Col span={24}>
           <Row>
-            <Col span={10}>{photo && <img src={photo} />}</Col>
+            <Col span={10}>{photo && <img src={photo} alt="avatar image"/>}</Col>
             <Col span={14}>
               <p>
                 <StyledBoldSpan>{`${surname} ${name}`}</StyledBoldSpan>

@@ -27,14 +27,17 @@ const StyledTable = styled(Table)`
   }
 `;
 
-const showDate = date => (date ? new Date(date).toLocaleDateString() : "");
+const shownDate = date => (date ? new Date(date).toLocaleDateString() : "");
 
 function CvTable() {
   const [cvList, setCvList] = useState([]);
   const [rawList, setRawList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filteredInfo, setFilteredInfo] = useState({});
+  /*
+  todo use in request to api
   const [sortedInfo, setSortedInfo] = useState({});
+  */
   const [salaryFilterRange, setSalaryFilterRange] = useState([]);
   const [salaryRange, setSalaryRange] = useState([]);
   const [cvInfo, setCvInfo] = useState({ visible: false, cvInformation: {} });
@@ -65,7 +68,10 @@ function CvTable() {
   }, [rawList]);
   const handleChange = (pagination, filters, sorter) => {
     setFilteredInfo(filters);
+    /*
+    todo use in request to api
     setSortedInfo(sorter);
+    */
   };
 
   const onRow = record => ({
@@ -148,13 +154,13 @@ function CvTable() {
       title: "Последнее изменение",
       dataIndex: "lastModified",
       key: "lastModified",
-      render: showDate
+      render: shownDate
     },
     {
       title: "Добавленно на работа юа",
       dataIndex: "addDate",
       key: "addDate",
-      render: showDate
+      render: shownDate
     }
   ];
   return (

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Col, Divider, Row, Slider } from "antd";
+import React from "react";
+import {Col, Row, Slider} from "antd";
 import styled from "styled-components";
 import * as numeral from "numeral";
 
