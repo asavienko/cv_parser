@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { message, Table } from "antd";
+import { Divider, message, Table } from "antd";
 import { RangeSlider } from "./RangeSlider";
 import * as numeral from "numeral";
 import { CvInformation } from "./CvInformation";
@@ -29,10 +29,8 @@ const StyledTable = styled(Table)`
 
 const shownDate = date => (date ? new Date(date).toLocaleDateString() : "");
 
-function CvTable() {
+function CvTable({ rawList, fetchCvList, loading, setFavorites, favorites }) {
   const [cvList, setCvList] = useState([]);
-  const [rawList, setRawList] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [filteredInfo, setFilteredInfo] = useState({});
   /*
   todo use in request to api
@@ -43,18 +41,8 @@ function CvTable() {
   const [cvInfo, setCvInfo] = useState({ visible: false, cvInformation: {} });
 
   useEffect(() => {
-    setLoading(true);
-    fetch("/cvlist")
-      .then(res => res.json())
-      .then(obj => {
-        if (obj.confirmation === "fail") {
-          message.error(obj.message);
-        }
-        setCvList(obj.data);
-        setRawList(obj.data);
-        setLoading(false);
-      })
-      .catch(() => message.error("Не удается загрузить данные"));
+    const cvList = rawList && rawList.length ? rawList : fetchCvList;
+    setCvList(cvList);
   }, []);
 
   useEffect(() => {
@@ -94,6 +82,15 @@ function CvTable() {
     setCvList(rawList);
     setSalaryRange(salaryFilterRange);
   };
+
+  const addToFavorite = record => {
+    console.log(record);
+    const isNotEmptyArray = favorites && favorites.length;
+    isNotEmptyArray
+      ? setFavorites([...favorites, record])
+      : setFavorites([record]);
+  };
+
   const columns = [
     {
       width: 150,
@@ -108,7 +105,9 @@ function CvTable() {
       key: "email",
       filters: [{ text: "есть", value: true }, { text: "нет", value: false }],
       filteredValue: filteredInfo.email || null,
-      onFilter: (value, { email }) => !!email === value,/*
+      onFilter: (value, { email }) =>
+        !!email ===
+        value /*
       render: email => <EllipsisTooltip title={email} />*/
     },
     {
@@ -161,6 +160,15 @@ function CvTable() {
       dataIndex: "addDate",
       key: "addDate",
       render: shownDate
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (text, record) => (
+        <span>
+          <a onClick={() => addToFavorite(record)}>Добавить в избранные</a>
+        </span>
+      )
     }
   ];
   return (
