@@ -73,14 +73,12 @@ const DescrBlock = ({ description, name, location, yearOfEnding, comment }) => (
       location ? (
         <React.Fragment>
           <StyledBoldSpan>{name}</StyledBoldSpan>
-          <span> {location && `(${location})`}</span>
+          <span> {location}</span>
         </React.Fragment>
       ) : (
         <StyledBoldSpan>{name}</StyledBoldSpan>
       )
-    ) : (
-      <span>{location && `(${location})`}</span>
-    )}
+    ) : null}
     {yearOfEnding && (
       <StyledAdditionalInfo>Год окончания: {yearOfEnding}</StyledAdditionalInfo>
     )}
@@ -121,7 +119,9 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
       <StyledRow justify="centre">
         <Col span={24}>
           <Row>
-            <Col span={10}>{photo && <img src={photo} alt="avatar image"/>}</Col>
+            <Col span={10}>
+              {photo && <img src={photo} alt="avatar image" />}
+            </Col>
             <Col span={14}>
               <p>
                 <StyledBoldSpan>{`${surname} ${name}`}</StyledBoldSpan>
@@ -131,15 +131,15 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
                   birthDate
                 ).toLocaleDateString()}`}</p>
               )}
-              {cityName && <p>Регион: {cityName}</p>}
-              {phone && <p>Телефон: {phone}</p>}
-              {email && <p>E-mail: {email}</p>}
+              {cityName && <p>Регион:{" "}{cityName}</p>}
+              {phone && <p>Телефон:{" "}{phone}</p>}
+              {email && <p>E-mail:{" "}{email}</p>}
             </Col>
           </Row>
         </Col>
         <ColStyledSpeciality span={24}>
           <StyledTitle level={4}>
-            {speciality} <StyledSalary>{salary}</StyledSalary>
+            {speciality}{" "}<StyledSalary>{salary}</StyledSalary>
           </StyledTitle>
         </ColStyledSpeciality>
         {lastModified && (
@@ -163,7 +163,7 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
                   </Row>
                   <Row>
                     <StyledAdditionalInfo>
-                      `{item.StartDate} - {item.EndDate} `
+                      {item.StartDate} - {item.EndDate}{" "}
                       <StyledDatesDiff>({item.DatesDiff})</StyledDatesDiff>
                     </StyledAdditionalInfo>
                   </Row>
