@@ -2,7 +2,7 @@ import React from "react";
 import { Input, Select } from "antd";
 
 const { Search } = Input;
-const {Option} = Select
+const {Option} = Select;
 
 const options = [
   {

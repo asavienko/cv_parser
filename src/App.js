@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import CvTable from "./components/CvTable/CvTable";
+import CvList from "./components/CvTable/CvList";
 import TopMenu from "./components/TopMenu/TopMenu";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./components/Home/Home";
 import { Layout, message } from "antd";
 import styled from "styled-components";
 import Favorites from "./components/Favorites/Favorites";
+import openNotification from "./components/ReusableComponents/Notification";
 
 const { Header, Content } = Layout;
 
@@ -28,21 +29,26 @@ const StyledContent = styled(Content)`
 function App() {
   const [rawList, setRawList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const fetchCvList = () => {
+  const fetchCvList = async () => {
     setLoading(true);
-    fetch("/cvlist")
-      .then(res => res.json())
-      .then(obj => {
-        if (obj.confirmation === "fail") {
-          message.error(obj.message);
-        }
-        setRawList(obj.data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-        message.error("Не удается загрузить данные");
+    try {
+      const response = await fetch("/cvlist");
+      const obj = await response.json();
+      console.log(response);
+      console.log(obj);
+      if (obj.confirmation === "fail") {
+        throw new Error();
+      }
+      obj.data.forEach(cv => (cv.key = cv._id));
+      setRawList(obj.data);
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+      openNotification({
+        type: "error",
+        message: "Не удалось загрузить данные"
       });
+    }
   };
   const [favorites, setFavorites] = useState([]);
   return (
@@ -67,11 +73,11 @@ function App() {
               <Route
                 path="/list"
                 component={() => (
-                  <CvTable
+                  <CvList
                     rawList={rawList}
                     fetchCvList={fetchCvList}
                     loading={loading}
-                    setFavorites={(record)=>setFavorites(record)}
+                    setFavorites={record => setFavorites(record)}
                     favorites={favorites}
                   />
                 )}
