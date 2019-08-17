@@ -3,7 +3,7 @@ import CvList from "./components/CvTable/CvList";
 import TopMenu from "./components/TopMenu/TopMenu";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./components/Home/Home";
-import { Layout, message } from "antd";
+import { Layout } from "antd";
 import styled from "styled-components";
 import Favorites from "./components/Favorites/Favorites";
 import openNotification from "./components/ReusableComponents/Notification";
@@ -25,6 +25,10 @@ const StyledContent = styled(Content)`
   overflow: auto;
   height: calc(100vh - 64px);
 `;
+const StyledLayout = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 function App() {
   const [rawList, setRawList] = useState([]);
@@ -34,12 +38,12 @@ function App() {
     try {
       const response = await fetch("/cvlist");
       const obj = await response.json();
-      console.log(response);
-      console.log(obj);
       if (obj.confirmation === "fail") {
         throw new Error();
       }
-      obj.data.forEach(cv => (cv.key = cv._id));
+      for (let cv of obj.data) {
+        cv.key = cv._id;
+      }
       setRawList(obj.data);
       setLoading(false);
     } catch (e) {
@@ -50,10 +54,9 @@ function App() {
       });
     }
   };
-  const [favorites, setFavorites] = useState([]);
   return (
     <Router>
-      <Layout>
+      <StyledLayout>
         <StyledHeader theme="light">
           <TopMenu />
         </StyledHeader>
@@ -61,15 +64,7 @@ function App() {
           <StyledContent>
             <Switch>
               <Route exact path="/" component={Home} />
-              <Route
-                path="/favorites"
-                component={() => (
-                  <Favorites
-                    favorites={favorites}
-                    setFavorites={setFavorites}
-                  />
-                )}
-              />
+              <Route path="/favorites" component={Favorites} />
               <Route
                 path="/list"
                 component={() => (
@@ -77,15 +72,13 @@ function App() {
                     rawList={rawList}
                     fetchCvList={fetchCvList}
                     loading={loading}
-                    setFavorites={record => setFavorites(record)}
-                    favorites={favorites}
                   />
                 )}
               />
             </Switch>
           </StyledContent>
         </StyledDiv>
-      </Layout>
+      </StyledLayout>
     </Router>
   );
 }

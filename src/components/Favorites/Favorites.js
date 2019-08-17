@@ -16,7 +16,7 @@ function Favorites({ favoriteCvList }) {
   const [cvList, setCvList] = useState([]);
   const [filteredInfo, setFilteredInfo] = useState({});
   useEffect(() => {
-    if (favoriteCvList && favoriteCvList.length) {
+    if (favoriteCvList.length) {
       const salary = favoriteCvList.map(({ salary }) =>
         numeral(salary).value()
       );
@@ -106,7 +106,6 @@ function Favorites({ favoriteCvList }) {
         rowSelection={rowSelection}
         filteredInfo={filteredInfo}
       />
-      ;
       <CvInformation
         cvInfo={cvInfo}
         onCvInformationClose={onCvInformationClose}

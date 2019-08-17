@@ -10,8 +10,6 @@ function CvList({
   rawList,
   fetchCvList,
   loading,
-  setFavorites,
-  favorites,
   favoriteCvList,
   setFavoriteList
 }) {
@@ -32,8 +30,8 @@ function CvList({
         cvList = await fetchCvList();
       }
       setCvList(cvList);
-      if (rawList && rawList.length) {
-        const salary = rawList.map(({ salary }) => numeral(salary).value());
+      if (cvList && cvList.length) {
+        const salary = cvList.map(({ salary }) => numeral(salary).value());
         const min = Math.min(...salary);
         const max = Math.max(...salary);
         setSalaryFilterRange([min, max]);

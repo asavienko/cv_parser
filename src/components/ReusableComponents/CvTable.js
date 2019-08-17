@@ -1,9 +1,9 @@
 import React from "react";
-import {EllipsisTooltip} from "../CvTable/EllipsisToolitp";
+import { EllipsisTooltip } from "../CvTable/EllipsisToolitp";
 import * as numeral from "numeral";
-import {RangeSlider} from "../CvTable/RangeSlider";
+import { RangeSlider } from "../CvTable/RangeSlider";
 import styled from "styled-components";
-import {Table} from "antd";
+import { Table } from "antd";
 
 const shownDate = date => (date ? new Date(date).toLocaleDateString() : "");
 
@@ -54,10 +54,7 @@ function CvTable({
       key: "email",
       filters: [{ text: "есть", value: true }, { text: "нет", value: false }],
       filteredValue: filteredInfo.email || null,
-      onFilter: (value, { email }) =>
-        !!email ===
-        value /*
-      render: email => <EllipsisTooltip title={email} />*/
+      onFilter: (value, { email }) => !!email === value
     },
     {
       width: 150,

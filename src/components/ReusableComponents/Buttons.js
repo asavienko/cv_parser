@@ -6,6 +6,10 @@ const StyledCloseButton = styled(Button)`
   margin-left: 5px;
 `;
 
+const StyledDivWrapper = styled.div`
+height: 40px;
+`
+
 export function EditFavoriteListButton({
   addToFavoriteDisabled,
   onPrimaryClick,
@@ -14,7 +18,7 @@ export function EditFavoriteListButton({
   onCancelClick
 }) {
   return (
-    <div style={{ height: 40 }}>
+    <StyledDivWrapper>
       <Button
         type="primary"
         onClick={onPrimaryClick}
@@ -32,6 +36,6 @@ export function EditFavoriteListButton({
           onClick={onCancelClick}
         />
       )}
-    </div>
+    </StyledDivWrapper>
   );
 }
