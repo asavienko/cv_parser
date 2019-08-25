@@ -8,17 +8,10 @@ import styled from "styled-components";
 import Favorites from "./components/Favorites/Favorites";
 import openNotification from "./components/ReusableComponents/Notification";
 
-const { Header, Content } = Layout;
-
-const StyledHeader = styled(Header)`
-  background: RGBA(255, 255, 255, 1);
-  padding: 0;
-  height: 48px;
-`;
 const StyledDiv = styled.div`
   background: RGBA(236, 236, 236, 1);
 `;
-const StyledContent = styled(Content)`
+const StyledContent = styled.div`
   background: RGBA(255, 255, 255, 1);
   margin: 8px 12px;
   padding: 8px 12px;
@@ -57,9 +50,7 @@ function App() {
   return (
     <Router>
       <StyledLayout>
-        <StyledHeader theme="light">
-          <TopMenu />
-        </StyledHeader>
+        <TopMenu />
         <StyledDiv>
           <StyledContent>
             <Switch>

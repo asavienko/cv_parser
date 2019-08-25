@@ -53,7 +53,7 @@ function CvTable({
       dataIndex: "email",
       key: "email",
       filters: [{ text: "есть", value: true }, { text: "нет", value: false }],
-      filteredValue: filteredInfo.email || null,
+      filteredValue: filteredInfo.email || "",
       onFilter: (value, { email }) => !!email === value
     },
     {
@@ -62,7 +62,7 @@ function CvTable({
       dataIndex: "phone",
       key: "phone",
       filters: [{ text: "есть", value: true }, { text: "нет", value: false }],
-      filteredValue: filteredInfo.phone || null,
+      filteredValue: filteredInfo.phone || "",
       onFilter: (value, { phone }) => !!phone === value
     },
     {

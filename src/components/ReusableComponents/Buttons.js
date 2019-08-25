@@ -7,8 +7,8 @@ const StyledCloseButton = styled(Button)`
 `;
 
 const StyledDivWrapper = styled.div`
-height: 40px;
-`
+  height: 40px;
+`;
 
 export function EditFavoriteListButton({
   addToFavoriteDisabled,
