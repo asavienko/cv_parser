@@ -120,7 +120,7 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
         <Col span={24}>
           <Row>
             <Col span={10}>
-              {photo && <img src={photo} alt="avatar image" />}
+              {photo && <img src={photo} alt="avatar" />}
             </Col>
             <Col span={14}>
               <p>

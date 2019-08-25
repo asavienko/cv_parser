@@ -9,7 +9,6 @@ const app = express();
 
 const client = connectDb();
 
-
 const collection = client.then(obj =>
   obj.db("rabotaua").collection("cvs")
 );

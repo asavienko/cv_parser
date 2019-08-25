@@ -1,11 +1,15 @@
 import React from "react";
-import {Menu} from "antd";
-import {Link} from "react-router-dom";
+import { Menu } from "antd";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
 
+const StyledMenu = styled(Menu)`
+  line-height: 45px;
+`;
 
 function TopMenu() {
   return (
-    <Menu mode="horizontal" >
+    <StyledMenu mode="horizontal">
       <Menu.Item key="home">
         <Link to="/">Главная</Link>
       </Menu.Item>
@@ -15,7 +19,7 @@ function TopMenu() {
       <Menu.Item key="list">
         <Link to="/list">Список</Link>
       </Menu.Item>
-    </Menu>
+    </StyledMenu>
   );
 }
 export default TopMenu;
