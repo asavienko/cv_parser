@@ -56,8 +56,8 @@ function Favorites({ favoriteCvList, setFavoriteList }) {
   };
   const saveFavoriteList = () => {
     let editedCvList = favoriteCvList.filter(cv => {
-      const hasTheSameKey = selectedRowKeys.some(key => cv.key === key);
-      return !hasTheSameKey;
+      const hasSelectedKey = selectedRowKeys.some(key => cv.key === key);
+      return !hasSelectedKey;
     });
     setSelectedRowKeys([]);
     setFavoriteList(editedCvList);
