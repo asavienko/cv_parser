@@ -1,5 +1,8 @@
-import { SET_FAVORITE } from "../constants/constantsActions";
+import { SET_FAVORITE, SET_RAW_LIST } from "../constants/constantsActions";
 
-export function setFavoriteList(favoriteCvList) {
-  return { type: SET_FAVORITE, favoriteCvList};
+export function setFavoriteListAction(favoriteCvList) {
+  return { type: SET_FAVORITE, favoriteCvList };
+}
+export function setRawListAction(rawList) {
+  return { type: SET_RAW_LIST, rawList };
 }

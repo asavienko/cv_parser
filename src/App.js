@@ -31,29 +31,6 @@ const StyledLayout = styled.div`
 `;
 
 function App() {
-  const [rawList, setRawList] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const fetchCvList = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch("/cvlist");
-      const obj = await response.json();
-      if (obj.confirmation === "fail") {
-        throw new Error();
-      }
-      for (let cv of obj.data) {
-        cv.key = cv._id;
-      }
-      setRawList(obj.data);
-      setLoading(false);
-    } catch (e) {
-      setLoading(false);
-      openNotification({
-        type: "error",
-        message: "Не удалось загрузить данные"
-      });
-    }
-  };
   return (
     <Router>
       <StyledLayout>
@@ -65,16 +42,7 @@ function App() {
             <Switch>
               <Route exact path="/" component={Home} />
               <Route path="/favorites" component={Favorites} />
-              <Route
-                path="/list"
-                component={() => (
-                  <CvList
-                    rawList={rawList}
-                    fetchCvList={fetchCvList}
-                    loading={loading}
-                  />
-                )}
-              />
+              <Route path="/list" component={CvList} />
             </Switch>
           </StyledContent>
         </StyledDiv>

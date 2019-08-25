@@ -3,15 +3,15 @@ import * as numeral from "numeral";
 import { CvInformation } from "./CvInformation";
 import { CvTable } from "../ReusableComponents/CvTable";
 import { connect } from "react-redux";
-import { setFavoriteList } from "../../actions/cvActions";
+import { setFavoriteListAction, setRawListAction } from "../../actions/cvActions";
 import { EditFavoriteListButton } from "../ReusableComponents/Buttons";
+import openNotification from "../ReusableComponents/Notification";
 
 function CvList({
-  rawList,
-  fetchCvList,
-  loading,
   favoriteCvList,
-  setFavoriteList
+  setFavoriteList,
+  setRawList,
+  rawList
 }) {
   const [cvList, setCvList] = useState([]);
   const [filteredInfo, setFilteredInfo] = useState({});
@@ -22,15 +22,33 @@ function CvList({
   const [salaryFilterRange, setSalaryFilterRange] = useState([]);
   const [salaryRange, setSalaryRange] = useState([]);
   const [cvInfo, setCvInfo] = useState({ visible: false, cvInformation: {} });
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     (async function() {
       let cvList = rawList.length > 0 && rawList;
       if (!cvList) {
-        cvList = await fetchCvList();
+        setLoading(true);
+        try {
+          const response = await fetch("/cvlist");
+          const obj = await response.json();
+          if (obj.confirmation === "fail") {
+            throw new Error();
+          }
+          for (let cv of obj.data) {
+            cv.key = cv._id;
+          }
+          setRawList(obj.data);
+          setLoading(false);
+        } catch (e) {
+          setLoading(false);
+          openNotification({
+            type: "error",
+            message: "Не удалось загрузить данные"
+          });
+        }
       }
       setCvList(cvList);
-      if (cvList && cvList.length) {
+      if (cvList.length) {
         const salary = cvList.map(({ salary }) => numeral(salary).value());
         const min = Math.min(...salary);
         const max = Math.max(...salary);
@@ -38,7 +56,7 @@ function CvList({
         setSalaryRange([min, max]);
       }
     })();
-  }, [rawList, fetchCvList]);
+  }, [rawList, cvList]);
 
   const handleChange = (pagination, filters, sorter) => {
     setFilteredInfo(filters);
@@ -132,12 +150,14 @@ function CvList({
   );
 }
 
-const mapStateToProps = ({ cvReducer: { favoriteCvList } }) => ({
-  favoriteCvList
+const mapStateToProps = ({ cvReducer: { favoriteCvList, rawList } }) => ({
+  favoriteCvList,
+  rawList
 });
 
 const mapDispatchToProps = dispatch => ({
-  setFavoriteList: favoriteList => dispatch(setFavoriteList(favoriteList))
+  setRawList: rawList => dispatch(setRawListAction(rawList)),
+  setFavoriteList: favoriteList => dispatch(setFavoriteListAction(favoriteList))
 });
 
 export default connect(
