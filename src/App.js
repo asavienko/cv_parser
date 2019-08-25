@@ -8,17 +8,10 @@ import styled from "styled-components";
 import Favorites from "./components/Favorites/Favorites";
 import openNotification from "./components/ReusableComponents/Notification";
 
-const { Header, Content } = Layout;
-
-const StyledHeader = styled(Header)`
-  background: RGBA(255, 255, 255, 1);
-  padding: 0;
-  height: 48px;
-`;
 const StyledDiv = styled.div`
   background: RGBA(236, 236, 236, 1);
 `;
-const StyledContent = styled(Content)`
+const StyledContent = styled.div`
   background: RGBA(255, 255, 255, 1);
   margin: 8px 12px;
   padding: 8px 12px;
@@ -31,12 +24,33 @@ const StyledLayout = styled.div`
 `;
 
 function App() {
+  const [rawList, setRawList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const fetchCvList = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("/cvlist");
+      const obj = await response.json();
+      if (obj.confirmation === "fail") {
+        throw new Error();
+      }
+      for (let cv of obj.data) {
+        cv.key = cv._id;
+      }
+      setRawList(obj.data);
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+      openNotification({
+        type: "error",
+        message: "Не удалось загрузить данные"
+      });
+    }
+  };
   return (
     <Router>
       <StyledLayout>
-        <StyledHeader theme="light">
-          <TopMenu />
-        </StyledHeader>
+        <TopMenu />
         <StyledDiv>
           <StyledContent>
             <Switch>
