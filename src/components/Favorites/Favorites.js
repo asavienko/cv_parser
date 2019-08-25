@@ -4,9 +4,9 @@ import { CvTable } from "../ReusableComponents/CvTable";
 import { EditFavoriteListButton } from "../ReusableComponents/Buttons";
 import * as numeral from "numeral";
 import { CvInformation } from "../CvTable/CvInformation";
-import { setFavoriteList } from "../../actions/cvActions";
+import { setFavoriteListAction } from "../../actions/cvActions";
 
-function Favorites({ favoriteCvList }) {
+function Favorites({ favoriteCvList, setFavoriteList }) {
   const [addToFavoriteActive, setAddToFavoriteActive] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [salaryRange, setSalaryRange] = useState([]);
@@ -76,7 +76,6 @@ function Favorites({ favoriteCvList }) {
   const onSelectChange = value => {
     setSelectedRowKeys(value);
   };
-
   const rowSelectionConfig = {
     selectedRowKeys,
     onChange: onSelectChange
@@ -92,6 +91,9 @@ function Favorites({ favoriteCvList }) {
         cvCounts={selectedRowKeys.length}
         onPrimaryClick={onAddToFavoriteButtonClick}
         onCancelClick={cancelAddingToFavorite}
+        type="danger"
+        buttonName = "Удалить"
+
       />
       <CvTable
         cvList={favoriteCvList}
@@ -119,7 +121,7 @@ const mapStateToProps = ({ cvReducer: { favoriteCvList } }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setFavoriteList: favoriteList => dispatch(setFavoriteList(favoriteList))
+  setFavoriteList: favoriteList => dispatch(setFavoriteListAction(favoriteList))
 });
 
 export default connect(

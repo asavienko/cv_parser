@@ -15,18 +15,20 @@ export function EditFavoriteListButton({
   onPrimaryClick,
   addToFavoriteActive,
   cvCounts,
-  onCancelClick
+  onCancelClick,
+  type = "primary",
+  buttonName = "Добавить в избранные"
 }) {
   return (
     <StyledDivWrapper>
       <Button
-        type="primary"
+        type={type}
         onClick={onPrimaryClick}
         disabled={addToFavoriteDisabled}
       >
         {addToFavoriteActive
-          ? `Добавить ${cvCounts} резюме`
-          : `Добавить в избранные`}
+          ? `Изменить ${cvCounts} резюме`
+          : buttonName}
       </Button>
       {addToFavoriteActive && (
         <StyledCloseButton

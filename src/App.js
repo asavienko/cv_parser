@@ -56,16 +56,7 @@ function App() {
             <Switch>
               <Route exact path="/" component={Home} />
               <Route path="/favorites" component={Favorites} />
-              <Route
-                path="/list"
-                component={() => (
-                  <CvList
-                    rawList={rawList}
-                    fetchCvList={fetchCvList}
-                    loading={loading}
-                  />
-                )}
-              />
+              <Route path="/list" component={CvList} />
             </Switch>
           </StyledContent>
         </StyledDiv>
