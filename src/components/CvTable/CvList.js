@@ -29,15 +29,15 @@ function CvList({
       if (!cvList) {
         setLoading(true);
         try {
-          const response = await fetch("/cvlist");
-          const obj = await response.json();
-          if (obj.confirmation === "fail") {
+          const cvListResponse = await fetch("/cvlist");
+          const cvListJson = await cvListResponse.json();
+          if (cvListJson.confirmation === "fail") {
             throw new Error();
           }
-          for (let cv of obj.data) {
-            cv.key = cv._id;
+          for (let cvItem of cvListJson.data) {
+            cvItem.key = cvItem._id;
           }
-          setRawList(obj.data);
+          setRawList(cvListJson.data);
           setLoading(false);
         } catch (e) {
           setLoading(false);
