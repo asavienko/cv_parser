@@ -16,6 +16,7 @@ export function EditFavoriteListButton({
   addToFavoriteActive,
   cvCounts,
   onCancelClick,
+  mainButtonText = "Изменить",
   type = "primary",
   buttonName = "Добавить в избранные"
 }) {
@@ -27,7 +28,7 @@ export function EditFavoriteListButton({
         disabled={addToFavoriteDisabled}
       >
         {addToFavoriteActive
-          ? `Изменить ${cvCounts} резюме`
+          ? `${mainButtonText}: ${cvCounts} шт.`
           : buttonName}
       </Button>
       {addToFavoriteActive && (
