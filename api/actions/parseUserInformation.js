@@ -6,7 +6,7 @@ const openContactsSelector =
 const checkResponse = ({ response, resumeId }) =>
   response.request().resourceType() === "xhr" &&
   response.request().url() ===
-    `https://employer-api.rabota.ua/resume/${resumeId}` &&
+  `https://employer-api.rabota.ua/resume/${resumeId}` &&
   response.request().method() === "GET" &&
   response.status() === 200;
 
