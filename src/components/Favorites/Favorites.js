@@ -55,15 +55,15 @@ function Favorites({ favoriteCvList, setFavoriteList }) {
     */
   };
   const saveFavoriteList = () => {
-    let selectedCvList = selectedRowKeys.map(key =>
-      favoriteCvList.find(cv => cv.key === key)
-    );
-    setFavoriteList(selectedCvList);
+    let editedCvList = favoriteCvList.filter(cv => {
+      const hasSelectedKey = selectedRowKeys.some(key => cv.key === key);
+      return !hasSelectedKey;
+    });
+    setSelectedRowKeys([]);
+    setFavoriteList(editedCvList);
     setAddToFavoriteActive(false);
   };
   const editFavoriteList = () => {
-    const favoriteKeys = favoriteCvList.map(cv => cv.key);
-    setSelectedRowKeys(favoriteKeys);
     setAddToFavoriteActive(true);
   };
   const onAddToFavoriteButtonClick = () => {
@@ -92,8 +92,8 @@ function Favorites({ favoriteCvList, setFavoriteList }) {
         onPrimaryClick={onAddToFavoriteButtonClick}
         onCancelClick={cancelAddingToFavorite}
         type="danger"
-        buttonName = "Удалить"
-
+        buttonName="Удалить"
+        mainButtonText="Удалить"
       />
       <CvTable
         cvList={favoriteCvList}
