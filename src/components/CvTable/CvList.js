@@ -55,7 +55,7 @@ function CvList({ favoriteCvList, setFavoriteList, setRawList, rawList }) {
         setSalaryRange([min, max]);
       }
     })();
-  }, [rawList, cvList]);
+  }, [rawList, cvList, setRawList]);
 
   const handleChange = (pagination, filters, sorter) => {
     setFilteredInfo(filters);

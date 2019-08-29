@@ -1,13 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import CvList from "./components/CvTable/CvList";
 import TopMenu from "./components/TopMenu/TopMenu";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import Home from "./components/Home/Home";
-import { Layout } from "antd";
 import styled from "styled-components";
 import Favorites from "./components/Favorites/Favorites";
-import openNotification from "./components/ReusableComponents/Notification";
-import { getRequest } from "./services/CvServices";
 
 const StyledDiv = styled.div`
   background: RGBA(236, 236, 236, 1);
@@ -25,29 +22,6 @@ const StyledLayout = styled.div`
 `;
 
 function App() {
-  const [rawList, setRawList] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const fetchCvList = async () => {
-    setLoading(true);
-    try {
-      const response = await getRequest("/cvlist");
-      if (obj.confirmation === "success") {
-        for (let cv of response.data) {
-          cv.key = cv._id;
-        }
-        setRawList(response.data);
-        setLoading(false);
-      } else {
-        throw new Error();
-      }
-    } catch (e) {
-      openNotification({
-        type: "error",
-        message: "Не удалось загрузить данные"
-      });
-      setLoading(false);
-    }
-  };
   return (
     <Router>
       <StyledLayout>

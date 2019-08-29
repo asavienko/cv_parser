@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Input, Modal, Select } from "antd";
+import { Input, Select } from "antd";
 import { connect } from "react-redux";
 import { setDictionaryCityAction } from "../../actions/cvActions";
 import styled from "styled-components";
 import { getRequest } from "../../services/CvServices";
 import openNotification from "../ReusableComponents/Notification";
+import SearchModal from "./SearchModal";
 
 const { Search } = Input;
 const { Option } = Select;
@@ -107,16 +108,10 @@ function Home({ dictionaryCity, setDictionaryCity }) {
           </StyledSelect>
         }
       />
-
-      <Modal
-        title="Basic Modal"
-        visible={modalVisible}
-        onCancel={handleModalCancel}
-      >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-      </Modal>
+      <SearchModal
+        handleModalCancel={handleModalCancel}
+        modalVisible={modalVisible}
+      />
     </React.Fragment>
   );
 }
