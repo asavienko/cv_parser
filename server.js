@@ -5,8 +5,8 @@ const login = require("./api/actions/login");
 const connectDb = require("./api/actions/connectMongoDb");
 const userIds = require("./api/mockData/mockData").openedCvs;
 const express = require("express");
-const countFoundCvs = require("./api/actions/countFoundCvs");
-const getAuthCookie = require("./api/actions/getAuthCookie");
+const getTotalCvs = require("./api/actions/getTotalCvs");
+const getAuthToken = require("./api/actions/getAuthToken");
 
 const app = express();
 app.use(express.json());
@@ -34,7 +34,7 @@ app.get("/cvlist", (req, res) => {
       })
     );
 });
-app.get("/dictionary_city", (req, res) => {
+app.get("/dictionary-city", (req, res) => {
   collection
     .then(collection =>
       collection
@@ -50,20 +50,15 @@ app.get("/dictionary_city", (req, res) => {
       })
     );
 });
-
-app.post("/cv_preparse", async (req, res) => {
-  const request = req.body;
-  console.log(request);
+app.get("/total-cvs", async (req, res) => {
+  const request = req.query;
   const page = await initBrowser();
   const enteredPage = await login(page);
-  const cookie = await getAuthCookie( enteredPage );
-  console.log(cookie);
-  const foundCvs = await countFoundCvs({ page: enteredPage, request });
-  // await enteredPage.close();
-  console.log(foundCvs);
-  res.json({ foundCvs });
+  const cookie = await getAuthToken(enteredPage);
+  await enteredPage.close();
+  const foundCvs = await getTotalCvs({ page: enteredPage, request });
+  res.json({ confirmation: "success", data: foundCvs });
 });
-
 app.listen(port, () => console.log(`Listening on port ${port}...`));
 
 /*

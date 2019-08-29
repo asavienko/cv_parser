@@ -1,8 +1,8 @@
-const getAuthCookie = async page => {
+const getAuthToken = async page => {
   const cookies = await page.cookies();
   const name = ".RAB2AUTH";
   const auth = cookies.find(cookie => cookie.name === name);
-  const cookie = name + "=" + auth.value;
-  return cookie;
+  const token = name + "=" + auth.value;
+  return token;
 };
-module.exports = getAuthCookie;
+module.exports = getAuthToken;

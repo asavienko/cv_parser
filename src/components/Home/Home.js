@@ -3,6 +3,8 @@ import { Input, Modal, Select } from "antd";
 import { connect } from "react-redux";
 import { setDictionaryCityAction } from "../../actions/cvActions";
 import styled from "styled-components";
+import { getRequest } from "../../services/CvServices";
+import openNotification from "../ReusableComponents/Notification";
 
 const { Search } = Input;
 const { Option } = Select;
@@ -16,7 +18,7 @@ const StyledSearch = styled(Search)`
 
 function Home({ dictionaryCity, setDictionaryCity }) {
   const [searchRequest, setSearchRequest] = useState({
-    regionid: 0,
+    regionId: 0,
     keywords: ""
   });
   const [modalLoading, setModalLoading] = useState(false);
@@ -24,48 +26,56 @@ function Home({ dictionaryCity, setDictionaryCity }) {
   const [modalData, setModalData] = useState({});
 
   useEffect(() => {
-    if (!dictionaryCity.length) {
-      fetch("/dictionary_city")
-        .then(res => res.json())
-        .then(json => {
-          if (json.confirmation === "success") {
-            setDictionaryCity(json.data);
-          } else if (json.confirmation === "fail") {
+    (async () => {
+      if (!dictionaryCity.length) {
+        try {
+          const response = await getRequest("/dictionary-city");
+          if (response.confirmation === "success") {
+            setDictionaryCity(response.data);
+          } else {
             throw new Error();
           }
-        })
-        .catch(err => console.log(err));
-    }
+        } catch {
+          openNotification({
+            type: "error",
+            message: "Не удалось загрузить списко городов"
+          });
+        }
+      }
+    })();
   }, [dictionaryCity, setDictionaryCity]);
 
   const onSelectFilter = (input, option) =>
     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
   const onSelectChange = value => {
     const editedSearchRequest = searchRequest;
-    editedSearchRequest.regionid = value;
+    editedSearchRequest.regionId = value;
     setSearchRequest(editedSearchRequest);
   };
-  const onSearchPressed = searchValue => {
+  const onSearchPressed = async searchValue => {
     const editedSearchRequest = searchRequest;
     editedSearchRequest.keywords = searchValue;
     setSearchRequest(editedSearchRequest);
-    console.log(searchRequest);
     setModalLoading(true);
     setModalVisible(true);
-    fetch("/cv_preparse", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(searchRequest)
-    })
-      .then(response => response.json())
-      .then(json => {
-        console.log(json);
-        setModalData(json);
-        setModalLoading(false);
-      })
-      .catch(err => console.log(err));
+    try {
+      const response = await getRequest(
+        `/total-cvs?regionid=${searchRequest.regionId}&keywords=${
+          searchRequest.keywords
+        }`
+      );
+      if (response.confirmation === "success") {
+        setModalData(response.data);
+      } else {
+        throw new Error();
+      }
+    } catch {
+      openNotification({
+        type: "error",
+        message: "Не получить общее количство резюме"
+      });
+    }
+    setModalLoading(false);
   };
   const handleModalCancel = () => {
     setModalVisible(false);

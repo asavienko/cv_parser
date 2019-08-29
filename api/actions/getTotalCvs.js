@@ -1,10 +1,10 @@
 const querystring = require("querystring");
 const fetch = require("node-fetch");
 
-const countFoundCvs = async ({
+const getTotalCvs = async ({
   page,
   request: {
-    keyword = "",
+    keywords = "",
     regionid = 0,
     period = 7,
     searchtype = "everywhere",
@@ -14,17 +14,17 @@ const countFoundCvs = async ({
 }) => {
   const targetUrl = "https://rabota.ua/api/resume/search?";
   const searchStringRequest = querystring.stringify({
-    keyword,
+    keywords,
     regionid,
     period,
     searchtype,
     moveability,
     sort
   });
+  console.log(searchStringRequest);
   const response = await fetch(targetUrl + searchStringRequest);
   const json = await response.json();
-  const totalCvs = json.Total;
-  return totalCvs;
+  return json.Total;
 };
 
-module.exports = countFoundCvs;
+module.exports = getTotalCvs;

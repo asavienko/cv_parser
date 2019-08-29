@@ -3,16 +3,15 @@ import * as numeral from "numeral";
 import { CvInformation } from "./CvInformation";
 import { CvTable } from "../ReusableComponents/CvTable";
 import { connect } from "react-redux";
-import { setFavoriteListAction, setRawListAction } from "../../actions/cvActions";
+import {
+  setFavoriteListAction,
+  setRawListAction
+} from "../../actions/cvActions";
 import { EditFavoriteListButton } from "../ReusableComponents/Buttons";
 import openNotification from "../ReusableComponents/Notification";
+import { getRequest } from "../../services/CvServices";
 
-function CvList({
-  favoriteCvList,
-  setFavoriteList,
-  setRawList,
-  rawList
-}) {
+function CvList({ favoriteCvList, setFavoriteList, setRawList, rawList }) {
   const [cvList, setCvList] = useState([]);
   const [filteredInfo, setFilteredInfo] = useState({});
   /*
@@ -29,22 +28,22 @@ function CvList({
       if (!cvList) {
         setLoading(true);
         try {
-          const cvListResponse = await fetch("/cvlist");
-          const cvListJson = await cvListResponse.json();
-          if (cvListJson.confirmation === "fail") {
-            throw new Error();
+          const response = await getRequest("/cvlist");
+          if (response.confirmation === "success") {
+            for (let cvItem of response.data) {
+              cvItem.key = cvItem._id;
+            }
+            setRawList(response.data);
+            setLoading(false);
+          } else {
+            throw new Error()
           }
-          for (let cvItem of cvListJson.data) {
-            cvItem.key = cvItem._id;
-          }
-          setRawList(cvListJson.data);
-          setLoading(false);
         } catch (e) {
-          setLoading(false);
           openNotification({
             type: "error",
             message: "Не удалось загрузить данные"
           });
+          setLoading(false);
         }
       }
       setCvList(cvList);

@@ -7,6 +7,7 @@ import { Layout } from "antd";
 import styled from "styled-components";
 import Favorites from "./components/Favorites/Favorites";
 import openNotification from "./components/ReusableComponents/Notification";
+import { getRequest } from "./services/CvServices";
 
 const StyledDiv = styled.div`
   background: RGBA(236, 236, 236, 1);
@@ -29,22 +30,22 @@ function App() {
   const fetchCvList = async () => {
     setLoading(true);
     try {
-      const response = await fetch("/cvlist");
-      const obj = await response.json();
-      if (obj.confirmation === "fail") {
+      const response = await getRequest("/cvlist");
+      if (obj.confirmation === "success") {
+        for (let cv of response.data) {
+          cv.key = cv._id;
+        }
+        setRawList(response.data);
+        setLoading(false);
+      } else {
         throw new Error();
       }
-      for (let cv of obj.data) {
-        cv.key = cv._id;
-      }
-      setRawList(obj.data);
-      setLoading(false);
     } catch (e) {
-      setLoading(false);
       openNotification({
         type: "error",
         message: "Не удалось загрузить данные"
       });
+      setLoading(false);
     }
   };
   return (
