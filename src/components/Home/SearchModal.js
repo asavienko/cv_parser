@@ -10,7 +10,7 @@ function SearchModal({
   modalData: { totalCv },
   okButtonLoading
 }) {
-  const okButtonDisabled = totalCv ? modalLoading : true;
+  const okButtonDisabled = !totalCv || modalLoading;
   return (
     <Modal
       visible={modalVisible}

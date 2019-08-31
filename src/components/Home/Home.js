@@ -97,7 +97,6 @@ function Home({ dictionaryCity, setDictionaryCity }) {
       setModalVisible(false);
       if (response.confirmation === "success") {
         InformationModal({
-          type: "info",
           title: "Вы начали сканировать резюме",
           content: (
             <div>
@@ -119,7 +118,7 @@ function Home({ dictionaryCity, setDictionaryCity }) {
       setModalVisible(false);
       InformationModal({
         type: "error",
-        title: "Что то пошло не так :(",
+        title: "Что то пошло не так",
         content: (
           <div>
             Повторите попытку позже. Если ошибка повторится, обратитесь к
