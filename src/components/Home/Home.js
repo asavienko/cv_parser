@@ -7,7 +7,7 @@ import { getRequest } from "../../services/fetchUtils";
 import openNotification from "../ReusableComponents/Notification";
 import SearchModal from "./SearchModal";
 import InformationModal from "../ReusableComponents/InformationModal";
-import { StyledBoldSpan } from "../ReusableComponents/StyledComponents";
+import { StyledBoldSpan } from "../../styles";
 import getTotalCv from "../../services/cvRequests";
 
 const { Search } = Input;

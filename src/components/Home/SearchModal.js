@@ -1,6 +1,6 @@
 import { Modal, Spin } from "antd";
 import React from "react";
-import { StyledBoldSpan } from "../ReusableComponents/StyledComponents";
+import { StyledBoldSpan } from "../../styles";
 
 function SearchModal({
   modalVisible,

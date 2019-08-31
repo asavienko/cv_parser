@@ -61,8 +61,6 @@ app.get("/total-cvs", async (req, res) => {
   res.json({ confirmation: "success", data: foundCvs });
 });
 app.get("/parse-cvs", async (req, res) => {
-  const request = req.query;
-  console.log(request);
   res.json({ confirmation: "success", minutes: 134 });
 });
 app.listen(port, () => console.log(`Listening on port ${port}...`));

@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Col, Drawer, Row, Timeline } from "antd";
 import styled from "styled-components";
-import {StyledBoldSpan} from "../ReusableComponents/StyledComponents";
+import {StyledBoldSpan} from "../../styles";
 
 const StyledDrawer = styled(Drawer)`
   .ant-drawer-body {
