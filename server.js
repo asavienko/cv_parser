@@ -7,6 +7,7 @@ const userIds = require("./api/mockData/mockData").openedCvs;
 const express = require("express");
 const getTotalCvs = require("./api/actions/getTotalCvs");
 const getAuthToken = require("./api/actions/getAuthToken");
+const querystring = require("querystring");
 
 const app = express();
 app.use(express.json());
@@ -51,13 +52,18 @@ app.get("/dictionary-city", (req, res) => {
     );
 });
 app.get("/total-cvs", async (req, res) => {
-  const request = req.query;
   const page = await initBrowser();
   const enteredPage = await login(page);
-  const cookie = await getAuthToken(enteredPage);
+  const token = await getAuthToken(enteredPage);
   await enteredPage.close();
-  const foundCvs = await getTotalCvs({ page: enteredPage, request });
+  const query = querystring.stringify(req.query);
+  const foundCvs = await getTotalCvs({ token, queryString: query });
   res.json({ confirmation: "success", data: foundCvs });
+});
+app.get("/parse-cvs", async (req, res) => {
+  const request = req.query;
+  console.log(request);
+  res.json({ confirmation: "success", minutes: 134 });
 });
 app.listen(port, () => console.log(`Listening on port ${port}...`));
 

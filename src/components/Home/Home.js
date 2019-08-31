@@ -3,9 +3,12 @@ import { Input, Select } from "antd";
 import { connect } from "react-redux";
 import { setDictionaryCityAction } from "../../actions/cvActions";
 import styled from "styled-components";
-import { getRequest } from "../../services/CvServices";
+import { getRequest } from "../../services/fetchUtils";
 import openNotification from "../ReusableComponents/Notification";
 import SearchModal from "./SearchModal";
+import InformationModal from "../ReusableComponents/InformationModal";
+import { StyledBoldSpan } from "../ReusableComponents/StyledComponents";
+import getTotalCv from "../../services/cvRequests";
 
 const { Search } = Input;
 const { Option } = Select;
@@ -18,13 +21,15 @@ const StyledSearch = styled(Search)`
 `;
 
 function Home({ dictionaryCity, setDictionaryCity }) {
+  const modalBasicData = { totalCv: 0 };
   const [searchRequest, setSearchRequest] = useState({
     regionId: 0,
     keywords: ""
   });
   const [modalLoading, setModalLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [modalData, setModalData] = useState({});
+  const [modalData, setModalData] = useState(modalBasicData);
+  const [okButtonLoading, setOkButtonLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -66,14 +71,16 @@ function Home({ dictionaryCity, setDictionaryCity }) {
         }`
       );
       if (response.confirmation === "success") {
-        setModalData(response.data);
+        const editedModalDate = modalData;
+        editedModalDate.totalCv = response.data;
+        setModalData(editedModalDate);
       } else {
         throw new Error();
       }
     } catch {
       openNotification({
         type: "error",
-        message: "Не получить общее количство резюме"
+        message: "Не удалось получить общее количство резюме"
       });
     }
     setModalLoading(false);
@@ -81,7 +88,47 @@ function Home({ dictionaryCity, setDictionaryCity }) {
   const handleModalCancel = () => {
     setModalVisible(false);
     setModalLoading(false);
-    setModalData({});
+    setModalData(modalBasicData);
+  };
+  const handleModalOk = async () => {
+    try {
+      setOkButtonLoading(true);
+      const response = await getTotalCv(searchRequest);
+      setModalVisible(false);
+      if (response.confirmation === "success") {
+        InformationModal({
+          type: "info",
+          title: "Вы начали сканировать резюме",
+          content: (
+            <div>
+              <p>
+                Это займет окколо{" "}
+                <StyledBoldSpan>{response.minutes}мин.</StyledBoldSpan>
+              </p>
+              <p>Вы можете посмотреть уже отсканированные резюме в списке</p>
+              <p>
+                Когда будут отсканированны все резюме вы получите уведомление
+              </p>
+            </div>
+          )
+        });
+      } else {
+        throw new Error();
+      }
+    } catch (e) {
+      setModalVisible(false);
+      InformationModal({
+        type: "error",
+        title: "Что то пошло не так :(",
+        content: (
+          <div>
+            Повторите попытку позже. Если ошибка повторится, обратитесь к
+            системному администратору
+          </div>
+        )
+      });
+    }
+    setOkButtonLoading(false);
   };
   return (
     <React.Fragment>
@@ -111,6 +158,10 @@ function Home({ dictionaryCity, setDictionaryCity }) {
       <SearchModal
         handleModalCancel={handleModalCancel}
         modalVisible={modalVisible}
+        modalData={modalData}
+        modalLoading={modalLoading}
+        handleModalOk={handleModalOk}
+        okButtonLoading={okButtonLoading}
       />
     </React.Fragment>
   );

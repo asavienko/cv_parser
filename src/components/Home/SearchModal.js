@@ -1,16 +1,32 @@
-import { Modal } from "antd";
+import { Modal, Spin } from "antd";
 import React from "react";
+import { StyledBoldSpan } from "../ReusableComponents/StyledComponents";
 
-function SearchModal({ modalVisible, handleModalCancel }) {
+function SearchModal({
+  modalVisible,
+  modalLoading,
+  handleModalCancel,
+  handleModalOk,
+  modalData: { totalCv },
+  okButtonLoading
+}) {
+  const okButtonDisabled = totalCv ? modalLoading : true;
   return (
     <Modal
-      title="Basic Modal"
       visible={modalVisible}
       onCancel={handleModalCancel}
+      okButtonProps={{ disabled: okButtonDisabled, loading: okButtonLoading }}
+      onOk={handleModalOk}
+      title="Сохранить резюме в базу"
+      okText="Сохранить"
+      cancelText="Отмена"
     >
-      <p>Some contents...</p>
-      <p>Some contents...</p>
-      <p>Some contents...</p>
+      <Spin tip="Ищем резюме..." spinning={modalLoading}>
+        <p>
+          По вашему запросу найденно: <StyledBoldSpan>{totalCv}</StyledBoldSpan>{" "}
+          резюме
+        </p>
+      </Spin>
     </Modal>
   );
 }
