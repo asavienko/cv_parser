@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Col, Drawer, Row, Timeline } from "antd";
 import styled from "styled-components";
+import {StyledBoldSpan} from "../../styles";
 
 const StyledDrawer = styled(Drawer)`
   .ant-drawer-body {
@@ -63,9 +64,7 @@ const StyledTimeline = styled(Timeline)`
 const StyledDatesDiff = styled.span`
   white-space: nowrap;
 `;
-const StyledBoldSpan = styled.span`
-  font-weight: 700;
-`;
+
 
 const DescrBlock = ({ description, name, location, yearOfEnding, comment }) => (
   <StyledDescrEl>

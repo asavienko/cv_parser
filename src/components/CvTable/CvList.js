@@ -9,7 +9,7 @@ import {
 } from "../../actions/cvActions";
 import { EditFavoriteListButton } from "../ReusableComponents/Buttons";
 import openNotification from "../ReusableComponents/Notification";
-import { getRequest } from "../../services/CvServices";
+import { getRequest } from "../../services/fetchUtils";
 
 function CvList({ favoriteCvList, setFavoriteList, setRawList, rawList }) {
   const [cvList, setCvList] = useState([]);
