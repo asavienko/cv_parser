@@ -14,4 +14,6 @@ const getTotalCv = async ({ regionId: regionid, keywords }) => {
   await getRequest(url);
 };
 
-export default getTotalCv;
+const getDictionaryCity = async () => await getRequest("/dictionary-city")
+
+export {getTotalCv, getDictionaryCity};

@@ -3,12 +3,11 @@ import { Input, Select } from "antd";
 import { connect } from "react-redux";
 import { setDictionaryCityAction } from "../../actions/cvActions";
 import styled from "styled-components";
-import { getRequest } from "../../services/fetchUtils";
 import openNotification from "../ReusableComponents/Notification";
 import SearchModal from "./SearchModal";
 import InformationModal from "../ReusableComponents/InformationModal";
 import { StyledBoldSpan } from "../../styles";
-import getTotalCv from "../../services/cvRequests";
+import { getDictionaryCity, getTotalCv } from "../../services/cvRequests";
 
 const { Search } = Input;
 const { Option } = Select;
@@ -35,7 +34,7 @@ function Home({ dictionaryCity, setDictionaryCity }) {
     (async () => {
       if (!dictionaryCity.length) {
         try {
-          const response = await getRequest("/dictionary-city");
+          const response = await getDictionaryCity();
           if (response.confirmation === "success") {
             setDictionaryCity(response.data);
           } else {
@@ -65,11 +64,7 @@ function Home({ dictionaryCity, setDictionaryCity }) {
     setModalLoading(true);
     setModalVisible(true);
     try {
-      const response = await getRequest(
-        `/total-cvs?regionid=${searchRequest.regionId}&keywords=${
-          searchRequest.keywords
-        }`
-      );
+      const response = await getTotalCv(searchRequest);
       if (response.confirmation === "success") {
         const editedModalDate = modalData;
         editedModalDate.totalCv = response.data;
@@ -96,7 +91,7 @@ function Home({ dictionaryCity, setDictionaryCity }) {
       const response = await getTotalCv(searchRequest);
       setModalVisible(false);
       if (response.confirmation === "success") {
-        InformationModal({
+        return InformationModal({
           title: "Вы начали сканировать резюме",
           content: (
             <div>
@@ -111,9 +106,8 @@ function Home({ dictionaryCity, setDictionaryCity }) {
             </div>
           )
         });
-      } else {
-        throw new Error();
       }
+      throw new Error();
     } catch (e) {
       setModalVisible(false);
       InformationModal({

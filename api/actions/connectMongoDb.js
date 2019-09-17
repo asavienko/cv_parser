@@ -10,4 +10,17 @@ const connectDb = () => {
   return client;
 };
 
-module.exports = connectDb;
+const connectCollection = async (dbName, collectName) => {
+  if (dbName && collectName) {
+    const client = await connectDb();
+    const collection = await client.db(dbName).collection(collectName);
+    return collection;
+  } else if (dbName) {
+    const client = await connectDb();
+    const db = await client.db(dbName);
+    return db;
+  }
+  return await connectDb();
+};
+
+module.exports = connectCollection;
