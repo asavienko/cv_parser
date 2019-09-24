@@ -1,7 +1,9 @@
 import { getRequest } from "./fetchUtils";
+const pkg = require("../../package.json");
+const target = process.env.PROXY || pkg.proxy;
 
 const getTotalCv = async ({ regionId: regionid, keywords }) => {
-  const url = new URL("/parse-cvs");
+  const url = new URL("/total-cvs", target);
   url.search = new URLSearchParams({
     regionid,
     keywords,
@@ -11,9 +13,9 @@ const getTotalCv = async ({ regionId: regionid, keywords }) => {
     sort: "date"
   });
 
-  await getRequest(url);
+  return await getRequest(url);
 };
 
-const getDictionaryCity = async () => await getRequest("/dictionary-city")
+const getDictionaryCity = async () => await getRequest("/dictionary-city");
 
-export {getTotalCv, getDictionaryCity};
+export { getTotalCv, getDictionaryCity };

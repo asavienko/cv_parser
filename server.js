@@ -41,7 +41,6 @@ app.get("/dictionary-city", async (req, res) => {
   }
 });
 app.get("/total-cvs", async (req, res) => {
-  console.log("test");
   const page = await initBrowser();
   const enteredPage = await login(page);
   const token = await getAuthToken(enteredPage);
