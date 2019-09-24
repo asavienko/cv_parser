@@ -2,36 +2,57 @@ const initBrowser = require("./api/actions/initBrowser");
 const parseUserInformation = require("./api/actions/parseUserInformation");
 const parseCvs = require("./api/actions/parseCvs");
 const login = require("./api/actions/login");
-const connectDb = require("./api/actions/connectMongoDb");
+const connectCollection = require("./api/actions/connectMongoDb");
 const userIds = require("./api/mockData/mockData").openedCvs;
 const express = require("express");
+const getTotalCvs = require("./api/actions/getTotalCvs");
+const getAuthToken = require("./api/actions/getAuthToken");
+const query = require("querystring");
+
 const app = express();
+app.use(express.json());
 
-const client = connectDb();
-
-const collection = client.then(obj =>
-  obj.db("rabotaua").collection("cvs")
-);
-
-app.get("/", (req, res) => {
-  res.send("Hello world...  ");
-});
-
-app.get("/cvlist", (req, res) => {
-  const query = req.query;
-  collection
-    .then(collection => collection.find(query).toArray())
-    .then(result => res.json({ confirmation: "success", data: result }))
-    .catch(err =>
-      res.json({
-        confirmation: "fail",
-        message: err.message
-      })
-    );
-});
 const port = 5000;
-app.listen(port, () => console.log(`Listening on port ${port}...`));
 
+app.get("/cvlist", async (req, res) => {
+  const query = req.query;
+  try {
+    const collection = await connectCollection("rabotaua", "cvs");
+    const result = await collection.find(query).toArray();
+    res.json({ confirmation: "success", data: result });
+  } catch (err) {
+    res.json({
+      confirmation: "fail",
+      message: err.message
+    });
+  }
+});
+app.get("/dictionary-city", async (req, res) => {
+  //todo up to date data from api
+  try {
+    const collection = await connectCollection("rabotaua", "dictionaryCity");
+    const result = await collection.find().toArray();
+    res.json({ confirmation: "success", data: result });
+  } catch (e) {
+    res.json({
+      confirmation: "fail",
+      message: e.message
+    });
+  }
+});
+app.get("/total-cvs", async (req, res) => {
+  const page = await initBrowser();
+  const enteredPage = await login(page);
+  const token = await getAuthToken(enteredPage);
+  await enteredPage.close();
+  const queryString = query.stringify(req.query);
+  const foundCvs = await getTotalCvs({ token, queryString });
+  res.json({ confirmation: "success", data: foundCvs });
+});
+app.get("/parse-cvs", async (req, res) => {
+  res.json({ confirmation: "success", minutes: 134 });
+});
+app.listen(port, () => console.log(`Listening on port ${port}...`));
 
 /*
 

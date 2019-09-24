@@ -1,8 +1,13 @@
-import { SET_FAVORITE, SET_RAW_LIST } from "../constants/constantsActions";
+import {
+  SET_DICTIONARY_CITY,
+  SET_FAVORITE,
+  SET_RAW_LIST
+} from "../constants/constantsActions";
 
 const initState = {
   favoriteCvList: [],
-  rawList: []
+  rawList: [],
+  dictionaryCity: []
 };
 
 function cvReducer(state = initState, action) {
@@ -11,6 +16,8 @@ function cvReducer(state = initState, action) {
       return { ...state, favoriteCvList: action.favoriteCvList };
     case SET_RAW_LIST:
       return { ...state, rawList: action.rawList };
+    case SET_DICTIONARY_CITY:
+      return { ...state, dictionaryCity: action.dictionaryCity };
     default:
       return state;
   }

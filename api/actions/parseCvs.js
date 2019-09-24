@@ -2,7 +2,6 @@ const connectDb = require("./connectMongoDb");
 const searchRequest = require("../constants/userData").searchRequest;
 
 let errorCounter = 0;
-// todo sick the other variant
 let parsedPage = null;
 
 const parseDocument = async ({ collection, cv }) => {
@@ -44,7 +43,6 @@ const parseResponse = async ({ collection, response }) => {
 };
 
 const parseEachPage = async ({ page, collection }) => {
-  //todo how to improve this function, so don't pass collection in each implementing
   try {
     const response = await page.waitForResponse(
       response =>

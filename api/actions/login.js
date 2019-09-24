@@ -18,7 +18,7 @@ const login = async page => {
     userPassword
   );
   await page.click("#ctl00_Sidebar_login_lnkLogin");
-  await page.waitForResponse(response => response.status() === 200);
+  await page.waitForNavigation()
   return await page;
 };
 
