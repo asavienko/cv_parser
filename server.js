@@ -8,9 +8,14 @@ const express = require("express");
 const getTotalCvs = require("./api/actions/getTotalCvs");
 const getAuthToken = require("./api/actions/getAuthToken");
 const query = require("querystring");
+const cors = require("cors");
 
 const app = express();
-app.use(express.json());
+const corsOptions = {
+  origin: "http://localhost:3000",
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 
 const port = 5000;
 
