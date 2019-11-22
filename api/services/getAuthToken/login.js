@@ -1,14 +1,10 @@
-const userName = require("../constants/userData").userName;
-const userPassword = require("../constants/userData").userPassword;
+const userName = process.env.USER_NAME;
+const userPassword = process.env.USER_PASSWORD;
 
 const login = async page => {
   await page.goto("https://rabota.ua/employer/");
-  await page.waitFor(
-    "#ctl00_Header_header > div > header > div > div:nth-child(2) > ul > li:nth-child(3) > a.f-header-menu-list-link-with-border > label"
-  );
-  await page.click(
-    "#ctl00_Header_header > div > header > div > div:nth-child(2) > ul > li:nth-child(3) > a.f-header-menu-list-link-with-border > label"
-  );
+  await page.waitForSelector('a>[for=f-overlay-chkbx]');
+  await page.click('a>[for=f-overlay-chkbx]');
 
   await page.waitFor('input[name="ctl00$Sidebar$login$txbLogin"]');
   await page.type('input[name="ctl00$Sidebar$login$txbLogin"]', userName);

@@ -1,5 +1,5 @@
-const connectDb = require("./connectMongoDb");
-const searchRequest = require("../constants/userData").searchRequest;
+const connectDb = require("../../services/connectMongoDb");
+const searchRequest = require("../constants/constants").searchRequest;
 
 let errorCounter = 0;
 let parsedPage = null;
