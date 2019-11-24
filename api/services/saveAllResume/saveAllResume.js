@@ -6,20 +6,33 @@ const saveAllResume = async () => {
   const authToken = await getAuthToken();
   const options = { headers: { Cookie: authToken } };
   const client = await connectMongoDb();
-  const collection = client.db("rabotaua").collection("reports");
-  const responseDB = await collection.insertOne({
+  const collectionResumes = client.db("rabotaua").collection("resumes");
+  const collectionReports = client.db("rabotaua").collection("reports");
+
+  const responseDB = await collectionReports.insertOne({
     startDate: new Date(),
     addedResume: 0,
     emptyPages: 0,
     resumesId: [],
-    status: "executes"
+    status: "started"
   });
   const reportId = responseDB.insertedId;
   try {
-    await parsePages({ reportId, options });
-    collection.updateOne({ _id: reportId }, { status: "ended" });
+    await parsePages({
+      reportId,
+      options,
+      collectionReports,
+      collectionResumes
+    });
+    collectionReports.updateOne(
+      { _id: reportId },
+      { $set: { status: "ended" } }
+    );
   } catch (e) {
-    collection.updateOne({ _id: reportId }, { status: "failed", error: e });
+    collectionReports.updateOne(
+      { _id: reportId },
+      { $set: { status: "failed", error: e } }
+    );
   }
 };
 

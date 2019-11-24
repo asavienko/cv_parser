@@ -2,38 +2,33 @@ const fetch = require("node-fetch");
 const saveToDb = require("./saveToDb");
 const saveReport = require("./saveReport");
 
-let i = 1;
+const parsePages = async ({
+  reportId,
+  options,
+  collectionReports,
+  collectionResumes
+}) => {
+  let i = 0;
 
-
-
-const parsePages = async ({ reportId, options }) => {
+  const parseEachPage = async () => {
+    const url = `https://rabota.ua/api/resume/search?period=6&searchtype=everywhere&sort=date&count=20&pg=${i++}`;
+    console.log(i);
+    const response = await fetch(url, options);
+    const json = await response.json();
+    const report = await saveToDb({ data: json.Documents, collectionResumes });
+    const reportSaveResult = await saveReport(
+      report,
+      reportId,
+      collectionReports
+    );
+    reportSaveResult.status === "executes" && (await parseEachPage());
+  };
   const arrOfPromises = [];
-  for (let j = i; j <= i + 40; j++) {
-    const url = `https://rabota.ua/api/resume/search?period=6&searchtype=everywhere&sort=date&count=20&pg=${j}`;
-    const promise = new Promise(fetch(url, options));
-    arrOfPromises.push(promise);
-    console.log(j);
+  for (let j = 0; j < 200; j++) {
+    arrOfPromises.push(parseEachPage());
   }
-  i += 40;
 
-  Promise.all(arrOfPromises)
-    .then(response => response.json())
-    .then(json => {
-      console.log(json);
-      return saveToDb(json.Documents);
-    })
-    .then(report => {
-      return saveReport(report, reportId);
-    })
-    .then(reports => {
-      console.log(reports);
-      console.log(reports.find(report => report.status === "ended"));
-      reports.find(report => report.status === "ended") &&
-        parsePages({
-          reportId,
-          options
-        });
-    });
+  await Promise.all(arrOfPromises);
 };
 
 module.exports = parsePages;
