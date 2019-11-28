@@ -24,9 +24,11 @@ const saveAllResume = async () => {
   } catch (e) {
     collectionReports.updateOne(
       { _id: reportId },
-      { $set: { status: "failed", error: e, endDate: new Date() } }
+      { $set: { status: "failed", error: e.message, endDate: new Date() } }
     );
+    return { message: e.message };
   }
+  return { message: "Successfully started" };
 };
 
 module.exports = saveAllResume;
