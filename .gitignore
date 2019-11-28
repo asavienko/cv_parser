@@ -25,4 +25,4 @@ yarn-error.log*
 
 
 
-/src/constants/userData.js
+/api/toDellete/migration.js

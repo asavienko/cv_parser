@@ -1,17 +1,11 @@
-const saveReportToDb = async (
-  { emptyPages = 0, insertedCount = 0, insertedIds = [] },
-  reportId,
-  collectionReports
-) => {
-  collectionReports.updateOne(
+const saveReportToDb = async (report, reportId, collectionReports) => {
+  await collectionReports.updateOne(
     { _id: reportId },
     {
-      $inc: { addedResume: insertedCount, emptyPages },
-      $push: { insertedIds: { $each: insertedIds } },
+      $push: { log: report },
       $set: { status: "executes" }
     }
   );
-  return emptyPages ? { status: "finishing" } : { status: "executes" };
 };
 
 module.exports = saveReportToDb;

@@ -1,17 +1,29 @@
-const saveToDb = async ({ data, collectionResumes }) => {
-  console.log(data.length);
-  if (data.length) {
-    const response = await collectionResumes.insertMany(data, {
-      ordered: false
-    });
-    const insertedIds = Object.values(response.insertedIds);
+const saveToDb = ({ data, collectionResumes }) => {
+  const responseManyPromises = data.map(async cv => {
+    const responseOne = await collectionResumes.updateOne(
+      { ResumeId: cv.ResumeId },
+      {
+        $set: {
+          Speciality: cv.Speciality,
+          FullName: cv.FullName,
+          DisplayName: cv.DisplayName,
+          Salary: cv.Salary,
+          CityName: cv.CityName,
+          Experience: cv.Experience,
+          Photo: cv.Photo
+        }
+      },
+      { upsert: true }
+    );
     return {
-      insertedCount: response.insertedCount,
-      insertedIds,
-      emptyPages: 0
+      updatedDocumentsCount: responseOne.modifiedCount,
+      newDocumentsCount: responseOne.upsertedCount,
+      foundDocumentsInDbCount: responseOne.matchedCount
     };
-  }
-  return { emptyPages: 1 };
+  });
+
+  const responseMany = Promise.all(responseManyPromises)
+  return responseMany;
 };
 
 module.exports = saveToDb;

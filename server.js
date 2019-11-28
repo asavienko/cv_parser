@@ -19,7 +19,6 @@ app.get("/dictionary-city", getDictionaryCity);
 app.get("/total-cvs", totalCvs);
 app.get("/parse-all-resume", parseAllResume);
 
-
 app.get("/parse-cvs", async (req, res) => {
   res.json({ confirmation: "success", minutes: 134 });
 });

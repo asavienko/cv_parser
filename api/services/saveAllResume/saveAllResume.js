@@ -11,27 +11,20 @@ const saveAllResume = async () => {
 
   const responseDB = await collectionReports.insertOne({
     startDate: new Date(),
-    addedResume: 0,
-    emptyPages: 0,
-    resumesId: [],
     status: "started"
   });
   const reportId = responseDB.insertedId;
   try {
-    await parsePages({
+    parsePages({
       reportId,
       options,
       collectionReports,
       collectionResumes
     });
-    collectionReports.updateOne(
-      { _id: reportId },
-      { $set: { status: "ended" } }
-    );
   } catch (e) {
     collectionReports.updateOne(
       { _id: reportId },
-      { $set: { status: "failed", error: e } }
+      { $set: { status: "failed", error: e, endDate: new Date() } }
     );
   }
 };
