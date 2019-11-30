@@ -21,7 +21,7 @@ app.get("/parse-all-resume", parseAllResume);
 app.get("/parse-resume-information", parseResumeInformation);
 
 app.get("/parse-cvs", async (req, res) => {
-  res.json({minutes: 134 });
+  res.json({ minutes: 134 });
 });
 app.get("/cvlist", async (req, res) => {
   const query = req.query;
@@ -30,7 +30,7 @@ app.get("/cvlist", async (req, res) => {
     const result = await collection.find(query).toArray();
     res.json({ data: result });
   } catch ({ message }) {
-    res.json({error: message });
+    res.json({ error: message });
   }
 });
 
