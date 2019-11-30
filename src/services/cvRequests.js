@@ -12,7 +12,6 @@ const getTotalCv = async ({ regionId: regionid, keywords }) => {
     moveability: 0,
     sort: "date"
   });
-  console.log(url);
   return await getRequest(url);
 };
 

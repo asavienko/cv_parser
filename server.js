@@ -20,25 +20,16 @@ app.get("/total-cvs", totalCvs);
 app.get("/parse-all-resume", parseAllResume);
 
 app.get("/parse-cvs", async (req, res) => {
-  res.json({ confirmation: "success", minutes: 134 });
+  res.json({minutes: 134 });
 });
 app.get("/cvlist", async (req, res) => {
   const query = req.query;
   try {
     const collection = await connectCollection("rabotaua", "cvs");
     const result = await collection.find(query).toArray();
-    res.json({ confirmation: "success", data: result });
-  } catch (err) {
-    res.json({
-      confirmation: "fail",
-      message: err.message
-    });
-
-    //todo replace error response
-    /*res.json({
-      confirmation: "fail",
-      error: {message: err.message}
-    });*/
+    res.json({ data: result });
+  } catch ({ message }) {
+    res.json({error: message });
   }
 });
 

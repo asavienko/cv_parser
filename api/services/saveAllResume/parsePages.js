@@ -1,6 +1,7 @@
 const fetch = require("node-fetch");
 const saveToDb = require("./saveToDb");
 const saveReport = require("./saveReport");
+const _ = require("lodash");
 
 const parsePages = ({
   reportId,
@@ -12,24 +13,20 @@ const parsePages = ({
   function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-  const parseEachPage = async x => {
-    const url = `https://rabota.ua/api/resume/search?period=6&searchtype=everywhere&sort=date&count=20&pg=${x ||
-      i++}`;
-    let z = x || i;
+  const parseEachPage = async previousPage => {
+    let currentPage = previousPage || i++;
+    const url = `https://rabota.ua/api/resume/search?period=6&searchtype=everywhere&sort=date&count=20&pg=${currentPage}`;
     try {
       const response = await fetch(url, options);
       const json = await response.json();
-      if (!("Documents" in json) || json.Documents.length === 0) {
+      const responseDocuments = _.get(json, "Documents", []);
+      if (!responseDocuments.length) {
         throw new Error(
-          `No data in document. response.Message: ${
-            json.Message
-          }. Documents in json: ${"Documents" in json}. Documents.length: ${
-            json.Documents.length
-          }`
+          `No data in document. response.Message: ${json.Message}.`
         );
       }
       const reportMany = await saveToDb({
-        data: json.Documents,
+        data: responseDocuments,
         collectionResumes
       });
       const report = reportMany.reduce((a, b) => {
@@ -41,24 +38,24 @@ const parsePages = ({
             a.foundDocumentsInDbCount + b.foundDocumentsInDbCount
         };
       });
-      report.parsedPage = z;
+      report.parsedPage = currentPage;
       report.foundOnPage = json.Documents.length;
       report.time = new Date();
       await saveReport(report, reportId, collectionReports);
       parseEachPage();
     } catch (error) {
       await saveReport(
-        { error: error.message, parsedPage: z, time: new Date() },
+        { error: error.message, parsedPage: currentPage, time: new Date() },
         reportId,
         collectionReports
       );
       await timeout(30000);
-      parseEachPage(z);
+      parseEachPage(currentPage);
     }
   };
   const arrOfPromises = [];
-  for (let j = 0; j <= 1; j++) {
-    arrOfPromises.push((() => setTimeout(parseEachPage, j * 1 * 1000))());
+  for (let j = 0; j <= 3; j++) {
+    arrOfPromises.push((() => setTimeout(parseEachPage, j  * 1000))());
   }
 
   Promise.all(arrOfPromises);
