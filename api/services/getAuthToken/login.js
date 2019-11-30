@@ -10,8 +10,7 @@ const login = async page => {
   await page.type('input[type="password"]', userPassword);
   await page.waitFor("#ctl00_content_ZoneLogin_btnLogin");
   await page.click("#ctl00_content_ZoneLogin_btnLogin");
-  await page.waitForNavigation();
-  return await page;
+  return await page.waitForNavigation();
 };
 
 module.exports = login;

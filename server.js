@@ -1,7 +1,6 @@
 require("dotenv").config();
 const cors = require("cors");
 
-const connectDb = require("./api/services/connectMongoDb");
 const totalCvs = require("./api/routes/totalCvs");
 const getDictionaryCity = require("./api/routes/getDictionaryCity");
 const parseAllResume = require("./api/routes/parseAllResume");
@@ -22,25 +21,16 @@ app.get("/parse-all-resume", parseAllResume);
 app.get("/parse-resume-information", parseResumeInformation);
 
 app.get("/parse-cvs", async (req, res) => {
-  res.json({ confirmation: "success", minutes: 134 });
+  res.json({minutes: 134 });
 });
 app.get("/cvlist", async (req, res) => {
   const query = req.query;
   try {
     const collection = await connectDb("rabotaua", "cvs");
     const result = await collection.find(query).toArray();
-    res.json({ confirmation: "success", data: result });
-  } catch (err) {
-    res.json({
-      confirmation: "fail",
-      message: err.message
-    });
-
-    //todo replace error response
-    /*res.json({
-      confirmation: "fail",
-      error: {message: err.message}
-    });*/
+    res.json({ data: result });
+  } catch ({ message }) {
+    res.json({error: message });
   }
 });
 
