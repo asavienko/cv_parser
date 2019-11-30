@@ -1,4 +1,4 @@
-const connectDb = require("./connectMongoDb");
+const connectDb = require("../../services/connectMongoDb");
 
 const openContactsSelector =
   'div[id*="ctl00_centerZone_BriefResume1_CvView1_cvHeader_plhBuyResume"] a.btn-primary-new';

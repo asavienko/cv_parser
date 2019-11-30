@@ -65,7 +65,6 @@ function Home({ dictionaryCity, setDictionaryCity }) {
     setModalVisible(true);
     try {
       const response = await getTotalCv(searchRequest);
-      console.log(response)
       if (response.confirmation === "success") {
         const editedModalDate = modalData;
         editedModalDate.totalCv = response.data;
