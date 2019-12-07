@@ -2,7 +2,7 @@ const fetch = require("node-fetch");
 const saveToDb = require("./saveToDb");
 const saveReport = require("./saveReport");
 
-const parseInformation = ({
+const parseDetails = ({
   reportId,
   options,
   collectionReports,
@@ -13,7 +13,7 @@ const parseInformation = ({
     return new Promise(resolve => setTimeout(resolve, ms));
   }
   const parseEachResume = async previousResume => {
-    const [resume] =
+    const resume =
       previousResume ||
       (await collectionResumes
         .aggregate([
@@ -21,8 +21,7 @@ const parseInformation = ({
           { $project: { resumeId: "$ResumeId" } },
           { $limit: 1 }
         ])
-        .toArray());
-    console.log("test");
+        .toArray()[0]);
     console.log(resume);
     previousResume ||
       (await collectionResumes.updateOne(
@@ -65,4 +64,4 @@ const parseInformation = ({
   Promise.all(arrOfPromises);
 };
 
-module.exports = parseInformation;
+module.exports = parseDetails;

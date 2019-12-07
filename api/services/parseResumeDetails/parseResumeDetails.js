@@ -1,13 +1,13 @@
 const getAuthToken = require("../getAuthToken/getAuthToken");
 const connectMongoDb = require("../connectMongoDb");
-const parseInformation = require("./parseInformation");
+const parseInformation = require("./parseDetails");
 
-const parseResumeInformation = async () => {
+const parseResumeDetails = async () => {
   const authToken = await getAuthToken();
   const options = { headers: { Cookie: authToken } };
   const client = await connectMongoDb();
   const collectionResumes = client.db("rabotaua").collection("resumes");
-  const collectionReports = client.db("rabotaua").collection("reports");
+  const collectionReports = client.db("rabotaua").collection("reportsTest");
   const collectionResumesInformation = client
     .db("rabotaua")
     .collection("resumesInformation");
@@ -35,4 +35,4 @@ const parseResumeInformation = async () => {
   return { message: "Successfully started" };
 };
 
-module.exports = parseResumeInformation;
+module.exports = parseResumeDetails;

@@ -4,7 +4,7 @@ const cors = require("cors");
 const totalCvs = require("./api/routes/totalCvs");
 const getDictionaryCity = require("./api/routes/getDictionaryCity");
 const parseAllResume = require("./api/routes/parseAllResume");
-const parseResumeInformation = require("./api/routes/parseResumeInformation");
+const parseResumeDetails = require("./api/routes/parseResumeDetails");
 const express = require("express");
 
 const app = express();
@@ -18,7 +18,7 @@ const port = 5000;
 app.get("/dictionary-city", getDictionaryCity);
 app.get("/total-cvs", totalCvs);
 app.get("/parse-all-resume", parseAllResume);
-app.get("/parse-resume-information", parseResumeInformation);
+app.get("/parse-resume-details", parseResumeDetails);
 
 app.get("/parse-cvs", async (req, res) => {
   res.json({ minutes: 134 });
