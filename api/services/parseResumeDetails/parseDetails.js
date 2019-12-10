@@ -13,7 +13,7 @@ const parseDetails = ({
     return new Promise(resolve => setTimeout(resolve, ms));
   }
   const parseEachResume = async previousResume => {
-    const resume =
+    const [resume] =
       previousResume ||
       (await collectionResumes
         .aggregate([
@@ -21,13 +21,8 @@ const parseDetails = ({
           { $project: { resumeId: "$ResumeId" } },
           { $limit: 1 }
         ])
-        .toArray()[0]);
+        .toArray());
     console.log(resume);
-    previousResume ||
-      (await collectionResumes.updateOne(
-        { _id: resume._id },
-        { $set: { status: "parsing" } }
-      ));
     const url = `https://employer-api.rabota.ua/resume/${resume.resumeId}`;
 
     try {
@@ -37,23 +32,23 @@ const parseDetails = ({
       }
       const json = await response.json();
 
-      /* const report = await saveToDb({
-        data: json.Documents,
-        collectionResumes,
-        collectionResumesInformation
+      const report = await saveToDb({
+        data: json,
+        collectionResumesInformation,
+        collectionResumes
       });
-      await saveReport(report, reportId, collectionReports);*/
+      await saveReport(report, reportId, collectionReports);
       parseEachResume();
     } catch (error) {
-      /*
+      console.log(error.message);
       await saveReport(
-        { error: error.message, resumeId, time: new Date() },
+        { error: error.message, resumeId: resume, time: new Date() },
         reportId,
         collectionReports
-      );*/
+      );
       console.log(error);
       await timeout(30000);
-      parseEachResume(resume);
+      parseEachResume([resume]);
     }
   };
   const arrOfPromises = [];

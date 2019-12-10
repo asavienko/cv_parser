@@ -1,29 +1,18 @@
-const saveToDb = ({ data, collectionResumes }) => {
-  const responseManyPromises = data.map(async cv => {
-    const responseOne = await collectionResumes.updateOne(
-      { ResumeId: cv.ResumeId },
-      {
-        $set: {
-          Speciality: cv.Speciality,
-          FullName: cv.FullName,
-          DisplayName: cv.DisplayName,
-          Salary: cv.Salary,
-          CityName: cv.CityName,
-          Experience: cv.Experience,
-          Photo: cv.Photo
-        }
-      },
-      { upsert: true }
-    );
-    return {
-      updatedDocumentsCount: responseOne.modifiedCount,
-      newDocumentsCount: responseOne.upsertedCount,
-      foundDocumentsInDbCount: responseOne.matchedCount
-    };
-  });
-
-  const responseMany = Promise.all(responseManyPromises);
-  return responseMany;
+const saveToDb = async ({ data, collectionResumes }) => {
+  const _id = data.resumeId;
+  data = { _id };
+  const response = await collectionResumes.aggregate(
+    { $match: { _id } },
+    {
+      $set: data,
+      $unset: { resumeId: "" }
+    }
+  );
+  return {
+    resumeId: _id,
+    date: new Date(),
+    response
+  };
 };
 
 module.exports = saveToDb;
