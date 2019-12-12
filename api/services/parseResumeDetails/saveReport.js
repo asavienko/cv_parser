@@ -2,8 +2,8 @@ const saveReportToDb = async (report, reportId, collectionReports) => {
   await collectionReports.updateOne(
     { _id: reportId },
     {
-      $push: { log: report },
-      $set: { status: "executes" }
+      $set: { status: "executes" },
+      $push: { log: report }
     }
   );
 };

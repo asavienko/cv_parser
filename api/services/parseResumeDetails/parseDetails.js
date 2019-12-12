@@ -1,59 +1,83 @@
 const fetch = require("node-fetch");
 const saveToDb = require("./saveToDb");
 const saveReport = require("./saveReport");
+const saveErrorStatus = require("./saveErrorStatus");
 
 const parseDetails = ({
   reportId,
   options,
   collectionReports,
-  collectionResumes,
-  collectionResumesInformation
+  collectionResumes
 }) => {
   function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-  const parseEachResume = async previousResume => {
-    const [resume] =
+  const parseEachResume = async (previousResume, skip) => {
+    const [{ _id }] =
       previousResume ||
       (await collectionResumes
         .aggregate([
-          { $match: { status: { $nin: ["informationSaved", "parsing"] } } },
-          { $project: { resumeId: "$ResumeId" } },
+          {
+            $match: {
+              email: { $exists: false },
+              responseStatus: { $nin: [204] }
+            }
+          },
+          { $project: { _id: true } },
+          { $skip: skip },
           { $limit: 1 }
         ])
         .toArray());
-    console.log(resume);
-    const url = `https://employer-api.rabota.ua/resume/${resume.resumeId}`;
-
+    const url = `https://employer-api.rabota.ua/resume/${_id}`;
+    console.log(`id in url: ${_id}`);
     try {
       const response = await fetch(url, options);
-      if (response.status !== 200) {
-        throw new Error(`Response status: ${response.status}`);
+      const { status: responseStatus } = response;
+      console.log(responseStatus);
+      if (responseStatus === 204) {
+        const report = await saveErrorStatus({
+          responseStatus,
+          collectionResumes,
+          _id
+        });
+        await saveReport(report, reportId, collectionReports);
+        parseEachResume(null, skip);
+      } else if (responseStatus !== 200) {
+        await saveReport(
+          {
+            error: `Error status: ${responseStatus}`,
+            resumeId: _id,
+            time: new Date()
+          },
+          reportId,
+          collectionReports
+        );
+        await timeout(30000);
+        parseEachResume([{ _id }], skip);
+      } else if (responseStatus === 200) {
+        const json = await response.json();
+        const report = await saveToDb({
+          data: json,
+          collectionResumes
+        });
+        await saveReport(report, reportId, collectionReports);
+        parseEachResume(null, skip);
       }
-      const json = await response.json();
-
-      const report = await saveToDb({
-        data: json,
-        collectionResumesInformation,
-        collectionResumes
-      });
-      await saveReport(report, reportId, collectionReports);
-      parseEachResume();
     } catch (error) {
-      console.log(error.message);
       await saveReport(
-        { error: error.message, resumeId: resume, time: new Date() },
+        { error: error.message, resumeId: _id, time: new Date() },
         reportId,
         collectionReports
       );
-      console.log(error);
       await timeout(30000);
-      parseEachResume([resume]);
+      parseEachResume([{ _id }], skip);
     }
   };
   const arrOfPromises = [];
-  for (let j = 0; j <= 1; j++) {
-    arrOfPromises.push((() => setTimeout(parseEachResume, j * 1 * 1000))());
+  for (let j = 0; j < 10; j++) {
+    arrOfPromises.push(
+      (() => setTimeout(() => parseEachResume(null, j), j * 1.5 * 1000))()
+    );
   }
 
   Promise.all(arrOfPromises);

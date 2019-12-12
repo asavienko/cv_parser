@@ -6,11 +6,8 @@ const parseResumeDetails = async () => {
   const authToken = await getAuthToken();
   const options = { headers: { Cookie: authToken } };
   const client = await connectMongoDb();
-  const collectionResumes = client.db("rabotaua").collection("resumes");
-  const collectionReports = client.db("rabotaua").collection("reportsTest");
-  const collectionResumesInformation = client
-    .db("rabotaua")
-    .collection("resumesInformation");
+  const collectionResumes = client.db("rabotaua").collection("resumeIds");
+  const collectionReports = client.db("rabotaua").collection("reports");
   const responseDB = await collectionReports.insertOne({
     name: "Parse resumeId information",
     startDate: new Date(),
@@ -23,7 +20,6 @@ const parseResumeDetails = async () => {
       options,
       collectionReports,
       collectionResumes,
-      collectionResumesInformation
     });
   } catch (e) {
     collectionReports.updateOne(

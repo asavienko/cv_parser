@@ -1,17 +1,23 @@
 const saveToDb = async ({ data, collectionResumes }) => {
-  const _id = data.resumeId;
-  data = { _id };
-  const response = await collectionResumes.aggregate(
-    { $match: { _id } },
+  const { resumeId: _id } = data;
+  delete data.resumeId;
+  const response = await collectionResumes.updateOne(
+    { _id },
     {
       $set: data,
-      $unset: { resumeId: "" }
+      $unset: { responseStatus: "" }
     }
   );
+  const { upsertedId } = response;
+  const updated = response.modifiedCount === 1;
+  const upserted = response.upsertedCount === 1;
+
   return {
     resumeId: _id,
     date: new Date(),
-    response
+    updated,
+    upserted,
+    upsertedId
   };
 };
 
