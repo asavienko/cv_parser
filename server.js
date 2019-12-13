@@ -4,7 +4,7 @@ const cors = require("cors");
 const totalCvs = require("./api/routes/totalCvs");
 const getDictionaryCity = require("./api/routes/getDictionaryCity");
 const parseAllResume = require("./api/routes/parseAllResume");
-const connectCollection = require("./api/services/connectMongoDb");
+const parseResumeDetails = require("./api/routes/parseResumeDetails");
 const express = require("express");
 
 const app = express();
@@ -18,18 +18,19 @@ const port = 5000;
 app.get("/dictionary-city", getDictionaryCity);
 app.get("/total-cvs", totalCvs);
 app.get("/parse-all-resume", parseAllResume);
+app.get("/parse-resume-details", parseResumeDetails);
 
 app.get("/parse-cvs", async (req, res) => {
-  res.json({minutes: 134 });
+  res.json({ minutes: 134 });
 });
 app.get("/cvlist", async (req, res) => {
   const query = req.query;
   try {
-    const collection = await connectCollection("rabotaua", "cvs");
+    const collection = await connectDb("rabotaua", "cvs");
     const result = await collection.find(query).toArray();
     res.json({ data: result });
   } catch ({ message }) {
-    res.json({error: message });
+    res.json({ error: message });
   }
 });
 

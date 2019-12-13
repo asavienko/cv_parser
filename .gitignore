@@ -14,6 +14,7 @@
 # misc
 /.idea
 .DS_Store
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -25,4 +26,8 @@ yarn-error.log*
 
 
 
-/api/toDellete/migration.js
+
+
+/api/toDellete/
+/src/mokData/cvData.json
+/src/mokData/mokData.js
