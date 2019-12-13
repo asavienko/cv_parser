@@ -29,24 +29,23 @@ function CvList({ favoriteCvList, setFavoriteList, setRawList, rawList }) {
         setLoading(true);
         try {
           const response = await getRequest("/cvlist");
-          if (response.confirmation === "success") {
+          const responseSuccess = response.status === 200 && response.data;
+          if (responseSuccess) {
             for (let cvItem of response.data) {
               cvItem.key = cvItem._id;
             }
             setRawList(response.data);
-            setLoading(false);
-          } else {
-            throw new Error()
           }
-        } catch (e) {
+        } catch {
           openNotification({
             type: "error",
             message: "Не удалось загрузить данные"
           });
+        } finally {
           setLoading(false);
         }
       }
-      setCvList(cvList);
+      // setCvList(cvList);
       if (cvList.length) {
         const salary = cvList.map(({ salary }) => numeral(salary).value());
         const min = Math.min(...salary);
