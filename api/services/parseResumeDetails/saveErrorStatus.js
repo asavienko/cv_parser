@@ -6,7 +6,6 @@ const saveErrorStatus = async ({ responseStatus, collectionResumes, _id }) => {
     }
   );
   const inserted = response.modifiedCount === 1;
-  console.log(`inserted error status ${inserted}`);
   return {
     resumeId: _id,
     date: new Date(),

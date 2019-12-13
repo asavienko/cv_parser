@@ -19,7 +19,7 @@ const parseResumeDetails = async () => {
       reportId,
       options,
       collectionReports,
-      collectionResumes,
+      collectionResumes
     });
   } catch (e) {
     collectionReports.updateOne(

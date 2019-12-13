@@ -1,6 +1,5 @@
 const saveToDb = async ({ data, collectionResumes }) => {
   const { resumeId: _id } = data;
-  delete data.resumeId;
   const response = await collectionResumes.updateOne(
     { _id },
     {

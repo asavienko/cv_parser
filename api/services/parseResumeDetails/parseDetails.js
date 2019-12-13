@@ -2,6 +2,7 @@ const fetch = require("node-fetch");
 const saveToDb = require("./saveToDb");
 const saveReport = require("./saveReport");
 const saveErrorStatus = require("./saveErrorStatus");
+const getId = require("./getId");
 
 const parseDetails = ({
   reportId,
@@ -13,28 +14,22 @@ const parseDetails = ({
     return new Promise(resolve => setTimeout(resolve, ms));
   }
   const parseEachResume = async (previousResume, skip) => {
-    const [{ _id }] =
-      previousResume ||
-      (await collectionResumes
-        .aggregate([
-          {
-            $match: {
-              email: { $exists: false },
-              responseStatus: { $nin: [204] }
-            }
-          },
-          { $project: { _id: true } },
-          { $skip: skip },
-          { $limit: 1 }
-        ])
-        .toArray());
+    const _id = await getId({ collectionResumes, skip, previousResume });
     const url = `https://employer-api.rabota.ua/resume/${_id}`;
-    console.log(`id in url: ${_id}`);
     try {
       const response = await fetch(url, options);
       const { status: responseStatus } = response;
-      console.log(responseStatus);
-      if (responseStatus === 204) {
+      if (responseStatus === 200) {
+        const data = await response.json();
+        delete data.resumeId;
+        const report = await saveToDb({
+          data,
+          collectionResumes
+        });
+        await saveReport(report, reportId, collectionReports);
+        parseEachResume(null, skip);
+        return;
+      } else if (responseStatus === 204) {
         const report = await saveErrorStatus({
           responseStatus,
           collectionResumes,
@@ -42,27 +37,19 @@ const parseDetails = ({
         });
         await saveReport(report, reportId, collectionReports);
         parseEachResume(null, skip);
-      } else if (responseStatus !== 200) {
-        await saveReport(
-          {
-            error: `Error status: ${responseStatus}`,
-            resumeId: _id,
-            time: new Date()
-          },
-          reportId,
-          collectionReports
-        );
-        await timeout(30000);
-        parseEachResume([{ _id }], skip);
-      } else if (responseStatus === 200) {
-        const json = await response.json();
-        const report = await saveToDb({
-          data: json,
-          collectionResumes
-        });
-        await saveReport(report, reportId, collectionReports);
-        parseEachResume(null, skip);
+        return;
       }
+      await saveReport(
+        {
+          error: `Error status: ${responseStatus}`,
+          resumeId: _id,
+          time: new Date()
+        },
+        reportId,
+        collectionReports
+      );
+      await timeout(30000);
+      parseEachResume(_id, skip);
     } catch (error) {
       await saveReport(
         { error: error.message, resumeId: _id, time: new Date() },
@@ -70,7 +57,7 @@ const parseDetails = ({
         collectionReports
       );
       await timeout(30000);
-      parseEachResume([{ _id }], skip);
+      parseEachResume(_id, skip);
     }
   };
   const arrOfPromises = [];
