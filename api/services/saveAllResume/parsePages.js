@@ -19,14 +19,16 @@ const parsePages = ({
     try {
       const response = await fetch(url, options);
       const json = await response.json();
-      const responseDocuments = _.get(json, "Documents", []);
+
+      const responseDocuments = _.get(json, "Documents.ResumeId", []);
       if (!responseDocuments.length) {
         throw new Error(
           `No data in document. response.Message: ${json.Message}.`
         );
       }
+      const data = responseDocuments.map(({ ResumeId: _id }) => ({ _id }));
       const reportMany = await saveToDb({
-        data: responseDocuments,
+        data,
         collectionResumes
       });
       const report = reportMany.reduce((a, b) => {
@@ -39,7 +41,7 @@ const parsePages = ({
         };
       });
       report.parsedPage = currentPage;
-      report.foundOnPage = json.Documents.length;
+      report.foundOnPage = data.length;
       report.time = new Date();
       await saveReport(report, reportId, collectionReports);
       parseEachPage();
@@ -55,7 +57,7 @@ const parsePages = ({
   };
   const arrOfPromises = [];
   for (let j = 0; j <= 3; j++) {
-    arrOfPromises.push((() => setTimeout(parseEachPage, j  * 1000))());
+    arrOfPromises.push((() => setTimeout(parseEachPage, j * 1000))());
   }
 
   Promise.all(arrOfPromises);

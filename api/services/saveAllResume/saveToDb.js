@@ -21,8 +21,7 @@ const saveToDb = ({ data, collectionResumes }) => {
       foundDocumentsInDbCount: responseOne.matchedCount
     };
   });
-
-  const responseMany = Promise.all(responseManyPromises)
+  const responseMany = Promise.all(responseManyPromises);
   return responseMany;
 };
 
