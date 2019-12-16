@@ -1,17 +1,9 @@
 const saveToDb = ({ data, collectionResumes }) => {
-  const responseManyPromises = data.map(async cv => {
+  const responseManyPromises = data.map(async _id => {
     const responseOne = await collectionResumes.updateOne(
-      { ResumeId: cv.ResumeId },
+      { _id },
       {
-        $set: {
-          Speciality: cv.Speciality,
-          FullName: cv.FullName,
-          DisplayName: cv.DisplayName,
-          Salary: cv.Salary,
-          CityName: cv.CityName,
-          Experience: cv.Experience,
-          Photo: cv.Photo
-        }
+        $set: _id
       },
       { upsert: true }
     );
