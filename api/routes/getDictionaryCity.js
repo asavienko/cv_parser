@@ -1,4 +1,4 @@
-const connectDb = require("../services/connectMongoDb");
+const connectDb = require("../database/connectMongoDb");
 
 const getDictionaryCity = async (req, res) => {
   //todo up to date data from api

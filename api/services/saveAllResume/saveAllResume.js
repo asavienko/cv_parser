@@ -1,5 +1,5 @@
 const getAuthToken = require("../getAuthToken/getAuthToken");
-const connectMongoDb = require("../connectMongoDb");
+const connectMongoDb = require("../../database/connectMongoDb");
 const parsePages = require("./parsePages");
 
 const saveAllResume = async () => {
