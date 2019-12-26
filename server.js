@@ -6,6 +6,9 @@ const totalCvs = require("./api/routes/totalCvs");
 const getDictionaryCity = require("./api/routes/getDictionaryCity");
 const parseAllResume = require("./api/routes/parseAllResume");
 const parseResumeDetails = require("./api/routes/parseResumeDetails");
+const errorHandler = require("./api/middleware/error-handler");
+const jwt = require("./api/middleware/jwt");
+const user = require("./api/routes/users");
 
 const app = express();
 
@@ -16,6 +19,7 @@ const corsOptions = {
   optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get("/dictionary-city", getDictionaryCity);
@@ -26,6 +30,15 @@ app.get("/parse-resume-details", parseResumeDetails);
 app.get("/parse-cvs", async (req, res) => {
   res.json({ minutes: 134 });
 });
+
+app.use(jwt());
+
+app.use("/users", user);
+
+app.use(errorHandler);
+
+/*
+Todo delete or refactor
 app.get("/cvlist", async (req, res) => {
   const query = req.query;
   try {
@@ -36,5 +49,6 @@ app.get("/cvlist", async (req, res) => {
     res.json({ error: message });
   }
 });
+*/
 
 app.listen(port, () => console.log(`Listening on port ${port}...`));
