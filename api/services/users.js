@@ -2,25 +2,32 @@ const SECRET = process.env.SECRET;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const connectDb = require("../database/connectMongoDb");
-const ObjectId = require("mongodb").ObjectID;
+const uniqid = require("uniqid");
 
-module.exports = {
-  authenticate,
-  getAll,
-  getById,
-  create,
-  update,
-  delete: _delete
+const userPipelines = {
+  getAll: () => [{ $project: { hash: false } }],
+  getById: _id => [{ $match: { _id } }, { $project: { hash: 0 } }],
+  createCheckName: userParams => [
+    { $match: { username: userParams.username } },
+    { $project: { username: 1 } },
+    { $count: "count" }
+  ]
 };
 
-async function getCollection() {
+const getUsersCollection = async () => {
   const client = await connectDb();
   return client.db("rabotaua").collection("users");
-}
+};
+
+const sameNameCheck = async ({ user, userParam, collection }) => {
+  const sameNameCheck =
+    user.username !== userParam.username &&
+    (await collection.findOne({ username: userParam.username }));
+  return !!sameNameCheck;
+};
 
 async function authenticate({ username, password }) {
-  const client = await connectDb();
-  const collection = client.db("rabotaua").collection("users");
+  const collection = await getUsersCollection();
   const user = await collection.findOne({ username });
   if (user && bcrypt.compareSync(password, user.hash)) {
     const { hash, ...userWithoutHash } = user;
@@ -32,34 +39,21 @@ async function authenticate({ username, password }) {
   }
 }
 
-async function getAll() {
-  const client = await connectDb();
-  const collection = client.db("rabotaua").collection("users");
-  return await collection.aggregate([{ $project: { hash: false } }]).toArray();
-}
+const getAll = async () => {
+  const collection = await getUsersCollection();
+  return await collection.aggregate(userPipelines.getAll()).toArray();
+};
 
-async function getById(id) {
-  const client = await connectDb();
-  const collection = client.db("rabotaua").collection("users");
-  const user = await collection
-    .aggregate([
-      { $match: { _id: new ObjectId(id) } },
-      { $project: { hash: 0 } }
-    ])
-    .toArray();
+const getById = async _id => {
+  const collection = await getUsersCollection();
+  const user = await collection.aggregate(userPipelines.getById(_id)).toArray();
   return user;
-}
+};
 
-async function create(userParam) {
-  console.log(userParam);
-  const client = await connectDb();
-  const collection = client.db("rabotaua").collection("users");
+const create = async userParam => {
+  const collection = await getUsersCollection();
   const [checkName] = await collection
-    .aggregate([
-      { $match: { username: userParam.username } },
-      { $project: { username: 1 } },
-      { $count: "count" }
-    ])
+    .aggregate(userPipelines.createCheckName(userParam))
     .toArray();
   if (checkName) {
     throw 'Username "' + userParam.username + '" is already taken';
@@ -73,33 +67,43 @@ async function create(userParam) {
   }
 
   // save user
+  userParam._id = uniqid();
   await collection.insertOne(userParam);
-}
+};
 
-async function update(_id, userParam) {
-  const collection = await getCollection();
-  const user = await collection.aggregate([{ $match: _id }]);
+const update = async (_id, userParam) => {
+  const collection = await getUsersCollection();
+  const user = await collection.findOne({ _id });
 
   // validate
   if (!user) throw "User not found";
 
-  const sameNameCheck =
-    user.username !== userParam.username &&
-    (await collection.findOne({ username: userParam.username }));
+  const checkName = await sameNameCheck({ user, userParam, collection });
 
-  if (sameNameCheck) {
+  if (checkName) {
     throw 'Username "' + userParam.username + '" is already taken';
   }
 
   // hash password if it was entered
   if (userParam.password) {
     userParam.hash = bcrypt.hashSync(userParam.password, 10);
+    delete userParam.password;
   }
 
   // copy userParam properties to user
   await collection.updateOne({ _id }, { userParam });
-}
+};
 
-async function _delete(_id) {
-  await getCollection().remove({ _id });
-}
+const remove = async _id => {
+  const collection = await getUsersCollection();
+  await collection.remove({ _id });
+};
+
+module.exports = {
+  authenticate,
+  getAll,
+  getById,
+  create,
+  update,
+  remove
+};

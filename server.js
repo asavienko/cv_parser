@@ -8,7 +8,7 @@ const parseAllResume = require("./api/routes/parseAllResume");
 const parseResumeDetails = require("./api/routes/parseResumeDetails");
 const errorHandler = require("./api/middleware/error-handler");
 const jwt = require("./api/middleware/jwt");
-const user = require("./api/routes/users");
+const usersApi = require("./api/routes/usersApi");
 
 const app = express();
 
@@ -33,7 +33,7 @@ app.get("/parse-cvs", async (req, res) => {
 
 app.use(jwt());
 
-app.use("/users", user);
+app.use("/users", usersApi);
 
 app.use(errorHandler);
 
