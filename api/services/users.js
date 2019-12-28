@@ -7,7 +7,7 @@ const uniqid = require("uniqid");
 const userPipelines = {
   getAll: () => [{ $project: { hash: false } }],
   getById: _id => [{ $match: { _id } }, { $project: { hash: 0 } }],
-  createCheckName: userParams => [
+  getSameUsername: userParams => [
     { $match: { username: userParams.username } },
     { $project: { username: 1 } },
     { $count: "count" }
@@ -26,7 +26,7 @@ const sameNameCheck = async ({ user, userParam, collection }) => {
   return !!sameNameCheck;
 };
 
-async function authenticate({ username, password }) {
+const authenticate = async ({ username, password }) => {
   const collection = await getUsersCollection();
   const user = await collection.findOne({ username });
   if (user && bcrypt.compareSync(password, user.hash)) {
@@ -37,7 +37,7 @@ async function authenticate({ username, password }) {
       token
     };
   }
-}
+};
 
 const getAll = async () => {
   const collection = await getUsersCollection();
@@ -53,7 +53,7 @@ const getById = async _id => {
 const create = async userParam => {
   const collection = await getUsersCollection();
   const [checkName] = await collection
-    .aggregate(userPipelines.createCheckName(userParam))
+    .aggregate(userPipelines.getSameUsername(userParam))
     .toArray();
   if (checkName) {
     throw 'Username "' + userParam.username + '" is already taken';
