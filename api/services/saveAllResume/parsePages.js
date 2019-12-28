@@ -1,5 +1,5 @@
 const fetch = require("node-fetch");
-const saveToDb = require("./saveToDb");
+const saveToDb = require("./saveResumeIdToDb");
 const saveReport = require("./saveReport");
 const _ = require("lodash");
 
@@ -19,14 +19,17 @@ const parsePages = ({
     try {
       const response = await fetch(url, options);
       const json = await response.json();
-      const responseDocuments = _.get(json, "Documents", []);
-      if (!responseDocuments.length) {
+
+      const data = _.get(json, "Documents.ResumeId", []).map(({ _id }) => ({
+        _id
+      }));
+      if (!data.length) {
         throw new Error(
           `No data in document. response.Message: ${json.Message}.`
         );
       }
       const reportMany = await saveToDb({
-        data: responseDocuments,
+        data,
         collectionResumes
       });
       const report = reportMany.reduce((a, b) => {
@@ -39,7 +42,7 @@ const parsePages = ({
         };
       });
       report.parsedPage = currentPage;
-      report.foundOnPage = json.Documents.length;
+      report.foundOnPage = data.length;
       report.time = new Date();
       await saveReport(report, reportId, collectionReports);
       parseEachPage();
@@ -55,7 +58,7 @@ const parsePages = ({
   };
   const arrOfPromises = [];
   for (let j = 0; j <= 3; j++) {
-    arrOfPromises.push((() => setTimeout(parseEachPage, j  * 1000))());
+    arrOfPromises.push((() => setTimeout(parseEachPage, j * 1000))());
   }
 
   Promise.all(arrOfPromises);

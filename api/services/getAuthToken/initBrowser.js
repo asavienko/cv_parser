@@ -1,9 +1,6 @@
 const puppeteer = require("puppeteer");
-const { browserHeadless } = require("../../toDellete/constants/constants");
 const initBrowser = async () => {
-  return await puppeteer.launch({
-    headless: browserHeadless
-  });
+  return await puppeteer.launch();
 };
 
 module.exports = initBrowser;

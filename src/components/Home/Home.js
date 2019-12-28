@@ -35,11 +35,7 @@ function Home({ dictionaryCity, setDictionaryCity }) {
       if (!dictionaryCity.length) {
         try {
           const response = await getDictionaryCity();
-          if (response.confirmation === "success") {
-            setDictionaryCity(response.data);
-          } else {
-            throw new Error();
-          }
+          response.status === 200 && setDictionaryCity(response.data);
         } catch {
           openNotification({
             type: "error",
