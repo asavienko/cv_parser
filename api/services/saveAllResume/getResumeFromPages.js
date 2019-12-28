@@ -2,7 +2,7 @@ const getAuthToken = require("../getAuthToken/getAuthToken");
 const connectMongoDb = require("../../database/connectMongoDb");
 const parsePages = require("./parsePages");
 
-const saveAllResume = async () => {
+const getResumeFromPages = async () => {
   const authToken = await getAuthToken();
   const options = { headers: { Cookie: authToken } };
   const client = await connectMongoDb();
@@ -32,4 +32,4 @@ const saveAllResume = async () => {
   return { message: "Successfully started" };
 };
 
-module.exports = saveAllResume;
+module.exports = getResumeFromPages;

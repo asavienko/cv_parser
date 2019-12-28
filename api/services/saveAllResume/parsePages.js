@@ -1,5 +1,5 @@
 const fetch = require("node-fetch");
-const saveToDb = require("./saveToDb");
+const saveToDb = require("./saveResumeIdToDb");
 const saveReport = require("./saveReport");
 const _ = require("lodash");
 

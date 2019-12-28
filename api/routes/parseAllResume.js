@@ -1,4 +1,4 @@
-const saveAllResume = require("../services/saveAllResume/saveAllResume");
+const saveAllResume = require("../services/saveAllResume/getResumeFromPages");
 
 const parseAllResume = async (req, res) => {
   try {

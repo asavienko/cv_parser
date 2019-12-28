@@ -1,4 +1,4 @@
-const saveToDb = ({ data, collectionResumes }) => {
+const saveResumeIdToDb = ({ data, collectionResumes }) => {
   const responseManyPromises = data.map(async _id => {
     const responseOne = await collectionResumes.updateOne(
       { _id },
@@ -17,4 +17,4 @@ const saveToDb = ({ data, collectionResumes }) => {
   return responseMany;
 };
 
-module.exports = saveToDb;
+module.exports = saveResumeIdToDb;
