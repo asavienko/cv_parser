@@ -5,6 +5,7 @@ import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import Home from "./components/Home/Home";
 import styled from "styled-components";
 import Favorites from "./components/Favorites/Favorites";
+import SignUp from "./components/SignUp/SignUp";
 
 const StyledDiv = styled.div`
   background: RGBA(236, 236, 236, 1);
@@ -32,6 +33,7 @@ function App() {
               <Route exact path="/" component={Home} />
               <Route path="/favorites" component={Favorites} />
               <Route path="/list" component={CvList} />
+              <Route path="/sign-up" component={SignUp}/>
             </Switch>
           </StyledContent>
         </StyledDiv>
