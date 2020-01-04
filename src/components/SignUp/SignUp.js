@@ -11,11 +11,15 @@ import StyledPhoneInput from "./StyledPhoneInput";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
 
 const formItemLayout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 13 }
+  labelCol: { span: 6, xxl: { span: 2, offset: 7 } },
+  wrapperCol: { span: 13, xxl: { span: 6 } }
 };
 const buttonItemLayout = {
-  wrapperCol: { xs: { span: 24, offset: 0 }, sm: { span: 13, offset: 6 } }
+  wrapperCol: {
+    xs: { span: 24, offset: 0 },
+    sm: { span: 13, offset: 6 },
+    xxl: { span: 6, offset: 9 }
+  }
 };
 
 class SignUp extends React.Component {
@@ -28,14 +32,24 @@ class SignUp extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     const { validateFields, getFieldValue, setFieldsValue } = this.props.form;
-    setFieldsValue({
-      name: getFieldValue("name").trim(),
-      surname: getFieldValue("surname").trim()
-    });
+
+    const onSuccess = values => {
+      console.log(getFieldValue("name"));
+      const rawName = getFieldValue("name");
+      const rawSurname = getFieldValue("surname");
+
+      const name = typeof rawName === "string" ? rawName.trim() : rawName;
+      const surname =
+        typeof rawSurname === "string" ? rawSurname.trim() : rawSurname;
+
+      setFieldsValue({
+        name,
+        surname
+      });
+      console.log("Received values of form: ", values);
+    };
     validateFields((err, values) => {
-      err
-        ? console.log("error", values)
-        : console.log("Received values of form: ", values);
+      err ? console.log("error", values) : onSuccess(values);
     });
   };
 
@@ -144,7 +158,7 @@ class SignUp extends React.Component {
               {
                 pattern: LETTERS_VALIDATION,
                 message: "Это поле может содержать только буквы.",
-                transform: value => value.trim()
+                transform: value => value && value.trim()
               },
               { max: 90, message: "Максимальная длина поля 90 символов." }
             ]
@@ -156,7 +170,7 @@ class SignUp extends React.Component {
               {
                 pattern: LETTERS_VALIDATION,
                 message: "Это поле может содержать только буквы",
-                transform: value => value.trim()
+                transform: value => value && value.trim()
               },
               { max: 90, message: "Максимальная длина поля 90 символов" }
             ]
