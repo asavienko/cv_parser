@@ -76,9 +76,6 @@ class SignUp extends React.Component {
         : callback("Вы ввели не корректный номер")
       : callback();
   };
-  handleFormLayoutChange = e => {
-    console.log(e);
-  };
 
   render() {
     const { getFieldDecorator } = this.props.form;

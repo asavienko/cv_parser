@@ -1,7 +1,7 @@
 import React from "react";
 import CvList from "./components/CvTable/CvList";
 import TopMenu from "./components/TopMenu/TopMenu";
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./components/Home/Home";
 import styled from "styled-components";
 import Favorites from "./components/Favorites/Favorites";
@@ -33,7 +33,7 @@ function App() {
               <Route exact path="/" component={Home} />
               <Route path="/favorites" component={Favorites} />
               <Route path="/list" component={CvList} />
-              <Route path="/sign-up" component={SignUp}/>
+              <Route path="/sign-up" component={SignUp} />
             </Switch>
           </StyledContent>
         </StyledDiv>
