@@ -10,8 +10,17 @@ import ru from "react-phone-number-input/locale/ru";
 import StyledPhoneInput from "./StyledPhoneInput";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
 
+const formItemLayout = {
+  labelCol: { span: 6 },
+  wrapperCol: { span: 13 }
+};
+const buttonItemLayout = {
+  wrapperCol: { xs: { span: 24, offset: 0 }, sm: { span: 13, offset: 6 } }
+};
+
 class SignUp extends React.Component {
   state = { confirmDirty: false };
+
   handleConfirmBlur = e => {
     const { value } = e.target;
     this.setState({ confirmDirty: this.state.confirmDirty || !!value });
@@ -53,13 +62,16 @@ class SignUp extends React.Component {
         : callback("Вы ввели не корректный номер")
       : callback();
   };
+  handleFormLayoutChange = e => {
+    console.log(e);
+  };
 
   render() {
     const { getFieldDecorator } = this.props.form;
 
     return (
       <Form onSubmit={this.handleSubmit}>
-        <Form.Item label="E-mail">
+        <Form.Item label="E-mail" {...formItemLayout}>
           {getFieldDecorator("email", {
             rules: [
               {
@@ -74,7 +86,7 @@ class SignUp extends React.Component {
             ]
           })(<Input />)}
         </Form.Item>
-        <Form.Item label="Пароль" hasFeedback>
+        <Form.Item label="Пароль" hasFeedback {...formItemLayout}>
           {getFieldDecorator("password", {
             rules: [
               {
@@ -93,7 +105,7 @@ class SignUp extends React.Component {
             ]
           })(<Input.Password />)}
         </Form.Item>
-        <Form.Item label="Подтвердите пароль" hasFeedback>
+        <Form.Item label="Подтвердите пароль" hasFeedback {...formItemLayout}>
           {getFieldDecorator("confirm", {
             rules: [
               {
@@ -106,7 +118,7 @@ class SignUp extends React.Component {
             ]
           })(<Input.Password onBlur={this.handleConfirmBlur} />)}
         </Form.Item>
-        <Form.Item label="Телефон">
+        <Form.Item label="Телефон" {...formItemLayout}>
           {getFieldDecorator("phone", {
             rules: [
               {
@@ -126,7 +138,7 @@ class SignUp extends React.Component {
             />
           )}
         </Form.Item>
-        <Form.Item label="Имя">
+        <Form.Item label="Имя" {...formItemLayout}>
           {getFieldDecorator("name", {
             rules: [
               {
@@ -138,7 +150,7 @@ class SignUp extends React.Component {
             ]
           })(<Input placeholder="Введите имя" />)}
         </Form.Item>
-        <Form.Item label="Фамилия">
+        <Form.Item label="Фамилия" {...formItemLayout}>
           {getFieldDecorator("surname", {
             rules: [
               {
@@ -150,8 +162,8 @@ class SignUp extends React.Component {
             ]
           })(<Input placeholder="Введите фамилию" />)}
         </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
+        <Form.Item {...buttonItemLayout}>
+          <Button type="primary" htmlType="submit" block>
             Подтвердить
           </Button>
         </Form.Item>
