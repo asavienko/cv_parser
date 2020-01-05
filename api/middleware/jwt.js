@@ -1,6 +1,6 @@
 const expressJwt = require("express-jwt");
 const SECRET = process.env.SECRET;
-const userService = require("../services/users");
+const userService = require("../services/users/users");
 
 const isRevoked = async (req, payload, done) => {
   const user = await userService.getById(payload.sub);

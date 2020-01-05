@@ -5,7 +5,7 @@ const {
   LETTERS_VALIDATION
 } = require("../constants/validation");
 
-const schema = Joi.object({
+const userSignUp = Joi.object({
   email: Joi.string()
     .required()
     .max(90)
@@ -28,4 +28,16 @@ const schema = Joi.object({
     .pattern(LETTERS_VALIDATION)
 });
 
-module.exports = { schema };
+const userSignIn = Joi.object({
+  email: Joi.string()
+    .required()
+    .max(90)
+    .email(),
+  password: Joi.string()
+    .required()
+    .min(8)
+    .max(90)
+    .pattern(PASSWORD_VALIDATION)
+});
+
+module.exports = { userSignUp, userSignIn };
