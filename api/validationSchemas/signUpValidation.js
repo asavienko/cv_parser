@@ -7,6 +7,7 @@ const schema = Joi.object({
     .max(90)
     .email(),
   password: Joi.string().required().max(90).valid(EMAIL_VALIDATION)
+
   /*
   confirm: delete from UI
 
