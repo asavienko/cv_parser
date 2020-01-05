@@ -8,24 +8,23 @@ const StyledPhoneInput = styled(PhoneInput)`
   transition: all 0.3s;
   height: 32px;
   color: #000;
-  :focus {
-    border-color: #40a9ff;
-    border-right-width: 1px !important;
-    outline: 0;
-    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
-  }
+
   :hover {
     border-color: #40a9ff;
     border-right-width: 1px !important;
   }
 
-  //phone-number-component-wrapper
+  //
+  // -==styles for react-phone-number-input component==-
+  //
+  //styles for wrapper div
   .react-phone-number-input__row {
     width: 100%;
     padding: 4px 11px;
     line-height: 32px;
   }
-  //input
+  
+  //styles for input field
   .react-phone-number-input__phone {
     border: none;
   }
@@ -33,18 +32,18 @@ const StyledPhoneInput = styled(PhoneInput)`
     color: #bfbfbf;
   }
 
-  //country block
+  //styles for country block 
   .react-phone-number-input__icon {
     border: none;
   }
 
-  //flags
-  & > div > div > div > img {
+  //styles for flags icons
+  .react-phone-number-input__icon img {
     display: block;
   }
 
-  //international icon
-  & > div > div > div > svg {
+  //styles for international icon
+  .react-phone-number-input__icon svg {
     display: block;
     margin-top: 2px;
   }
