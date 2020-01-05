@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Form, Input } from "antd";
+import openNotification from "../ReusableComponents/Notification";
 import {
   LETTERS_VALIDATION,
   PASSWORD_POLICY
@@ -11,13 +12,14 @@ import StyledPhoneInput from "./StyledPhoneInput";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
 
 const formItemLayout = {
-  labelCol: { span: 6, xxl: { span: 2, offset: 7 } },
-  wrapperCol: { span: 13, xxl: { span: 6 } }
+  labelCol: { sm: { span: 7 }, md: { span: 6 }, xxl: { span: 2, offset: 7 } },
+  wrapperCol: { sm: { span: 15 }, md: { span: 13 }, xxl: { span: 6 } }
 };
 const buttonItemLayout = {
   wrapperCol: {
     xs: { span: 24, offset: 0 },
-    sm: { span: 13, offset: 6 },
+    sm: { span: 15, offset: 7 },
+    md: { span: 13, offset: 6 },
     xxl: { span: 6, offset: 9 }
   }
 };
@@ -25,7 +27,7 @@ const buttonItemLayout = {
 class SignUp extends React.Component {
   state = { confirmDirty: false };
 
-  handleConfirmBlur = e => {
+  handleConfirmPasswordBlur = e => {
     const { value } = e.target;
     const { confirmDirty } = this.state;
     !confirmDirty && this.setState({ confirmDirty: !!value });
@@ -33,31 +35,37 @@ class SignUp extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const { validateFields, getFieldValue, setFieldsValue } = this.props.form;
+    const { validateFields } = this.props.form;
 
     const onSuccess = values => {
-      const rawName = getFieldValue("name");
-      const rawSurname = getFieldValue("surname");
+      const {
+        name: rawName,
+        surname: rawSurname,
+        email,
+        password,
+        phone
+      } = values;
 
-      const name = typeof rawName === "string" ? rawName.trim() : rawName;
-      const surname =
-        typeof rawSurname === "string" ? rawSurname.trim() : rawSurname;
+      const name = rawName && rawName.trim();
+      const surname = rawSurname && rawSurname.trim();
 
-      setFieldsValue({
-        name,
-        surname
-      });
-      console.log("Received values of form: ", values);
+      console.log("Dispatch data: ", { name, surname, email, password, phone });
     };
     validateFields((err, values) => {
-      err ? console.log("error", values) : onSuccess(values);
+      err
+        ? openNotification({
+            type: "error",
+            message: `Поля со звездочкой * обязательны для заполнения.`
+          })
+        : onSuccess(values);
     });
   };
 
   validateToNextPassword = (rule, value, callback) => {
     const { form } = this.props;
-    if (value && this.state.confirmDirty) {
-      form.validateFields(["confirm"], { force: true });
+    const { confirmDirty } = this.state;
+    if (value && confirmDirty) {
+      form.validateFields(["confirmPassword"], { force: true });
     }
     callback();
   };
@@ -72,11 +80,9 @@ class SignUp extends React.Component {
   };
 
   validatePhoneNumber = (rule, value, callback) => {
-    value
-      ? isPossiblePhoneNumber(value)
-        ? callback()
-        : callback("Вы ввели не корректный номер")
-      : callback();
+    !value || isPossiblePhoneNumber(value)
+      ? callback()
+      : callback("Вы ввели не корректный номер");
   };
 
   render() {
@@ -119,7 +125,7 @@ class SignUp extends React.Component {
           })(<Input.Password />)}
         </Form.Item>
         <Form.Item label="Подтвердите пароль" hasFeedback {...formItemLayout}>
-          {getFieldDecorator("confirm", {
+          {getFieldDecorator("confirmPassword", {
             rules: [
               {
                 required: true,
@@ -129,7 +135,7 @@ class SignUp extends React.Component {
                 validator: this.compareToFirstPassword
               }
             ]
-          })(<Input.Password onBlur={this.handleConfirmBlur} />)}
+          })(<Input.Password onBlur={this.handleConfirmPasswordBlur} />)}
         </Form.Item>
         <Form.Item label="Телефон" {...formItemLayout}>
           {getFieldDecorator("phone", {
@@ -146,7 +152,6 @@ class SignUp extends React.Component {
             <StyledPhoneInput
               country="UA"
               labels={ru}
-              usenationalformatfordefaultcountryvalue="false"
               placeholder="Ваш телефон"
             />
           )}
