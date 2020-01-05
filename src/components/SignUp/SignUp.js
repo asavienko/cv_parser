@@ -1,8 +1,8 @@
 import React from "react";
 import { Button, Form, Input } from "antd";
 import {
-  PASSWORD_POLICY,
-  LETTERS_VALIDATION
+  LETTERS_VALIDATION,
+  PASSWORD_POLICY
 } from "../../constants/validation";
 
 import "react-phone-number-input/style.css";
@@ -27,14 +27,15 @@ class SignUp extends React.Component {
 
   handleConfirmBlur = e => {
     const { value } = e.target;
-    this.setState({ confirmDirty: this.state.confirmDirty || !!value });
+    const { confirmDirty } = this.state;
+    !confirmDirty && this.setState({ confirmDirty: !!value });
   };
+
   handleSubmit = e => {
     e.preventDefault();
     const { validateFields, getFieldValue, setFieldsValue } = this.props.form;
 
     const onSuccess = values => {
-      console.log(getFieldValue("name"));
       const rawName = getFieldValue("name");
       const rawSurname = getFieldValue("surname");
 
@@ -53,15 +54,6 @@ class SignUp extends React.Component {
     });
   };
 
-  compareToFirstPassword = (rule, value, callback) => {
-    const { form } = this.props;
-    if (value && value !== form.getFieldValue("password")) {
-      callback("Вы ввели разные пароли");
-    } else {
-      callback();
-    }
-  };
-
   validateToNextPassword = (rule, value, callback) => {
     const { form } = this.props;
     if (value && this.state.confirmDirty) {
@@ -69,6 +61,16 @@ class SignUp extends React.Component {
     }
     callback();
   };
+
+  compareToFirstPassword = (rule, value, callback) => {
+    const { form } = this.props;
+    if (value && value !== form.getFieldValue("password")) {
+      return callback("Вы ввели разные пароли");
+    } else {
+      return callback();
+    }
+  };
+
   validatePhoneNumber = (rule, value, callback) => {
     value
       ? isPossiblePhoneNumber(value)
