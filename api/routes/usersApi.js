@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const userServices = require("../services/users/users");
+const userServices = require("../services/users/userServices");
 const joiMiddleware = require("../middleware/joi");
 const { userSignUp, userSignIn } = require("../validationSchemas/schemas");
 
