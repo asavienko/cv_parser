@@ -1,10 +1,13 @@
+const pkg = require("../../package.json");
+const target = process.env.PROXY || "http://localhost:5000";
+
 async function request(url, method, body) {
   try {
     const headers = new Headers();
     headers.append("Accept", "application/json");
     headers.append("Content-Type", "application/json");
-
-    const response = await fetch(url, {
+    const targetURL = new URL(url, target);
+    const response = await fetch(targetURL, {
       method,
       headers,
       body: body ? JSON.stringify(body) : undefined
