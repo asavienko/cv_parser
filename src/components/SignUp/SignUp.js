@@ -10,6 +10,7 @@ import "react-phone-number-input/style.css";
 import ru from "react-phone-number-input/locale/ru";
 import StyledPhoneInput from "./StyledPhoneInput";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
+import { postRequest } from "../../services/fetchUtils";
 
 const formItemLayout = {
   labelCol: { sm: { span: 7 }, md: { span: 6 }, xxl: { span: 2, offset: 7 } },
@@ -37,7 +38,7 @@ class SignUp extends React.Component {
     e.preventDefault();
     const { validateFields } = this.props.form;
 
-    const onSuccess = values => {
+    const onSuccess = async values => {
       const {
         name: rawName,
         surname: rawSurname,
@@ -49,6 +50,14 @@ class SignUp extends React.Component {
       const name = rawName && rawName.trim();
       const surname = rawSurname && rawSurname.trim();
 
+      const response = await postRequest("/users/sign-up", {
+        name,
+        surname,
+        email,
+        password,
+        phone
+      });
+      console.log(response);
       console.log("Dispatch data: ", { name, surname, email, password, phone });
     };
     validateFields((err, values) => {

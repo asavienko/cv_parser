@@ -40,7 +40,6 @@ function TopMenu({ location: { pathname } }) {
         setStateRenderHeader("true");
     }
   }, [pathname]);
-  console.log(renderHeaderState);
   return (
     <React.Fragment>
       <HeaderLayer show={renderHeaderState}>
