@@ -11,6 +11,7 @@ import ru from "react-phone-number-input/locale/ru";
 import StyledPhoneInput from "./StyledPhoneInput";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
 import { postRequest } from "../../services/fetchUtils";
+import ShowResult from "../ReusableComponents/ShowResult";
 
 const formItemLayout = {
   labelCol: { sm: { span: 7 }, md: { span: 6 }, xxl: { span: 2, offset: 7 } },
@@ -26,7 +27,7 @@ const buttonItemLayout = {
 };
 
 class SignUp extends React.Component {
-  state = { confirmDirty: false };
+  state = { confirmDirty: false, showResultSuccess: false };
 
   handleConfirmPasswordBlur = e => {
     const { value } = e.target;
@@ -58,13 +59,14 @@ class SignUp extends React.Component {
         phone
       });
       console.log(response);
-      console.log("Dispatch data: ", { name, surname, email, password, phone });
+      response && this.setState({ showResultSuccess: true });
     };
     validateFields((err, values) => {
       err
         ? openNotification({
-            type: "error",
-            message: `Поля со звездочкой * обязательны для заполнения.`
+            type: "warning",
+            message: "Заполните все обязательные поля",
+            description: "Поля со звездочкой * обязательны для заполнения."
           })
         : onSuccess(values);
     });
@@ -96,10 +98,17 @@ class SignUp extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { showResultSuccess } = this.state;
 
-    return (
-      <Form onSubmit={this.handleSubmit}>
-        <Form.Item label="E-mail" {...formItemLayout}>
+    return showResultSuccess ? (
+      <ShowResult
+        status="info"
+        title="Еще один шаг до конца регестрации"
+        subTitle="Для того чтобы окончить регестрацию, необходимо связаться по номеру телефона: +38 099 123 4567. Или дождаться когда мы свяжемся с Вами."
+      />
+    ) : (
+      <Form onSubmit={this.handleSubmit} {...formItemLayout}>
+        <Form.Item label="E-mail">
           {getFieldDecorator("email", {
             rules: [
               {
@@ -114,7 +123,7 @@ class SignUp extends React.Component {
             ]
           })(<Input />)}
         </Form.Item>
-        <Form.Item label="Пароль" hasFeedback {...formItemLayout}>
+        <Form.Item label="Пароль" hasFeedback >
           {getFieldDecorator("password", {
             rules: [
               {
@@ -133,7 +142,7 @@ class SignUp extends React.Component {
             ]
           })(<Input.Password />)}
         </Form.Item>
-        <Form.Item label="Подтвердите пароль" hasFeedback {...formItemLayout}>
+        <Form.Item label="Подтвердите пароль" hasFeedback >
           {getFieldDecorator("confirmPassword", {
             rules: [
               {
@@ -146,7 +155,7 @@ class SignUp extends React.Component {
             ]
           })(<Input.Password onBlur={this.handleConfirmPasswordBlur} />)}
         </Form.Item>
-        <Form.Item label="Телефон" {...formItemLayout}>
+        <Form.Item label="Телефон">
           {getFieldDecorator("phone", {
             rules: [
               {
@@ -165,7 +174,7 @@ class SignUp extends React.Component {
             />
           )}
         </Form.Item>
-        <Form.Item label="Имя" {...formItemLayout}>
+        <Form.Item label="Имя" >
           {getFieldDecorator("name", {
             rules: [
               {
@@ -177,7 +186,7 @@ class SignUp extends React.Component {
             ]
           })(<Input placeholder="Введите имя" />)}
         </Form.Item>
-        <Form.Item label="Фамилия" {...formItemLayout}>
+        <Form.Item label="Фамилия" >
           {getFieldDecorator("surname", {
             rules: [
               {
