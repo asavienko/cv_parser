@@ -23,7 +23,7 @@ const StyledPhoneInput = styled(PhoneInput)`
     padding: 4px 11px;
     line-height: 32px;
   }
-  
+
   //styles for input field
   .react-phone-number-input__phone {
     border: none;
@@ -32,7 +32,7 @@ const StyledPhoneInput = styled(PhoneInput)`
     color: #bfbfbf;
   }
 
-  //styles for country block 
+  //styles for country block
   .react-phone-number-input__icon {
     border: none;
   }
