@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Checkbox, Form, Icon, Input, Row } from "antd";
 import openNotification from "../ReusableComponents/Notification";
 import { PASSWORD_POLICY } from "../../constants/validation";
+import { Link } from "react-router-dom";
 
 const formItemLayout = {
   wrapperCol: {
@@ -40,7 +41,6 @@ class SignIn extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { history } = this.props;
 
     return (
       <Form onSubmit={this.handleSubmit} {...formItemLayout}>
@@ -76,19 +76,13 @@ class SignIn extends React.Component {
               valuePropName: "checked",
               initialValue: true
             })(<Checkbox>Запомнить меня</Checkbox>)}
-            <a className="login-form-forgot" href="">
-              Забыл пароль
-            </a>
+            <Link to="/">Забыл пароль</Link>
           </Row>
           <Button type="primary" htmlType="submit" block>
             Войти
           </Button>
-
           <Row>
-            Или{" "}
-            <a onClick={() => this.history.push("/sign-up")}>
-              зарегестрироваться сейчас!
-            </a>
+            Или <Link to="/sign-up">зарегестрироваться сейчас!</Link>
           </Row>
         </Form.Item>
       </Form>

@@ -3,8 +3,10 @@ import { Menu } from "antd";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { withRouter } from "react-router";
-import employ_logo from "../../images/employ_logo.svg";
-import lines_layout from "../../images/lines_layout.png";
+const employ_logo =
+  process.env.PUBLIC_URL + "images/temporaryImages/employ_logo.svg";
+const lines_layout =
+  process.env.PUBLIC_URL + "images/temporaryImages/lines_layout.png";
 
 const StyledMenu = styled(Menu)`
   line-height: 45px;
@@ -34,17 +36,18 @@ function TopMenu({ location: { pathname } }) {
   useEffect(() => {
     switch (pathname) {
       case "/sign-up":
-        setStateRenderHeader("false");
-        break;
+        return setStateRenderHeader("false");
+      case "/sign-in":
+        return setStateRenderHeader("false");
       default:
-        setStateRenderHeader("true");
+        return setStateRenderHeader("true");
     }
   }, [pathname]);
   return (
     <React.Fragment>
       <HeaderLayer show={renderHeaderState}>
-        <img src={employ_logo} />
-        <img src={lines_layout} />
+        <img src={employ_logo} alt="logo" />
+        <img src={lines_layout} alt="logo_layout" />
       </HeaderLayer>
       <StyledMenu mode="horizontal" show={renderHeaderState}>
         <Menu.Item key="home">

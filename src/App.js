@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import CvList from "./components/CvTable/CvList";
 import TopMenu from "./components/TopMenu/TopMenu";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";

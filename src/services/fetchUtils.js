@@ -1,5 +1,5 @@
-const pkg = require("../../package.json");
-const target = process.env.PROXY || "http://localhost:5000";
+const target =
+  process.env.REACT_APP_WEBAPP_SERVICE_URL || "http://localhost:5000";
 
 async function request(url, method, body) {
   try {
