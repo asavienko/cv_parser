@@ -83,6 +83,7 @@ class SignIn extends React.Component {
           <Button type="primary" htmlType="submit" block>
             Войти
           </Button>
+
           <Row>
             Или{" "}
             <a onClick={() => this.history.push("/sign-up")}>
