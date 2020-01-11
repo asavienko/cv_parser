@@ -4,9 +4,8 @@ import openNotification from "../ReusableComponents/Notification";
 import { PASSWORD_POLICY } from "../../constants/validation";
 import { Link } from "react-router-dom";
 
-const formItemLayout = {
+const formLayout = {
   wrapperCol: {
-    xs: { span: 20 },
     sm: { span: 16, offset: 4 },
     md: { span: 12, offset: 6 },
     lg: { span: 8, offset: 8 },
@@ -34,16 +33,12 @@ class SignIn extends React.Component {
         : onSuccess(values);
     });
   };
-  validateEmail = (rule, value, callback) => {};
-  validatePassword = (rule, value, callback) => {
-    rule ? callback() : callback("Test");
-  };
 
   render() {
     const { getFieldDecorator } = this.props.form;
 
     return (
-      <Form onSubmit={this.handleSubmit} {...formItemLayout}>
+      <Form onSubmit={this.handleSubmit} {...formLayout}>
         <Form.Item>
           {getFieldDecorator("email", {
             rules: [{ required: true, message: "Пожалуйста введите Ваш email" }]
@@ -57,10 +52,14 @@ class SignIn extends React.Component {
         </Form.Item>
         <Form.Item>
           {getFieldDecorator("password", {
-            rules: [
-              { required: true, message: "Пожалуйста введита Ваш пароль" },
-              { pattern: PASSWORD_POLICY },
-              { validator: this.validatePassword }
+            validate: [
+              {
+                trigger: "onBlur",
+                rules: [
+                  { pattern: PASSWORD_POLICY },
+                  { required: true, message: "Пожалуйста введита Ваш пароль" }
+                ]
+              }
             ]
           })(
             <Input
