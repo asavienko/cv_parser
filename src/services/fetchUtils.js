@@ -12,7 +12,6 @@ async function request(url, method, body) {
       headers,
       body: body ? JSON.stringify(body) : undefined
     });
-    console.log(response);
     return response.json();
   } catch (e) {
     console.error(e);

@@ -8,8 +8,10 @@ const StylesForInput = styled(Input)`
   }
 `;
 
-const StyledInput = props => {
-  return <StylesForInput {...props} />;
-};
+class StyledInput extends React.Component {
+  render() {
+    return <StylesForInput {...this.props} />;
+  }
+}
 
 export default StyledInput;

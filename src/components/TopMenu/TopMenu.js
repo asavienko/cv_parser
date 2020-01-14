@@ -38,6 +38,8 @@ function TopMenu({ location: { pathname } }) {
         return setStateRenderHeader("false");
       case "/sign-in":
         return setStateRenderHeader("false");
+      case "/email-not-verified":
+        return setStateRenderHeader("false");
       default:
         return setStateRenderHeader("true");
     }

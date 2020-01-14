@@ -3,6 +3,7 @@ import { Button, Checkbox, Form, Icon, Row } from "antd";
 import { PASSWORD_POLICY } from "../../constants/validation";
 import { Link } from "react-router-dom";
 import StyledInput from "../ReusableComponents/StyledInput";
+import { postRequest } from "../../services/fetchUtils";
 
 const formLayout = {
   wrapperCol: {
@@ -19,8 +20,12 @@ class SignIn extends React.Component {
     e.preventDefault();
     const { validateFields } = this.props.form;
 
-    const onSuccess = values => {
-      console.log(values);
+    const onSuccess = async ({ remember, ...dataToSend }) => {
+      const response = await postRequest("/users/sign-in", { ...dataToSend });
+      console.log(response);
+      response.err &&
+        response.err === "Email is not verified" &&
+        this.props.history.push("/email-not-verified");
     };
 
     validateFields((err, values) => {

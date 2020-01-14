@@ -38,7 +38,7 @@ class SignUp extends React.Component {
     e.preventDefault();
     const { validateFields } = this.props.form;
 
-    const onSuccess = values => {
+    const onSuccess = async values => {
       const {
         name: rawName,
         surname: rawSurname,
@@ -56,14 +56,9 @@ class SignUp extends React.Component {
         email,
         password,
         phone
-      })
-        .then(response => {
-          console.log("success" + JSON.stringify(response));
-        })
-        .catch(error => {
-          console.log("error" + error);
-        });
-      console.log(response);
+      });
+
+      console.log(response.err);
     };
     validateFields((err, values) => {
       err
