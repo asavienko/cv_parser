@@ -1,8 +1,8 @@
 import React from "react";
-import { Button, Checkbox, Form, Icon, Input, Row } from "antd";
-import openNotification from "../ReusableComponents/Notification";
+import { Button, Checkbox, Form, Icon, Row } from "antd";
 import { PASSWORD_POLICY } from "../../constants/validation";
 import { Link } from "react-router-dom";
+import StyledInput from "../ReusableComponents/StyledInput";
 
 const formLayout = {
   wrapperCol: {
@@ -24,13 +24,7 @@ class SignIn extends React.Component {
     };
 
     validateFields((err, values) => {
-      err
-        ? openNotification({
-            type: "warning",
-            message: "Заполните все обязательные поля",
-            description: "Поля со звездочкой * обязательны для заполнения."
-          })
-        : onSuccess(values);
+      !err && onSuccess(values);
     });
   };
 
@@ -41,14 +35,19 @@ class SignIn extends React.Component {
       <Form onSubmit={this.handleSubmit} {...formLayout}>
         <Form.Item>
           {getFieldDecorator("email", {
-            rules: [{ required: true, message: "Пожалуйста введите Ваш email" }]
-          })(
-            <Input
-              prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
-              type="email"
-              placeholder="Email"
-            />
-          )}
+            validate: [
+              {
+                trigger: "onBlur",
+                rules: [
+                  {
+                    type: "email",
+                    message: "Вы ввели не коректный email."
+                  },
+                  { required: true, message: "Пожалуйста введите Ваш email" }
+                ]
+              }
+            ]
+          })(<StyledInput prefix={<Icon type="mail" />} placeholder="Email" />)}
         </Form.Item>
         <Form.Item>
           {getFieldDecorator("password", {
@@ -56,14 +55,20 @@ class SignIn extends React.Component {
               {
                 trigger: "onBlur",
                 rules: [
-                  { pattern: PASSWORD_POLICY },
-                  { required: true, message: "Пожалуйста введита Ваш пароль" }
+                  {
+                    pattern: PASSWORD_POLICY,
+                    message: "Вы ввели не верный пороль "
+                  },
+                  {
+                    required: true,
+                    message: "Пожалуйста введита Ваш пароль"
+                  }
                 ]
               }
             ]
           })(
-            <Input
-              prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+            <StyledInput
+              prefix={<Icon type="lock" />}
               type="password"
               placeholder="Пароль"
             />

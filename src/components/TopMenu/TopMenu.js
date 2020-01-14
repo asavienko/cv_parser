@@ -10,15 +10,14 @@ const lines_layout =
 
 const StyledMenu = styled(Menu)`
   line-height: 45px;
-  ${({ show }) => show === "false" && `visibility: hidden;`}
+  ${({ show }) => show === "false" && `visibility: hidden`}
 `;
 const HeaderLayer = styled.div`
-  display: none;
+  display: ${({ show }) => (show === "true" ? `none` : `block`)};
   height: 46px;
   width: 100%;
   overflow: hidden;
   position: absolute;
-  ${({ show }) => show === "false" && `display: block;`}
   img:first-child {
     transform: translate(17%, -33%) rotate(48deg) scaleX(-1);
     height: 141px;
@@ -32,7 +31,7 @@ const HeaderLayer = styled.div`
   }
 `;
 function TopMenu({ location: { pathname } }) {
-  const [renderHeaderState, setStateRenderHeader] = useState("true");
+  const [StateShowMenu, setStateRenderHeader] = useState("true");
   useEffect(() => {
     switch (pathname) {
       case "/sign-up":
@@ -45,11 +44,11 @@ function TopMenu({ location: { pathname } }) {
   }, [pathname]);
   return (
     <React.Fragment>
-      <HeaderLayer show={renderHeaderState}>
+      <HeaderLayer show={StateShowMenu}>
         <img src={employ_logo} alt="logo" />
         <img src={lines_layout} alt="logo_layout" />
       </HeaderLayer>
-      <StyledMenu mode="horizontal" show={renderHeaderState}>
+      <StyledMenu mode="horizontal" show={StateShowMenu}>
         <Menu.Item key="home">
           <Link to="/">Главная</Link>
         </Menu.Item>

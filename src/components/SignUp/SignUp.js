@@ -11,7 +11,6 @@ import ru from "react-phone-number-input/locale/ru";
 import StyledPhoneInput from "./StyledPhoneInput";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
 import { postRequest } from "../../services/fetchUtils";
-import ShowResult from "../ReusableComponents/ShowResult";
 
 const formItemLayout = {
   labelCol: { sm: { span: 7 }, md: { span: 6 }, xxl: { span: 2, offset: 7 } },
@@ -27,7 +26,7 @@ const buttonItemLayout = {
 };
 
 class SignUp extends React.Component {
-  state = { confirmDirty: false, showResultSuccess: false };
+  state = { confirmDirty: false };
 
   handleConfirmPasswordBlur = e => {
     const { value } = e.target;
@@ -39,7 +38,7 @@ class SignUp extends React.Component {
     e.preventDefault();
     const { validateFields } = this.props.form;
 
-    const onSuccess = async values => {
+    const onSuccess = values => {
       const {
         name: rawName,
         surname: rawSurname,
@@ -51,15 +50,20 @@ class SignUp extends React.Component {
       const name = rawName && rawName.trim();
       const surname = rawSurname && rawSurname.trim();
 
-      const response = await postRequest("/users/sign-up", {
+      const response = postRequest("/users/sign-up", {
         name,
         surname,
         email,
         password,
         phone
-      });
+      })
+        .then(response => {
+          console.log("success" + JSON.stringify(response));
+        })
+        .catch(error => {
+          console.log("error" + error);
+        });
       console.log(response);
-      response && this.setState({ showResultSuccess: true });
     };
     validateFields((err, values) => {
       err
@@ -98,15 +102,8 @@ class SignUp extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { showResultSuccess } = this.state;
 
-    return showResultSuccess ? (
-      <ShowResult
-        status="info"
-        title="Еще один шаг до конца регестрации"
-        subTitle="Для того чтобы окончить регестрацию, необходимо связаться по номеру телефона: +38 099 123 4567. Или дождаться когда мы свяжемся с Вами."
-      />
-    ) : (
+    return (
       <Form onSubmit={this.handleSubmit} {...formItemLayout}>
         <Form.Item label="E-mail">
           {getFieldDecorator("email", {
@@ -123,7 +120,7 @@ class SignUp extends React.Component {
             ]
           })(<Input />)}
         </Form.Item>
-        <Form.Item label="Пароль" hasFeedback >
+        <Form.Item label="Пароль" hasFeedback>
           {getFieldDecorator("password", {
             rules: [
               {
@@ -142,7 +139,7 @@ class SignUp extends React.Component {
             ]
           })(<Input.Password />)}
         </Form.Item>
-        <Form.Item label="Подтвердите пароль" hasFeedback >
+        <Form.Item label="Подтвердите пароль" hasFeedback>
           {getFieldDecorator("confirmPassword", {
             rules: [
               {
@@ -174,7 +171,7 @@ class SignUp extends React.Component {
             />
           )}
         </Form.Item>
-        <Form.Item label="Имя" >
+        <Form.Item label="Имя">
           {getFieldDecorator("name", {
             rules: [
               {
@@ -186,7 +183,7 @@ class SignUp extends React.Component {
             ]
           })(<Input placeholder="Введите имя" />)}
         </Form.Item>
-        <Form.Item label="Фамилия" >
+        <Form.Item label="Фамилия">
           {getFieldDecorator("surname", {
             rules: [
               {
