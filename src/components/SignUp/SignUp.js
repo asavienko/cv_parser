@@ -11,6 +11,7 @@ import ru from "react-phone-number-input/locale/ru";
 import StyledPhoneInput from "./StyledPhoneInput";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
 import { postRequest } from "../../services/fetchUtils";
+import { signUpSignInFunction } from "../../services/signUpSignInFunction";
 
 const formItemLayout = {
   labelCol: { sm: { span: 7 }, md: { span: 6 }, xxl: { span: 2, offset: 7 } },
@@ -50,7 +51,7 @@ class SignUp extends React.Component {
       const name = rawName && rawName.trim();
       const surname = rawSurname && rawSurname.trim();
 
-      const response = postRequest("/users/sign-up", {
+      const response = await postRequest("/users/sign-up", {
         name,
         surname,
         email,
@@ -58,7 +59,13 @@ class SignUp extends React.Component {
         phone
       });
 
-      console.log(response.err);
+      response && response.err
+        ? openNotification({
+            type: "error",
+            message: "Ошибка",
+            description: response.err
+          })
+        : signUpSignInFunction(response);
     };
     validateFields((err, values) => {
       err

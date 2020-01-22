@@ -1,9 +1,10 @@
 import React from "react";
-import { Button, Checkbox, Form, Icon, Row } from "antd";
+import { Button, Form, Icon, Row } from "antd";
 import { PASSWORD_POLICY } from "../../constants/validation";
 import { Link } from "react-router-dom";
 import StyledInput from "../ReusableComponents/StyledInput";
 import { postRequest } from "../../services/fetchUtils";
+import openNotification from "../ReusableComponents/Notification";
 
 const formLayout = {
   wrapperCol: {
@@ -23,9 +24,15 @@ class SignIn extends React.Component {
     const onSuccess = async ({ remember, ...dataToSend }) => {
       const response = await postRequest("/users/sign-in", { ...dataToSend });
       console.log(response);
-      response.err &&
-        response.err === "Email is not verified" &&
-        this.props.history.push("/email-not-verified");
+      response &&
+        response.err &&
+        openNotification({
+          type: "error",
+          message: "Ошибка",
+          description: response.err
+        });
+
+      this.props.history.push("/email-not-verified");
     };
 
     validateFields((err, values) => {
@@ -80,18 +87,12 @@ class SignIn extends React.Component {
           )}
         </Form.Item>
         <Form.Item>
-          <Row type="flex" justify="space-between">
-            {getFieldDecorator("remember", {
-              valuePropName: "checked",
-              initialValue: true
-            })(<Checkbox>Запомнить меня</Checkbox>)}
-            <Link to="/">Забыл пароль</Link>
-          </Row>
           <Button type="primary" htmlType="submit" block>
             Войти
           </Button>
-          <Row>
-            Или <Link to="/sign-up">зарегестрироваться сейчас!</Link>
+          <Row type="flex" justify="space-between">
+            <Link to="/">Забыл пароль</Link>
+            <Link to="/sign-up">Регистрация!</Link>
           </Row>
         </Form.Item>
       </Form>
