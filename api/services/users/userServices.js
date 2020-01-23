@@ -30,16 +30,10 @@ const authenticate = async ({ email, password }) => {
   const [user] = await collection
     .aggregate(userPipelines.authenticate(email))
     .toArray();
-  if (!user.emailVerified) throw "Email не вертифицирован";
   if (user && bcrypt.compareSync(password, user.hash)) {
-    const { hash, emailVerified, ...userWithoutHash } = user;
-
+    const { hash, ...userWithoutHash } = user;
     const token = jwt.sign({ sub: user._id }, SECRET);
-
-    return {
-      ...userWithoutHash,
-      token
-    };
+    return { ...userWithoutHash, token };
   }
 };
 

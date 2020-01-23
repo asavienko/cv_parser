@@ -6,6 +6,8 @@ const openNotification = ({
   description,
   placement = "bottomLeft"
 }) => {
+  // notification type accepts values 'success', 'info', 'warning', 'error'
+
   notification[type]({
     message,
     description,

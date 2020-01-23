@@ -4,7 +4,7 @@ import { PASSWORD_POLICY } from "../../constants/validation";
 import { Link } from "react-router-dom";
 import StyledInput from "../ReusableComponents/StyledInput";
 import { postRequest } from "../../services/fetchUtils";
-import openNotification from "../ReusableComponents/Notification";
+import signUpSignInFunction from "../../services/signUpSignInFunction";
 
 const formLayout = {
   wrapperCol: {
@@ -21,18 +21,11 @@ class SignIn extends React.Component {
     e.preventDefault();
     const { validateFields } = this.props.form;
 
-    const onSuccess = async ({ remember, ...dataToSend }) => {
+    const onSuccess = async ({ ...dataToSend }) => {
       const response = await postRequest("/users/sign-in", { ...dataToSend });
-      console.log(response);
-      response &&
-        response.err &&
-        openNotification({
-          type: "error",
-          message: "Ошибка",
-          description: response.err
-        });
 
-      this.props.history.push("/email-not-verified");
+      const history = this.props.history;
+      signUpSignInFunction({ response, history });
     };
 
     validateFields((err, values) => {

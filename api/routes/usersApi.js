@@ -7,7 +7,7 @@ const { userSignUp, userSignIn } = require("../validationSchemas/schemas");
 const signUp = (req, res, next) => {
   userServices
     .create(req.body)
-    .then(() => res.json({ message: "User is created successfully" }))
+    .then(() => res.json({ success: true }))
     .catch(err => next(err));
 };
 
@@ -15,9 +15,9 @@ const signIn = (req, res, next) => {
   userServices
     .authenticate(req.body)
     .then(user =>
-      user
+      user && user.token
         ? res.json(user)
-        : res.status(400).json({ message: "Username or password is incorrect" })
+        : res.status(400).json({ err: "Email или пароль введены не верно" })
     )
     .catch(err => next(err));
 };

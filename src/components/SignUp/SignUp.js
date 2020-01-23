@@ -11,7 +11,7 @@ import ru from "react-phone-number-input/locale/ru";
 import StyledPhoneInput from "./StyledPhoneInput";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
 import { postRequest } from "../../services/fetchUtils";
-import { signUpSignInFunction } from "../../services/signUpSignInFunction";
+import signUpSignInFunction from "../../services/signUpSignInFunction";
 
 const formItemLayout = {
   labelCol: { sm: { span: 7 }, md: { span: 6 }, xxl: { span: 2, offset: 7 } },
@@ -59,13 +59,13 @@ class SignUp extends React.Component {
         phone
       });
 
-      response && response.err
-        ? openNotification({
-            type: "error",
-            message: "Ошибка",
-            description: response.err
-          })
-        : signUpSignInFunction(response);
+      const history = this.props.history;
+
+      signUpSignInFunction({
+        response,
+        history,
+        loginData: { email, password }
+      });
     };
     validateFields((err, values) => {
       err
