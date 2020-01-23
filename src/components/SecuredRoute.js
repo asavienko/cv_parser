@@ -7,8 +7,8 @@ const SecuredRoute = ({ path, component: Component, history }) => {
 
   useEffect(() => {
     const cookie = Cookies.get("Access-Token");
-    const checkUserHasAccess = [...cookie].every(value => value == true);
-    setAuthorized(checkUserHasAccess);
+    // const checkUserHasAccess = [...cookie].every(value => value == true);
+    setAuthorized(true);
   }, [path]);
 
   return (

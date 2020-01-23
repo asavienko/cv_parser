@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import StyledInput from "../ReusableComponents/StyledInput";
 import { postRequest } from "../../services/fetchUtils";
 import signUpSignInFunction from "../../services/signUpSignInFunction";
+import openNotification from "../ReusableComponents/Notification";
 
 const formLayout = {
   wrapperCol: {
@@ -21,11 +22,18 @@ class SignIn extends React.Component {
     e.preventDefault();
     const { validateFields } = this.props.form;
 
-    const onSuccess = async ({ ...dataToSend }) => {
-      const response = await postRequest("/users/sign-in", { ...dataToSend });
-
+    const onSuccess = ({ ...dataToSend }) => {
       const history = this.props.history;
-      signUpSignInFunction({ response, history });
+
+      postRequest("/users/sign-in", { ...dataToSend })
+        .then(response => signUpSignInFunction({ response, history }))
+        .catch(error =>
+          openNotification({
+            type: "error",
+            message: "Что-то пошло не так",
+            description: error && error.err
+          })
+        );
     };
 
     validateFields((err, values) => {
@@ -62,7 +70,8 @@ class SignIn extends React.Component {
                 rules: [
                   {
                     pattern: PASSWORD_POLICY,
-                    message: "Вы ввели не верный пороль "
+                    message:
+                      "Пароль должен содержать минимум 8 знаков включая: буквы верхнего и нижнего регистра, цифры. Все буквы латинского алфавита (Например: abcdefG8)."
                   },
                   {
                     required: true,

@@ -23,9 +23,11 @@ const signUpSignInFunction = ({ response, history, loginData = {} }) => {
       });
     case isEmailVerifiedFalse:
       Cookies.set("Access-Token", response.token);
+      Cookies.set("emailVerified", response.emailVerified);
       return history.push("/email-not-verified");
     case isEmailVerifiedTrue:
       Cookies.set("Access-Token", response.token);
+      Cookies.set("emailVerified", response.emailVerified);
       return history.push("/");
     case isSignUpSuccess:
       openNotification({
