@@ -2,20 +2,24 @@ import React, { useEffect, useState } from "react";
 import { Route, withRouter } from "react-router-dom";
 import Cookies from "js-cookie";
 
-const SecuredRoute = ({ path, component, history }) => {
-  useEffect(() => {
-    const token = Cookies.get("Access-Token");
-    !token && setAuthorized(false);
-  }, [path]);
+const SecuredRoute = ({ path, component: Component, history }) => {
   const [isAuthorized, setAuthorized] = useState(true);
-  return isAuthorized ? (
-    <Route path={path} component={component} />
-  ) : (
+
+  useEffect(() => {
+    const cookie = Cookies.get("Access-Token");
+    const checkUserHasAccess = [...cookie].every(value => value == true);
+    setAuthorized(checkUserHasAccess);
+  }, [path]);
+
+  return (
     <Route
       path={path}
       render={() => {
-        history.push("/sign-in");
-        return <div />;
+        if (!isAuthorized) {
+          history.push("/sign-in");
+          return <div />;
+        }
+        return <Component />;
       }}
     />
   );
