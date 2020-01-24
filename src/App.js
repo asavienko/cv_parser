@@ -6,6 +6,8 @@ import Home from "./components/Home/Home";
 import styled from "styled-components";
 import Favorites from "./components/Favorites/Favorites";
 import SignUp from "./components/SignUp/SignUp";
+import SignIn from "./components/SignIn/SignIn";
+import EmailNotVerified from "./components/EmailNotVerified";
 
 const StyledDiv = styled.div`
   background: RGBA(236, 236, 236, 1);
@@ -34,6 +36,8 @@ function App() {
               <Route path="/favorites" component={Favorites} />
               <Route path="/list" component={CvList} />
               <Route path="/sign-up" component={SignUp} />
+              <Route path="/sign-in" component={SignIn} />
+              <Route path="/email-not-verified" component={EmailNotVerified} />
             </Switch>
           </StyledContent>
         </StyledDiv>

@@ -10,6 +10,8 @@ import "react-phone-number-input/style.css";
 import ru from "react-phone-number-input/locale/ru";
 import StyledPhoneInput from "./StyledPhoneInput";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
+import { postRequest } from "../../services/fetchUtils";
+import signUpSignInFunction from "../../services/signUpSignInFunction";
 
 const formItemLayout = {
   labelCol: { sm: { span: 7 }, md: { span: 6 }, xxl: { span: 2, offset: 7 } },
@@ -37,7 +39,7 @@ class SignUp extends React.Component {
     e.preventDefault();
     const { validateFields } = this.props.form;
 
-    const onSuccess = values => {
+    const onSuccess = async values => {
       const {
         name: rawName,
         surname: rawSurname,
@@ -49,13 +51,49 @@ class SignUp extends React.Component {
       const name = rawName && rawName.trim();
       const surname = rawSurname && rawSurname.trim();
 
-      console.log("Dispatch data: ", { name, surname, email, password, phone });
+      const { history } = this.props;
+
+      postRequest("/users/sign-up", {
+        name,
+        surname,
+        email,
+        password,
+        phone
+      })
+        .then(response => {
+          (response.success &&
+            openNotification({
+              type: "success",
+              message: "Регестрация успешна",
+              description: `Пользователь с email ${
+                loginData.email
+              } успешно создан`
+            }) &&
+            signUpSignInFunction({
+              history,
+              loginData: { email, password }
+            })) ||
+            (response.err &&
+              openNotification({
+                type: "error",
+                message: "Ошибка",
+                description: response.err
+              }));
+        })
+        .catch(error =>
+          openNotification({
+            type: "error",
+            message: "Ошибка! Попробуйте снова",
+            description: error.err || error
+          })
+        );
     };
     validateFields((err, values) => {
       err
         ? openNotification({
-            type: "error",
-            message: `Поля со звездочкой * обязательны для заполнения.`
+            type: "warning",
+            message: "Заполните все обязательные поля",
+            description: "Поля со звездочкой * обязательны для заполнения."
           })
         : onSuccess(values);
     });
@@ -89,8 +127,8 @@ class SignUp extends React.Component {
     const { getFieldDecorator } = this.props.form;
 
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <Form.Item label="E-mail" {...formItemLayout}>
+      <Form onSubmit={this.handleSubmit} {...formItemLayout}>
+        <Form.Item label="E-mail">
           {getFieldDecorator("email", {
             rules: [
               {
@@ -105,7 +143,7 @@ class SignUp extends React.Component {
             ]
           })(<Input />)}
         </Form.Item>
-        <Form.Item label="Пароль" hasFeedback {...formItemLayout}>
+        <Form.Item label="Пароль" hasFeedback>
           {getFieldDecorator("password", {
             rules: [
               {
@@ -124,7 +162,7 @@ class SignUp extends React.Component {
             ]
           })(<Input.Password />)}
         </Form.Item>
-        <Form.Item label="Подтвердите пароль" hasFeedback {...formItemLayout}>
+        <Form.Item label="Подтвердите пароль" hasFeedback>
           {getFieldDecorator("confirmPassword", {
             rules: [
               {
@@ -137,7 +175,7 @@ class SignUp extends React.Component {
             ]
           })(<Input.Password onBlur={this.handleConfirmPasswordBlur} />)}
         </Form.Item>
-        <Form.Item label="Телефон" {...formItemLayout}>
+        <Form.Item label="Телефон">
           {getFieldDecorator("phone", {
             rules: [
               {
@@ -156,7 +194,7 @@ class SignUp extends React.Component {
             />
           )}
         </Form.Item>
-        <Form.Item label="Имя" {...formItemLayout}>
+        <Form.Item label="Имя">
           {getFieldDecorator("name", {
             rules: [
               {
@@ -168,7 +206,7 @@ class SignUp extends React.Component {
             ]
           })(<Input placeholder="Введите имя" />)}
         </Form.Item>
-        <Form.Item label="Фамилия" {...formItemLayout}>
+        <Form.Item label="Фамилия">
           {getFieldDecorator("surname", {
             rules: [
               {

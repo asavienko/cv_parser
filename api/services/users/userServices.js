@@ -10,7 +10,7 @@ const create = async userParam => {
   const [checkEmail] = await collection
     .aggregate(userPipelines.getSameEmail(userParam.email))
     .toArray();
-  if (checkEmail) throw 'Email "' + userParam.email + '" is already taken';
+  if (checkEmail) throw `Email "${userParam.email}" уже занят`;
 
   // hash password
   if (userParam.password) {
@@ -30,16 +30,10 @@ const authenticate = async ({ email, password }) => {
   const [user] = await collection
     .aggregate(userPipelines.authenticate(email))
     .toArray();
-  if (!user.emailVerified) throw "Email is not verified";
   if (user && bcrypt.compareSync(password, user.hash)) {
-    const { hash, emailVerified, ...userWithoutHash } = user;
-
+    const { hash, ...userWithoutHash } = user;
     const token = jwt.sign({ sub: user._id }, SECRET);
-
-    return {
-      ...userWithoutHash,
-      token
-    };
+    return { ...userWithoutHash, token };
   }
 };
 
@@ -64,12 +58,12 @@ const update = async (_id, userParam) => {
   const user = await collection.findOne({ _id });
 
   // validate
-  if (!user) throw "User not found";
+  if (!user) throw "Юзер не найден";
 
   const checkEmail = sameEmailCheck({ user, userParam, collection });
 
   if (checkEmail) {
-    throw 'Email "' + userParam.email + '" is already taken';
+    throw `Email "${userParam.email}" уже занят`;
   }
 
   // hash password if it was entered
