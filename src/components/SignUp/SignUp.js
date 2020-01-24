@@ -65,9 +65,7 @@ class SignUp extends React.Component {
             openNotification({
               type: "success",
               message: "Регестрация успешна",
-              description: `Пользователь с email ${
-                loginData.email
-              } успешно создан`
+              description: `Пользователь с email ${email} успешно создан`
             }) &&
             signUpSignInFunction({
               history,
