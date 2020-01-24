@@ -2,9 +2,10 @@ import React from "react";
 import { Button, Form, Icon, Row } from "antd";
 import { PASSWORD_POLICY } from "../../constants/validation";
 import { Link } from "react-router-dom";
-import StyledInput from "../ReusableComponents/StyledInput";
+import { StyledInput } from "../../styles";
 import { postRequest } from "../../services/fetchUtils";
 import signUpSignInFunction from "../../services/signUpSignInFunction";
+import openNotification from "../ReusableComponents/Notification";
 
 const formLayout = {
   wrapperCol: {
@@ -22,10 +23,17 @@ class SignIn extends React.Component {
     const { validateFields } = this.props.form;
 
     const onSuccess = async ({ ...dataToSend }) => {
-      const response = await postRequest("/users/sign-in", { ...dataToSend });
+      const { history } = this.props;
 
-      const history = this.props.history;
-      signUpSignInFunction({ response, history });
+      await postRequest("/users/sign-in", { ...dataToSend })
+        .then(response => signUpSignInFunction({ response, history }))
+        .catch(error =>
+          openNotification({
+            type: "error",
+            message: "Ошибка! Попробуйте снова",
+            description: error.err || error
+          })
+        );
     };
 
     validateFields((err, values) => {

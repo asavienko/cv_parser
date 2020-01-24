@@ -2,37 +2,19 @@ import openNotification from "../components/ReusableComponents/Notification";
 import Cookies from "js-cookie";
 import { postRequest } from "./fetchUtils";
 
-const signUpSignInFunction = ({ response, history, loginData = {} }) => {
-  const isError = response && "err" in response;
-  const isEmailVerifiedFalse =
-    response && response.token && response.emailVerified === false;
-  const isEmailVerifiedTrue =
-    response && response.token && response.emailVerified === true;
-  const isSignUpSuccess =
-    response &&
-    response.success &&
-    "email" in loginData &&
-    "password" in loginData;
+const signUpSignInFunction = ({
+  response = {},
+  history = {},
+  loginData = {}
+}) => {
+  const validToken = !!response.token;
+  const signUpData = !!loginData.email && !!loginData.password;
 
   switch (true) {
-    case isError:
-      return openNotification({
-        type: "error",
-        message: "Ошибка",
-        description: response.err
-      });
-    case isEmailVerifiedFalse:
+    case validToken:
       Cookies.set("Access-Token", response.token);
-      return history.push("/email-not-verified");
-    case isEmailVerifiedTrue:
-      Cookies.set("Access-Token", response.token);
-      return history.push("/");
-    case isSignUpSuccess:
-      openNotification({
-        type: "success",
-        message: "Регестрация успешна",
-        description: `Пользователь с email ${loginData.email} успешно создан`
-      });
+      return history.push(response.emailVerified ? "/" : "/email-not-verified");
+    case signUpData:
       return postRequest("/users/sign-in", loginData).then(response =>
         signUpSignInFunction({ response, history })
       );
