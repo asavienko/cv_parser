@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Form, Icon, Row } from "antd";
 import { PASSWORD_POLICY } from "../../constants/validation";
 import { Link } from "react-router-dom";
-import StyledInput from "../ReusableComponents/StyledInput";
+import { StyledInput } from "../../styles";
 import { postRequest } from "../../services/fetchUtils";
 import signUpSignInFunction from "../../services/signUpSignInFunction";
 import openNotification from "../ReusableComponents/Notification";
