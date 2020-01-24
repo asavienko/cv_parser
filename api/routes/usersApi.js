@@ -10,6 +10,7 @@ const signUp = (req, res, next) => {
 };
 
 const signIn = (req, res, next) => {
+  console.log(req);
   userServices
     .authenticate(req.body)
     .then(user =>
