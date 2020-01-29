@@ -1,11 +1,12 @@
 const target =
   process.env.REACT_APP_WEBAPP_SERVICE_URL || "http://localhost:5000";
 
-async function request(url, method, body) {
+async function request(url, method, { headers, body }) {
   try {
     const headers = new Headers();
     headers.append("Accept", "application/json");
     headers.append("Content-Type", "application/json");
+
     const targetURL = new URL(url, target);
     const response = await fetch(targetURL, {
       method,
@@ -19,18 +20,20 @@ async function request(url, method, body) {
   }
 }
 
-export const getRequest = async url => {
-  return request(url, "GET");
+export const getRequest = async (url, params = {}) => {
+  const { headers } = params;
+  return request(url, "GET", { headers });
 };
 
-export const postRequest = async (url, body = {}) => {
-  return request(url, "POST", body);
+export const postRequest = async (url, { headers = {}, body = {} }) => {
+  return request(url, "POST", { headers, body });
 };
 
-export const putRequest = async (url, body = {}) => {
-  return request(url, "PUT", body);
+export const putRequest = async (url, { headers = {}, body = {} }) => {
+  return request(url, "PUT", { headers, body });
 };
 
-export const deleteRequest = async url => {
-  return request(url, "DELETE");
+export const deleteRequest = async (url, params = {}) => {
+  const { headers } = params;
+  return request(url, "DELETE", { headers });
 };

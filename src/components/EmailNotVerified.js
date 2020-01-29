@@ -10,7 +10,7 @@ const StylePhone = styled.a`
   display: block;
 `;
 const EmailNotVerified = () => {
-  useEffect(async () => {
+  useEffect(() => async () => {
     console.log(await getRequest("/users"));
   });
   return (

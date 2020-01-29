@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CvList from "./components/CvTable/CvList";
 import TopMenu from "./components/TopMenu/TopMenu";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -27,6 +27,8 @@ const StyledLayout = styled.div`
 
 function App() {
   //in component didmount fetch(chek) user credentials if cookies set and use Redux
+
+  useEffect(() => {});
   return (
     <Router>
       <StyledLayout>
@@ -37,8 +39,6 @@ function App() {
               <SecuredRoute exact path="/" component={Home} />
               <SecuredRoute path="/favorites" component={Favorites} />
               <SecuredRoute path="/list" component={CvList} />
-
-
 
               <Route path="/sign-up" component={SignUp} />
               <Route path="/sign-in" component={SignIn} />

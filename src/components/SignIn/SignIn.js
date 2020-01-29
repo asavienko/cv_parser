@@ -25,7 +25,7 @@ class SignIn extends React.Component {
     const onSuccess = ({ ...dataToSend }) => {
       const history = this.props.history;
 
-      postRequest("/users/sign-in", { ...dataToSend })
+      postRequest("/users/sign-in", { body: { ...dataToSend } })
         .then(response => signUpSignInFunction({ response, history }))
         .catch(error =>
           openNotification({
