@@ -9,6 +9,17 @@ import SignUp from "./components/SignUp/SignUp";
 import SignIn from "./components/SignIn/SignIn";
 import EmailNotVerified from "./components/EmailNotVerified";
 import SecuredRoute from "./components/SecuredRoute";
+import _ from "lodash";
+import { getRequest } from "./services/fetchUtils";
+import {
+  getAuthHeader,
+  getUserFromCookieStorage,
+  getUserId,
+  setUserToCookieStorage
+} from "./services/cookieStorage";
+import openNotification from "./components/ReusableComponents/Notification";
+import { setUserAction } from "./actions/userActions";
+import { connect } from "react-redux";
 
 const StyledDiv = styled.div`
   background: RGBA(236, 236, 236, 1);
@@ -25,10 +36,33 @@ const StyledLayout = styled.div`
   flex-direction: column;
 `;
 
-function App() {
-  //in component didmount fetch(chek) user credentials if cookies set and use Redux
+const checkUserAndSetGlobally = ({ userFromStore, setUserToStore }) => {
+  if (_.isEmpty(userFromStore)) {
+    const userFromCookie = getUserFromCookieStorage();
+    setUserToStore(userFromCookie);
+    getRequest("/users", { ...getAuthHeader(), ...getUserId() })
+      .then(response => {
+        const [user] = response;
+        user
+          ? setUserToCookieStorage(user) && setUserToStore(user)
+          : Promise.reject(
+              "Пользователь не найден. Повторите или обновите страницу."
+            );
+      })
+      .catch(err =>
+        openNotification({
+          message: "Что-то пошло не так.",
+          description: JSON.stringify(err)
+        })
+      );
+  }
+};
 
-  useEffect(() => {});
+function App({ userFromStore, setUserToStore }) {
+  useEffect(() => {
+    checkUserAndSetGlobally({ userFromStore, setUserToStore });
+  }, [userFromStore, setUserToStore]);
+
   return (
     <Router>
       <StyledLayout>
@@ -51,4 +85,15 @@ function App() {
   );
 }
 
-export default App;
+const mapStateToProps = ({ userReducer: { user } }) => ({
+  userFromStore: user
+});
+
+const mapDispatchToProps = dispatch => ({
+  setUserToStore: credentials => dispatch(setUserAction(credentials))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);

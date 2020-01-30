@@ -1,18 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Result, Row } from "antd";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import clearCookieStorage from "../services/clearCookieStorage";
-import { getRequest } from "../services/fetchUtils";
+import { clearCookieStorage } from "../services/cookieStorage";
 
 const StylePhone = styled.a`
   font-weight: bold;
   display: block;
 `;
 const EmailNotVerified = () => {
-  useEffect(() => async () => {
-    console.log(await getRequest("/users"));
-  });
   return (
     <Result
       status="info"

@@ -1,5 +1,5 @@
-import { SET_USER_CREDENTIALS } from "../constants/constantsActions";
+import { SET_USER } from "../constants/constantsActions";
 
-export function setUserCredentials(credentials) {
-  return { type: SET_USER_CREDENTIALS, credentials };
+export function setUserAction(user) {
+  return { type: SET_USER, user };
 }

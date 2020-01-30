@@ -1,14 +1,13 @@
-import { SET_USER_CREDENTIALS } from "../constants/constantsActions";
+import { SET_USER } from "../constants/constantsActions";
 
-const initState = { emailVerified: false, token: false };
+const initState = { user: {} };
 
 function userReducer(state = initState, action) {
   switch (action.type) {
-    case SET_USER_CREDENTIALS:
+    case SET_USER:
       return {
         ...state,
-        emailVerified: action.emailVerified,
-        token: action.token
+        user: action.user
       };
     default:
       return { ...state };

@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Route, withRouter } from "react-router-dom";
-import Cookies from "js-cookie";
+import { connect } from "react-redux";
 
-const SecuredRoute = ({ path, component: Component, history }) => {
+const SecuredRoute = ({
+  path,
+  component: Component,
+  history,
+  userFromStore
+}) => {
   const [isAuthorized, setAuthorized] = useState(true);
 
   useEffect(() => {
-    const cookie = Cookies.get("Access-Token");
-    // const checkUserHasAccess = [...cookie].every(value => value == true);
-    setAuthorized(true);
-  }, [path]);
+    !userFromStore.emailVerified && history.push("email-not-verified")
+  }, [userFromStore]);
 
   return (
     <Route
@@ -25,4 +28,8 @@ const SecuredRoute = ({ path, component: Component, history }) => {
   );
 };
 
-export default withRouter(SecuredRoute);
+const mapStateToProps = ({ userReducer: { user } }) => ({
+  userFromStore: user
+});
+
+export default connect(mapStateToProps)(withRouter(SecuredRoute));

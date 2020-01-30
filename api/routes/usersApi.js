@@ -10,7 +10,6 @@ const signUp = (req, res, next) => {
 };
 
 const signIn = (req, res, next) => {
-  console.log(req);
   userServices
     .authenticate(req.body)
     .then(user =>
@@ -18,6 +17,13 @@ const signIn = (req, res, next) => {
         ? res.json(user)
         : res.status(400).json({ err: "Email или пароль введены не верно" })
     )
+    .catch(err => next(err));
+};
+
+const getUser = (req, res, next) => {
+  userServices
+    .getById(req.headers["_id"])
+    .then(users => res.json(users))
     .catch(err => next(err));
 };
 
@@ -31,6 +37,7 @@ const getAll = (req, res, next) => {
 router.post("/sign-in", signIn);
 router.post("/sign-up", signUp);
 
-router.get("/", getAll);
+router.get("/", getUser);
+router.get("/all", getAll);
 
 module.exports = router;
