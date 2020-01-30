@@ -37,3 +37,7 @@ export const putRequest = async (url, { headers = {}, body = {} }) => {
 export const deleteRequest = async (url, headers = {}) => {
   return request(url, "DELETE", { setHeaders: headers });
 };
+
+export const generateAuthHeader = (token = "") => {
+  return { Authorization: `Bearer ${token}` };
+};

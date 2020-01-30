@@ -1,35 +1,32 @@
-import React, { useEffect, useState } from "react";
-import { Route, withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+import React from "react";
+import { Redirect, Route } from "react-router-dom";
+import { getUserFromCookieStorage } from "../services/cookieStorage";
 
-const SecuredRoute = ({
-  path,
-  component: Component,
-  history,
-  userFromStore
-}) => {
-  const [isAuthorized, setAuthorized] = useState(true);
+const SecuredRoute = ({ component: Component, path, ...rest }) => (
+  <Route
+    {...rest}
+    render={props => {
+      const {
+        token: authenticatedUser,
+        emailVerified
+      } = getUserFromCookieStorage();
+      if (!authenticatedUser) {
+        return <Redirect to={{ pathname: "/sign-in" }} />;
+      }
+      if (authenticatedUser && !emailVerified) {
+        return path === "/email-not-verified" ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to={{ pathname: "/email-not-verified" }} />
+        );
+      }
+      return emailVerified && path === "/email-not-verified" ? (
+        <Redirect to={{ pathname: "/" }} />
+      ) : (
+        <Component {...props} />
+      );
+    }}
+  />
+);
 
-  useEffect(() => {
-    !userFromStore.emailVerified && history.push("email-not-verified")
-  }, [userFromStore]);
-
-  return (
-    <Route
-      path={path}
-      render={() => {
-        if (!isAuthorized) {
-          history.push("/sign-in");
-          return <div />;
-        }
-        return <Component />;
-      }}
-    />
-  );
-};
-
-const mapStateToProps = ({ userReducer: { user } }) => ({
-  userFromStore: user
-});
-
-export default connect(mapStateToProps)(withRouter(SecuredRoute));
+export default SecuredRoute;

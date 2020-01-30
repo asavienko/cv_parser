@@ -16,13 +16,3 @@ export const setUserToCookieStorage = user => {
   const newUser = Object.assign({}, oldUser, user);
   return Cookies.set("user", JSON.stringify(newUser));
 };
-
-export const getAuthHeader = () => {
-  const { token } = JSON.parse(Cookies.get("user"));
-  return token && { Authorization: `Bearer ${token}` };
-};
-
-export const getUserId = () => {
-  const { _id } = JSON.parse(Cookies.get("user"));
-  return { _id };
-};
