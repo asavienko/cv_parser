@@ -49,7 +49,7 @@ const checkUserAndSetGlobally = ({ userFromStore, setUserToStore }) => {
         _id,
         ...userFromCookieWithoutIdAndToken
       });
-      getRequest("/users", { _id, ...generateAuthHeader(token) })
+      getRequest("/users/get-current-user", { _id, ...generateAuthHeader(token) })
         .then(response => {
           const [user] = response;
           return user

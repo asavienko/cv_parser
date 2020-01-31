@@ -1,14 +1,16 @@
 const _ = require("lodash");
 const useSchema = require("../validationSchemas/useSchema");
 
-const joiMiddleware = () => (req, res, next) => {
-  const exceptions = ["/users"];
-  console.log(req.headers);
-  const isException = exceptions.includes(req.path);
-  const requestHasBody = ["POST", "PUT"].includes(req.method);
-  if (!isException && requestHasBody) {
-    const response = useSchema[req.path].validate(req.body);
-    const error = _.get(response, "error", {});
+const joiMiddleware = () => ({ path, body, headers }, res, next) => {
+  //add routes that skip validation
+  const exceptions = [""];
+
+  const isException = exceptions.includes(path);
+  if (!isException) {
+    const hasBody = !_.isEmpty(body);
+    const responseBody = hasBody && useSchema[path].validate(body);
+    const responseHeaders = useSchema.header.validate(headers)
+    const error = _.get({...responseBody, ...responseHeaders}, "error", {});
     error.name ? res.status(422).json({ err: error.name }) : next();
   } else {
     next();

@@ -2,7 +2,8 @@ const Joi = require("@hapi/joi");
 const {
   PASSWORD_VALIDATION,
   PHONE_VALIDATION,
-  LETTERS_VALIDATION
+  LETTERS_VALIDATION,
+  LETTERS_NUMBERS_DOTS
 } = require("../constants/validation");
 
 const userSignUp = Joi.object({
@@ -40,4 +41,9 @@ const userSignIn = Joi.object({
     .pattern(PASSWORD_VALIDATION)
 });
 
-module.exports = { userSignUp, userSignIn };
+const header = Joi.object().pattern(LETTERS_NUMBERS_DOTS, [
+  Joi.string().max(150).pattern(LETTERS_NUMBERS_DOTS),
+  Joi.number()
+]);
+
+module.exports = { userSignUp, userSignIn, header };
