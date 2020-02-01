@@ -75,20 +75,18 @@ class SignUp extends React.Component {
             });
             return;
           }
-          return Promise.reject(response);
+          return openNotification({
+            type: "error",
+            message: "Ошибка",
+            description: response.err
+          });
         })
         .catch((error = {}) =>
-          error.err
-            ? openNotification({
-                type: "error",
-                message: "Ошибка",
-                description: error.err
-              })
-            : openNotification({
-                type: "error",
-                message: "Ошибка! Попробуйте снова",
-                description: error
-              })
+          openNotification({
+            type: "error",
+            message: "Ошибка! Попробуйте снова",
+            description: error
+          })
         );
     };
     validateFields((err, values) => {

@@ -1,6 +1,6 @@
 import openNotification from "../components/ReusableComponents/Notification";
 import { postRequest } from "./fetchUtils";
-import { setUserToCookieStorage } from "./cookieStorage";
+import { updateUserInCookieStorage } from "./cookieStorage";
 
 const signUpSignInFunction = ({
   response = {},
@@ -11,7 +11,7 @@ const signUpSignInFunction = ({
   const hasSignUpData = !!loginData.email && !!loginData.password;
 
   if (validToken) {
-    setUserToCookieStorage(response);
+    updateUserInCookieStorage(response);
     return history.push(response.emailVerified ? "/" : "/email-not-verified");
   }
 

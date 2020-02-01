@@ -13,7 +13,7 @@ const SecuredRoute = ({ component: Component, path, ...rest }) => (
       if (!authenticatedUser) {
         return <Redirect to={{ pathname: "/sign-in" }} />;
       }
-      if (authenticatedUser && !emailVerified) {
+      if (!emailVerified) {
         return path === "/email-not-verified" ? (
           <Component {...props} />
         ) : (

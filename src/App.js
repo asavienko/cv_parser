@@ -13,10 +13,8 @@ import _ from "lodash";
 import {
   clearCookieStorage,
   getUserFromCookieStorage,
-  setUserToCookieStorage
+  updateUserInCookieStorage
 } from "./services/cookieStorage";
-import { setUserAction } from "./actions/userActions";
-import { connect } from "react-redux";
 import PreventSignedInRoute from "./components/PreventSignedInRoute";
 import { generateAuthHeader, getRequest } from "./services/fetchUtils";
 import openNotification from "./components/ReusableComponents/Notification";
@@ -36,53 +34,40 @@ const StyledLayout = styled.div`
   flex-direction: column;
 `;
 
-const checkUserAndSetGlobally = ({ userFromStore, setUserToStore }) => {
-  if (_.isEmpty(userFromStore)) {
-    const {
-      token,
+const checkUser = () => {
+  const { token, _id } = getUserFromCookieStorage();
+  if (token && _id) {
+    getRequest("/users/get-current-user", {
       _id,
-      ...userFromCookieWithoutIdAndToken
-    } = getUserFromCookieStorage();
-    if (token && _id) {
-      setUserToStore({
-        token,
-        _id,
-        ...userFromCookieWithoutIdAndToken
-      });
-      getRequest("/users/get-current-user", { _id, ...generateAuthHeader(token) })
-        .then(response => {
-          const [user] = response;
-          return user
-            ? setUserToCookieStorage(user) && setUserToStore(user)
-            : { userNotFound: true };
-        })
-        .then(error => {
-          error.userNotFound &&
-            openNotification({
-              message: "Пользователь не найден.",
-              description:
-                "Если ошибка повторится, обратитесь к администратору.  "
+      ...generateAuthHeader(token)
+    })
+      .then(response => {
+        const [user] = response;
+        return user
+          ? updateUserInCookieStorage(user)
+          : openNotification({
+              message: "Не првильный пароль или email",
+              description: "Введите данные повторно"
             });
-        })
-        .catch(err => {
-          clearCookieStorage();
-          openNotification({
-            type: "error",
-            message: "Что-то пошло не так.",
-            description:
-              "Если ошибка повторится, обратитесь к администратору. " +
-              JSON.stringify(err)
-          });
+      })
+      .catch(err => {
+        clearCookieStorage();
+        openNotification({
+          type: "error",
+          message: "Что-то пошло не так.",
+          description:
+            "Если ошибка повторится, обратитесь к администратору. " +
+            JSON.stringify(err)
         });
-    }
-    if (!token || !_id) clearCookieStorage();
+      });
   }
+  if (!token || !_id) clearCookieStorage();
 };
 
-function App({ userFromStore, setUserToStore }) {
+function App() {
   useEffect(() => {
-    checkUserAndSetGlobally({ userFromStore, setUserToStore });
-  }, [userFromStore, setUserToStore]);
+    checkUser();
+  });
 
   return (
     <Router>
@@ -109,15 +94,4 @@ function App({ userFromStore, setUserToStore }) {
   );
 }
 
-const mapStateToProps = ({ userReducer: { user } }) => ({
-  userFromStore: user
-});
-
-const mapDispatchToProps = dispatch => ({
-  setUserToStore: credentials => dispatch(setUserAction(credentials))
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(App);
+export default App;

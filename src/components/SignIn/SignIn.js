@@ -20,11 +20,12 @@ const formLayout = {
 class SignIn extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
-    const { validateFields } = this.props.form;
+    const {
+      history,
+      form: { validateFields }
+    } = this.props;
 
     const onSuccess = ({ ...dataToSend }) => {
-      const history = this.props.history;
-
       postRequest("/users/sign-in", { body: { ...dataToSend } })
         .then(response => signUpSignInFunction({ response, history }))
         .catch(error =>
