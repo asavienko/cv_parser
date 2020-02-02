@@ -25,8 +25,8 @@ class SignIn extends React.Component {
       form: { validateFields }
     } = this.props;
 
-    const onSuccess = ({ ...dataToSend }) => {
-      postRequest("/users/sign-in", { body: { ...dataToSend } })
+    const onSuccess = dataToSend => {
+      postRequest("/users/sign-in", dataToSend)
         .then(response => signUpSignInFunction({ response, history }))
         .catch(error =>
           openNotification({

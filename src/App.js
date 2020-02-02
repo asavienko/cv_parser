@@ -9,14 +9,8 @@ import SignUp from "./components/SignUp/SignUp";
 import SignIn from "./components/SignIn/SignIn";
 import EmailNotVerified from "./components/EmailNotVerified";
 import SecuredRoute from "./components/SecuredRoute";
-import {
-  clearCookieStorage,
-  getUserFromCookieStorage,
-  updateUserInCookieStorage
-} from "./services/cookieStorage";
 import PreventSignedInRoute from "./components/PreventSignedInRoute";
-import { generateAuthHeader, getRequest } from "./services/fetchUtils";
-import openNotification from "./components/ReusableComponents/Notification";
+import { checkUser } from "./utils";
 
 const StyledDiv = styled.div`
   background: RGBA(236, 236, 236, 1);
@@ -32,36 +26,6 @@ const StyledLayout = styled.div`
   display: flex;
   flex-direction: column;
 `;
-
-const checkUser = () => {
-  const { token, _id } = getUserFromCookieStorage();
-
-  if (!token || !_id) return clearCookieStorage();
-
-  getRequest("/users/get-current-user", {
-    _id,
-    ...generateAuthHeader(token)
-  })
-    .then(response => {
-      const [user] = response;
-      return user
-        ? updateUserInCookieStorage(user)
-        : openNotification({
-            message: "Не првильный пароль или email",
-            description: "Введите данные повторно"
-          });
-    })
-    .catch(err => {
-      clearCookieStorage();
-      openNotification({
-        type: "error",
-        message: "Что-то пошло не так.",
-        description:
-          "Если ошибка повторится, обратитесь к администратору. " +
-          JSON.stringify(err)
-      });
-    });
-};
 
 function App() {
   useEffect(() => {

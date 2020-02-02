@@ -16,7 +16,7 @@ const signUpSignInFunction = ({
   }
 
   if (hasSignUpData) {
-    return postRequest("/users/sign-in", { body: loginData }).then(response => {
+    return postRequest("/users/sign-in", loginData).then(response => {
       return signUpSignInFunction({ response, history });
     });
   }
