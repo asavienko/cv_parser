@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Menu } from "antd";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { withRouter } from "react-router";
+import { clearCookieStorage } from "../../services/cookieStorage";
+import { Link } from "react-router-dom";
+
 const employ_logo =
   process.env.PUBLIC_URL + "images/temporaryImages/employ_logo.svg";
 const lines_layout =
   process.env.PUBLIC_URL + "images/temporaryImages/lines_layout.png";
 
+const { Item } = Menu;
+
 const StyledMenu = styled(Menu)`
+  display: flex;
   line-height: 45px;
   ${({ show }) => show === "false" && `visibility: hidden`}
 `;
@@ -30,6 +35,12 @@ const HeaderLayer = styled.div`
     transform: translate(0, -50%);
   }
 `;
+
+const StyledLink = styled(Item)`
+  margin-left: auto;
+  padding-right: 20px;
+`;
+
 function TopMenu({ location: { pathname } }) {
   const [StateShowMenu, setStateRenderHeader] = useState("true");
   useEffect(() => {
@@ -51,15 +62,20 @@ function TopMenu({ location: { pathname } }) {
         <img src={lines_layout} alt="logo_layout" />
       </HeaderLayer>
       <StyledMenu mode="horizontal" show={StateShowMenu}>
-        <Menu.Item key="home">
+        <Item key="home">
           <Link to="/">Главная</Link>
-        </Menu.Item>
-        <Menu.Item key="favorites">
+        </Item>
+        <Item key="favorites">
           <Link to="/favorites">Избранные</Link>
-        </Menu.Item>
-        <Menu.Item key="list">
+        </Item>
+        <Item key="list">
           <Link to="/list">Список</Link>
-        </Menu.Item>
+        </Item>
+        <StyledLink key="logout">
+          <Link to="/sign-in" onClick={clearCookieStorage}>
+            Выйти
+          </Link>
+        </StyledLink>
       </StyledMenu>
     </React.Fragment>
   );

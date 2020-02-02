@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CvList from "./components/CvTable/CvList";
 import TopMenu from "./components/TopMenu/TopMenu";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Switch } from "react-router-dom";
 import Home from "./components/Home/Home";
 import styled from "styled-components";
 import Favorites from "./components/Favorites/Favorites";
 import SignUp from "./components/SignUp/SignUp";
 import SignIn from "./components/SignIn/SignIn";
 import EmailNotVerified from "./components/EmailNotVerified";
+import SecuredRoute from "./components/SecuredRoute";
+import PreventSignedInRoute from "./components/PreventSignedInRoute";
+import { checkUser } from "./utils";
 
 const StyledDiv = styled.div`
   background: RGBA(236, 236, 236, 1);
@@ -25,6 +28,10 @@ const StyledLayout = styled.div`
 `;
 
 function App() {
+  useEffect(() => {
+    checkUser();
+  });
+
   return (
     <Router>
       <StyledLayout>
@@ -32,12 +39,16 @@ function App() {
         <StyledDiv>
           <StyledContent>
             <Switch>
-              <Route exact path="/" component={Home} />
-              <Route path="/favorites" component={Favorites} />
-              <Route path="/list" component={CvList} />
-              <Route path="/sign-up" component={SignUp} />
-              <Route path="/sign-in" component={SignIn} />
-              <Route path="/email-not-verified" component={EmailNotVerified} />
+              <SecuredRoute exact path="/" component={Home} />
+              <SecuredRoute path="/favorites" component={Favorites} />
+              <SecuredRoute path="/list" component={CvList} />
+              <SecuredRoute
+                path="/email-not-verified"
+                component={EmailNotVerified}
+              />
+              <PreventSignedInRoute path="/sign-up" component={SignUp} />
+              <PreventSignedInRoute path="/sign-in" component={SignIn} />
+              <Redirect to={{ pathname: "/" }} />
             </Switch>
           </StyledContent>
         </StyledDiv>

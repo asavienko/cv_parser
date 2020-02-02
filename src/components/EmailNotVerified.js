@@ -2,7 +2,7 @@ import React from "react";
 import { Result, Row } from "antd";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import clearCookieStorage from "../services/clearCookieStorage";
+import { clearCookieStorage } from "../services/cookieStorage";
 
 const StylePhone = styled.a`
   font-weight: bold;

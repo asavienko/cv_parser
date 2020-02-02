@@ -4,8 +4,8 @@ import { PASSWORD_POLICY } from "../../constants/validation";
 import { Link } from "react-router-dom";
 import { StyledInput } from "../../styles";
 import { postRequest } from "../../services/fetchUtils";
-import signUpSignInFunction from "../../services/signUpSignInFunction";
 import openNotification from "../ReusableComponents/Notification";
+import { redirectFromSignInFunction } from "../../utils";
 
 const formLayout = {
   wrapperCol: {
@@ -20,24 +20,35 @@ const formLayout = {
 class SignIn extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
-    const { validateFields } = this.props.form;
+    const {
+      history,
+      form: { validateFields }
+    } = this.props;
 
-    const onSuccess = async ({ ...dataToSend }) => {
-      const { history } = this.props;
-
-      await postRequest("/users/sign-in", { ...dataToSend })
-        .then(response => signUpSignInFunction({ response, history }))
+    const signInFunction = dataToSend => {
+      postRequest("/users/sign-in", dataToSend)
+        .then(response => {
+          const result = redirectFromSignInFunction({ response, history });
+          if (!result) {
+            openNotification({
+              type: "error",
+              message: "Не правильные данные",
+              description:
+                "Вы ввели не правильный пароль или email. Пожалйстав проверьте данные и введите их еще раз"
+            });
+          }
+        })
         .catch(error =>
           openNotification({
             type: "error",
-            message: "Ошибка! Попробуйте снова",
-            description: error.err || error
+            message: "Что-то пошло не так",
+            description: error && error.err
           })
         );
     };
 
     validateFields((err, values) => {
-      !err && onSuccess(values);
+      !err && signInFunction(values);
     });
   };
 
@@ -70,7 +81,8 @@ class SignIn extends React.Component {
                 rules: [
                   {
                     pattern: PASSWORD_POLICY,
-                    message: "Вы ввели не верный пороль "
+                    message:
+                      "Пароль должен содержать минимум 8 знаков включая: буквы верхнего и нижнего регистра, цифры. Все буквы латинского алфавита (Например: abcdefG8)."
                   },
                   {
                     required: true,

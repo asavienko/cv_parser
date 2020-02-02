@@ -54,37 +54,37 @@ class SignUp extends React.Component {
       const { history } = this.props;
 
       postRequest("/users/sign-up", {
-        name,
-        surname,
-        email,
-        password,
-        phone
+        body: {
+          name,
+          surname,
+          email,
+          password,
+          phone
+        }
       })
         .then(response => {
-          (response.success &&
+          if (response.success) {
             openNotification({
               type: "success",
               message: "Регестрация успешна",
-              description: `Пользователь с email ${
-                loginData.email
-              } успешно создан`
-            }) &&
+              description: `Пользователь с email ${email} успешно создан`
+            });
             signUpSignInFunction({
               history,
               loginData: { email, password }
-            })) ||
-            (response.err &&
-              openNotification({
-                type: "error",
-                message: "Ошибка",
-                description: response.err
-              }));
+            });
+          }
+          return openNotification({
+            type: "error",
+            message: "Ошибка",
+            description: response.err
+          });
         })
-        .catch(error =>
+        .catch((error = {}) =>
           openNotification({
             type: "error",
             message: "Ошибка! Попробуйте снова",
-            description: error.err || error
+            description: error
           })
         );
     };
