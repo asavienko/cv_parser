@@ -39,7 +39,6 @@ const HeaderLayer = styled.div`
 const StyledLink = styled(Item)`
   margin-left: auto;
   padding-right: 20px;
-  font-weight: 600;
 `;
 
 function TopMenu({ location: { pathname } }) {
