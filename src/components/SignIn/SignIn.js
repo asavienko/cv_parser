@@ -4,8 +4,8 @@ import { PASSWORD_POLICY } from "../../constants/validation";
 import { Link } from "react-router-dom";
 import { StyledInput } from "../../styles";
 import { postRequest } from "../../services/fetchUtils";
-import signUpSignInFunction from "../../services/signUpSignInFunction";
 import openNotification from "../ReusableComponents/Notification";
+import { redirectFromSignInFunction } from "../../utils";
 
 const formLayout = {
   wrapperCol: {
@@ -25,9 +25,19 @@ class SignIn extends React.Component {
       form: { validateFields }
     } = this.props;
 
-    const onSuccess = dataToSend => {
+    const signInFunction = dataToSend => {
       postRequest("/users/sign-in", dataToSend)
-        .then(response => signUpSignInFunction({ response, history }))
+        .then(response => {
+          const result = redirectFromSignInFunction({ response, history });
+          if (!result) {
+            openNotification({
+              type: "error",
+              message: "Не правильные данные",
+              description:
+                "Вы ввели не правильный пароль или email. Пожалйстав проверьте данные и введите их еще раз"
+            });
+          }
+        })
         .catch(error =>
           openNotification({
             type: "error",
@@ -38,7 +48,7 @@ class SignIn extends React.Component {
     };
 
     validateFields((err, values) => {
-      !err && onSuccess(values);
+      !err && signInFunction(values);
     });
   };
 

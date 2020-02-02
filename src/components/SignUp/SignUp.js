@@ -73,7 +73,6 @@ class SignUp extends React.Component {
               history,
               loginData: { email, password }
             });
-            return;
           }
           return openNotification({
             type: "error",

@@ -20,7 +20,7 @@ const SecuredRoute = ({ component: Component, path, ...rest }) => (
           <Redirect to={{ pathname: "/email-not-verified" }} />
         );
       }
-      return emailVerified && path === "/email-not-verified" ? (
+      return path === "/email-not-verified" ? (
         <Redirect to={{ pathname: "/" }} />
       ) : (
         <Component {...props} />

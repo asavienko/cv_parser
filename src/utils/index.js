@@ -27,3 +27,11 @@ export const checkUser = () => {
       });
     });
 };
+
+export const redirectFromSignInFunction = ({ response, history }) => {
+  if (!!response.token) {
+    updateUserInCookieStorage(response);
+    history.push(response.emailVerified ? "/" : "/email-not-verified");
+    return true;
+  }
+};
