@@ -6,6 +6,7 @@ import openNotification from "../components/ReusableComponents/Notification";
 import { getCurrentUser } from "../services/userService";
 
 export const checkUser = () => {
+  console.log("checkUser");
   getCurrentUser()
     .then(response => {
       const [user] = response;

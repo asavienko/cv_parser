@@ -38,11 +38,11 @@ class SignIn extends React.Component {
             });
           }
         })
-        .catch(error =>
+        .catch((error = {}) =>
           openNotification({
             type: "error",
             message: "Что-то пошло не так",
-            description: error && error.err
+            description: error.err
           })
         );
     };
