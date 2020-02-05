@@ -5,13 +5,11 @@ import {
   LETTERS_VALIDATION,
   PASSWORD_POLICY
 } from "../../constants/validation";
-
 import "react-phone-number-input/style.css";
 import ru from "react-phone-number-input/locale/ru";
 import StyledPhoneInput from "./StyledPhoneInput";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
-import { postRequest } from "../../services/fetchUtils";
-import signUpSignInFunction from "../../services/signUpSignInFunction";
+import { signUpUserUtil } from "../../utils";
 
 const formItemLayout = {
   labelCol: { sm: { span: 7 }, md: { span: 6 }, xxl: { span: 2, offset: 7 } },
@@ -40,6 +38,7 @@ class SignUp extends React.Component {
     const { validateFields } = this.props.form;
 
     const onSuccess = async values => {
+      const { history } = this.props;
       const {
         name: rawName,
         surname: rawSurname,
@@ -51,42 +50,10 @@ class SignUp extends React.Component {
       const name = rawName && rawName.trim();
       const surname = rawSurname && rawSurname.trim();
 
-      const { history } = this.props;
+      const signUpData = { name, surname, email, password, phone };
+      const signInData = { email, password };
 
-      postRequest("/users/sign-up", {
-        body: {
-          name,
-          surname,
-          email,
-          password,
-          phone
-        }
-      })
-        .then(response => {
-          if (response.success) {
-            openNotification({
-              type: "success",
-              message: "Регестрация успешна",
-              description: `Пользователь с email ${email} успешно создан`
-            });
-            signUpSignInFunction({
-              history,
-              loginData: { email, password }
-            });
-          }
-          return openNotification({
-            type: "error",
-            message: "Ошибка",
-            description: response.err
-          });
-        })
-        .catch((error = {}) =>
-          openNotification({
-            type: "error",
-            message: "Ошибка! Попробуйте снова",
-            description: error
-          })
-        );
+      await signUpUserUtil({ signUpData, signInData, history });
     };
     validateFields((err, values) => {
       err

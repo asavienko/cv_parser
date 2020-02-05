@@ -29,6 +29,7 @@ const StyledLayout = styled.div`
 
 function App() {
   useEffect(() => {
+    console.log(checkUser);
     checkUser();
   });
 

@@ -3,9 +3,9 @@ import { Button, Form, Icon, Row } from "antd";
 import { PASSWORD_POLICY } from "../../constants/validation";
 import { Link } from "react-router-dom";
 import { StyledInput } from "../../styles";
-import { postRequest } from "../../services/fetchUtils";
 import openNotification from "../ReusableComponents/Notification";
 import { redirectFromSignInFunction } from "../../utils";
+import { signInUser } from "../../services/userService";
 
 const formLayout = {
   wrapperCol: {
@@ -26,7 +26,7 @@ class SignIn extends React.Component {
     } = this.props;
 
     const signInFunction = dataToSend => {
-      postRequest("/users/sign-in", dataToSend)
+      signInUser(dataToSend)
         .then(response => {
           const result = redirectFromSignInFunction({ response, history });
           if (!result) {
