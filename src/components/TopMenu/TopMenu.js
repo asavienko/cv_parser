@@ -9,6 +9,9 @@ import {
   StyledLink,
   StyledMenu
 } from "./TopMenu.styles";
+import { Menu } from "antd";
+
+const { Item } = Menu;
 
 function TopMenu({ location: { pathname } }) {
   const [StateShowMenu, setStateRenderHeader] = useState("true");
