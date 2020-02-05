@@ -3,33 +3,17 @@ import CvList from "./components/CvTable/CvList";
 import TopMenu from "./components/TopMenu/TopMenu";
 import { BrowserRouter as Router, Redirect, Switch } from "react-router-dom";
 import Home from "./components/Home/Home";
-import styled from "styled-components";
 import Favorites from "./components/Favorites/Favorites";
 import SignUp from "./components/SignUp/SignUp";
 import SignIn from "./components/SignIn/SignIn";
-import EmailNotVerified from "./components/EmailNotVerified";
+import EmailNotVerified from "./components/EmailNotVerified/EmailNotVerified";
 import SecuredRoute from "./components/SecuredRoute";
 import PreventSignedInRoute from "./components/PreventSignedInRoute";
 import { checkUser } from "./utils";
-
-const StyledDiv = styled.div`
-  background: RGBA(236, 236, 236, 1);
-`;
-const StyledContent = styled.div`
-  background: RGBA(255, 255, 255, 1);
-  margin: 8px 12px;
-  padding: 8px 12px;
-  overflow: auto;
-  height: calc(100vh - 64px);
-`;
-const StyledLayout = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+import { StyledContent, StyledDiv, StyledLayout } from "./App.styles";
 
 function App() {
   useEffect(() => {
-    console.log(checkUser);
     checkUser();
   });
 

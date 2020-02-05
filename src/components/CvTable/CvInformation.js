@@ -1,70 +1,20 @@
 import React from "react";
-import { Button, Col, Drawer, Row, Timeline } from "antd";
-import styled from "styled-components";
-import {StyledBoldSpan} from "../../styles";
-
-const StyledDrawer = styled(Drawer)`
-  .ant-drawer-body {
-    padding: 0;
-  }
-  .ant-drawer-content-wrapper {
-    width: 50% !important;
-  }
-`;
-const StyledRow = styled(Row)`
-  position: fixed;
-  overflow: auto;
-  padding: 24px;
-  height: calc(100% - 108px);
-`;
-const StyledFooter = styled.div`
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  border-top: 1px solid #e9e9e9;
-  padding: 10px 16px;
-  display: flex;
-  justify-content: space-around;
-`;
-
-const ColStyledSpeciality = styled(Col)`
-  text-align: center;
-  margin-top: 10px;
-`;
-const StyledSalary = styled.span`
-  color: RGBA(208, 208, 208, 1);
-  white-space: nowrap;
-`;
-const CenteredCol = styled(Col)`
-  text-align: center;
-`;
-const StyledTitle = styled.div`
-  color: rgba(0, 0, 0, 0.85);
-  font-size: 17px;
-  font-weight: 500;
-`;
-const StyledBlockTitle = styled.div`
-  border-bottom: 1px solid #e9e9e9;
-  width: 100%;
-  margin-top: 10px;
-  font-weight: 500;
-  font-size: 18px;
-`;
-const StyledDescrEl = styled.div`
-  margin-top: 10px;
-`;
-const StyledAdditionalInfo = styled.span`
-  display: block;
-  font-size: 12px;
-  color: RGBA(208, 208, 208, 1);
-`;
-const StyledTimeline = styled(Timeline)`
-  margin-top: 10px;
-`;
-const StyledDatesDiff = styled.span`
-  white-space: nowrap;
-`;
-
+import { Button, Col, Row, Timeline } from "antd";
+import { StyledBoldSpan } from "../../styles";
+import {
+  CenteredCol,
+  ColStyledSpeciality,
+  StyledAdditionalInfo,
+  StyledBlockTitle,
+  StyledDatesDiff,
+  StyledDescrEl,
+  StyledDrawer,
+  StyledFooter,
+  StyledRow,
+  StyledSalary,
+  StyledTimeline,
+  StyledTitle
+} from "./CvInforvation.styles";
 
 const DescrBlock = ({ description, name, location, yearOfEnding, comment }) => (
   <StyledDescrEl>
@@ -118,9 +68,7 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
       <StyledRow justify="centre">
         <Col span={24}>
           <Row>
-            <Col span={10}>
-              {photo && <img src={photo} alt="avatar" />}
-            </Col>
+            <Col span={10}>{photo && <img src={photo} alt="avatar" />}</Col>
             <Col span={14}>
               <p>
                 <StyledBoldSpan>{`${surname} ${name}`}</StyledBoldSpan>
@@ -130,15 +78,15 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
                   birthDate
                 ).toLocaleDateString()}`}</p>
               )}
-              {cityName && <p>Регион:{" "}{cityName}</p>}
-              {phone && <p>Телефон:{" "}{phone}</p>}
-              {email && <p>E-mail:{" "}{email}</p>}
+              {cityName && <p>Регион: {cityName}</p>}
+              {phone && <p>Телефон: {phone}</p>}
+              {email && <p>E-mail: {email}</p>}
             </Col>
           </Row>
         </Col>
         <ColStyledSpeciality span={24}>
           <StyledTitle level={4}>
-            {speciality}{" "}<StyledSalary>{salary}</StyledSalary>
+            {speciality} <StyledSalary>{salary}</StyledSalary>
           </StyledTitle>
         </ColStyledSpeciality>
         {lastModified && (

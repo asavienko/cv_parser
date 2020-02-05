@@ -7,22 +7,13 @@ import {
 } from "../../constants/validation";
 import "react-phone-number-input/style.css";
 import ru from "react-phone-number-input/locale/ru";
-import StyledPhoneInput from "./StyledPhoneInput";
+import {
+  buttonItemLayout,
+  formItemLayout,
+  StyledPhoneInput
+} from "./SignUp.styles";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
 import { signUpUserUtil } from "../../utils";
-
-const formItemLayout = {
-  labelCol: { sm: { span: 7 }, md: { span: 6 }, xxl: { span: 2, offset: 7 } },
-  wrapperCol: { sm: { span: 15 }, md: { span: 13 }, xxl: { span: 6 } }
-};
-const buttonItemLayout = {
-  wrapperCol: {
-    xs: { span: 24, offset: 0 },
-    sm: { span: 15, offset: 7 },
-    md: { span: 13, offset: 6 },
-    xxl: { span: 6, offset: 9 }
-  }
-};
 
 class SignUp extends React.Component {
   state = { confirmDirty: false };

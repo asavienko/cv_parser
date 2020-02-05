@@ -70,7 +70,6 @@ export const signUpUserUtil = ({ signUpData, signInData, history }) =>
     )
     .then(result => (result ? signInUser(signInData) : Promise.reject()))
     .then(response => {
-      console.log(response);
       const result =
         response && redirectFromSignInFunction({ response, history });
       if (!result) {

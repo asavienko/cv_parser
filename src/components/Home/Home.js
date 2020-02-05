@@ -1,23 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Input, Select } from "antd";
+import { Select } from "antd";
 import { connect } from "react-redux";
 import { setDictionaryCityAction } from "../../actions/cvActions";
-import styled from "styled-components";
 import openNotification from "../ReusableComponents/Notification";
-import SearchModal from "./SearchModal";
+import SearchModal from "./SearchModal/SearchModal";
 import InformationModal from "../ReusableComponents/InformationModal";
 import { StyledBoldSpan } from "../../styles";
 import { getDictionaryCity, getTotalCv } from "../../services/cvRequests";
+import {StyledSearch, StyledSelect} from "./Home.styles";
 
-const { Search } = Input;
 const { Option } = Select;
-
-const StyledSelect = styled(Select)`
-  width: 150px;
-`;
-const StyledSearch = styled(Search)`
-  padding: 15px;
-`;
 
 function Home({ dictionaryCity, setDictionaryCity }) {
   const modalBasicData = { totalCv: 0 };

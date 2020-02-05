@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import * as numeral from "numeral";
 import { CvInformation } from "./CvInformation";
-import { CvTable } from "../ReusableComponents/CvTable";
+import { CvTable } from "../ReusableComponents/CvTable/CvTable";
 import { connect } from "react-redux";
 import {
   setFavoriteListAction,
   setRawListAction
 } from "../../actions/cvActions";
-import { EditFavoriteListButton } from "../ReusableComponents/Buttons";
+import { EditFavoriteListButton } from "../ReusableComponents/EditeFavoriteListButton/EditFavoriteListButton";
 import openNotification from "../ReusableComponents/Notification";
 import { getRequest } from "../../services/fetchUtils";
 
