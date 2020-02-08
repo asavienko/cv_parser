@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Select } from "antd";
 import { connect } from "react-redux";
 import { setDictionaryCityAction } from "../../actions/cvActions";
-import openNotification from "../ReusableComponents/Notification";
+import openNotification from "../../views/NotificationComponent";
 import SearchModal from "./SearchModal/SearchModal";
-import InformationModal from "../ReusableComponents/InformationModal";
+import InformationModal from "./SearchModal/InformationModal";
 import { StyledBoldSpan } from "../../styles";
 import { getDictionaryCity, getTotalCv } from "../../services/cvRequests";
-import {StyledSearch, StyledSelect} from "./Home.styles";
+import { StyledSearch, StyledSelect } from "./Home.styles";
 
 const { Option } = Select;
 
@@ -95,10 +95,9 @@ function Home({ dictionaryCity, setDictionaryCity }) {
           )
         });
       }
-      throw new Error();
-    } catch (e) {
-      setModalVisible(false);
-      InformationModal({
+      throw Error();
+    } catch {
+      openNotification({
         type: "error",
         title: "Что то пошло не так",
         content: (

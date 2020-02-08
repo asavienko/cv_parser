@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
 import * as numeral from "numeral";
-import { CvInformation } from "./CvInformation";
-import { CvTable } from "../ReusableComponents/CvTable/CvTable";
+import CvInformation from "../../views/CvInformation";
+import CvTable from "../../views/CvTable";
 import { connect } from "react-redux";
 import {
   setFavoriteListAction,
   setRawListAction
 } from "../../actions/cvActions";
-import { EditFavoriteListButton } from "../ReusableComponents/EditeFavoriteListButton/EditFavoriteListButton";
-import openNotification from "../ReusableComponents/Notification";
+import EditFavoriteListButton from "../../views/EditFavoriteListButton";
+import openNotification from "../../views/NotificationComponent";
 import { getRequest } from "../../services/fetchUtils";
 
-function CvList({ favoriteCvList, setFavoriteList, setRawList, rawList }) {
+function CvListContainer({
+  favoriteCvList,
+  setFavoriteList,
+  setRawList,
+  rawList
+}) {
   const [cvList, setCvList] = useState([]);
   const [filteredInfo, setFilteredInfo] = useState({});
   /*
@@ -161,4 +166,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(CvList);
+)(CvListContainer);

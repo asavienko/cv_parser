@@ -5,7 +5,7 @@ import {
   StyledDivWrapper
 } from "./EditFavoriteListButton.styles";
 
-export function EditFavoriteListButton({
+export default function EditFavoriteListButton({
   addToFavoriteDisabled,
   onPrimaryClick,
   addToFavoriteActive,

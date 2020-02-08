@@ -3,8 +3,8 @@ import { Button, Form, Icon, Row } from "antd";
 import { PASSWORD_POLICY } from "../../constants/validation";
 import { Link } from "react-router-dom";
 import { StyledInput } from "../../styles";
-import openNotification from "../ReusableComponents/Notification";
-import { redirectFromSignInFunction } from "../../utils";
+import openNotification from "../../views/NotificationComponent";
+import { redirectFromSignInFunction } from "../../utils/userUtils";
 import { signInUser } from "../../services/userService";
 import { formLayout } from "./SignIn.styles";
 

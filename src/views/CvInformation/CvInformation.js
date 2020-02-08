@@ -164,4 +164,4 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
   );
 }
 
-export { CvInformation };
+export default CvInformation;

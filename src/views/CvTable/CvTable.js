@@ -1,8 +1,8 @@
 import React from "react";
-import { EllipsisTooltip } from "../../CvTable/EllipsisToolitp";
+import EllipsisTooltip from "./EllipsisTooltip";
 import * as numeral from "numeral";
-import { RangeSlider } from "../../CvTable/RangeSlider";
-import {StyledTable} from "./CvTable.styles";
+import RangeSlider from "./RangeSlider";
+import { StyledTable } from "./CvTable.styles";
 
 const shownDate = date => (date ? new Date(date).toLocaleDateString() : "");
 
@@ -101,4 +101,4 @@ function CvTable({
   );
 }
 
-export { CvTable };
+export default CvTable;

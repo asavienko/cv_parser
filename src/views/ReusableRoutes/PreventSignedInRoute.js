@@ -1,6 +1,6 @@
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
-import { getUserFromCookieStorage } from "../services/cookieStorage";
+import { getUserFromCookieStorage } from "../../services/cookieStorage";
 
 const PreventSignedInRoute = ({ component: Component, ...rest }) => (
   <Route

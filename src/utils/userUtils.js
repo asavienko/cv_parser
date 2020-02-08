@@ -3,7 +3,7 @@ import {
   getUserFromCookieStorage,
   updateUserInCookieStorage
 } from "../services/cookieStorage";
-import openNotification from "../components/ReusableComponents/Notification";
+import openNotification from "../views/NotificationComponent";
 import {
   getCurrentUser,
   signInUser,
