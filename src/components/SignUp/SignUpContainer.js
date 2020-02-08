@@ -3,8 +3,9 @@ import { Form } from "antd";
 import openNotification from "../../views/NotificationComponent";
 import "react-phone-number-input/style.css";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
-import { signUpUserUtil } from "../../utils/userUtils";
+import { redirectFromSignInFunction } from "../../utils/userUtils";
 import SignUp from "./SignUp";
+import { signInUser, signUpUser } from "../../services/userService";
 
 class SignUpContainer extends React.Component {
   state = { confirmDirty: false };
@@ -14,6 +15,45 @@ class SignUpContainer extends React.Component {
     const { confirmDirty } = this.state;
     !confirmDirty && this.setState({ confirmDirty: !!value });
   };
+
+  signUpUserUtil = ({ signUpData, signInData, history }) =>
+    signUpUser(signUpData)
+      .then(response => {
+        if (response.success) {
+          openNotification({
+            type: "success",
+            message: "Регестрация успешна"
+          });
+          return true;
+        }
+        openNotification({
+          type: "error",
+          message: "Ошибка",
+          description: response.err
+        });
+        return false;
+      })
+      .then(result => (result ? signInUser(signInData) : Promise.reject()))
+      .then(response => {
+        const result =
+          response && redirectFromSignInFunction({ response, history });
+        if (!result) {
+          openNotification({
+            type: "error",
+            message: "Что-то пошло не так",
+            description:
+              "Попробуйте ввести E-mail и Пароль указанные при регестрации и нажать Войти"
+          });
+        }
+      })
+      .catch(error => {
+        error &&
+          openNotification({
+            type: "error",
+            message: "Что-то пошло не так",
+            description: "error"
+          });
+      });
 
   handleSubmit = e => {
     e.preventDefault();
@@ -35,7 +75,7 @@ class SignUpContainer extends React.Component {
       const signUpData = { name, surname, email, password, phone };
       const signInData = { email, password };
 
-      await signUpUserUtil({ signUpData, signInData, history });
+      await this.signUpUserUtil({ signUpData, signInData, history });
     };
     validateFields((err, values) => {
       err
