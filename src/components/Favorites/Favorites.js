@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { CvTable } from "../ReusableComponents/CvTable";
-import { EditFavoriteListButton } from "../ReusableComponents/Buttons";
+import CvTable from "../../views/CvTable";
+import EditFavoriteListButton from "../../views/EditFavoriteListButton";
 import * as numeral from "numeral";
-import { CvInformation } from "../CvTable/CvInformation";
+import CvInformation from "../../views/CvInformation";
 import { setFavoriteListAction } from "../../actions/cvActions";
 
 function Favorites({ favoriteCvList, setFavoriteList }) {

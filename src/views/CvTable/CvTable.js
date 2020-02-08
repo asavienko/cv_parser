@@ -1,32 +1,10 @@
 import React from "react";
-import { EllipsisTooltip } from "../CvTable/EllipsisToolitp";
+import EllipsisTooltip from "./EllipsisTooltip";
 import * as numeral from "numeral";
-import { RangeSlider } from "../CvTable/RangeSlider";
-import styled from "styled-components";
-import { Table } from "antd";
+import RangeSlider from "./RangeSlider";
+import { StyledTable } from "./CvTable.styles";
 
 const shownDate = date => (date ? new Date(date).toLocaleDateString() : "");
-
-const StyledTable = styled(Table)`
-  .ant-table-body {
-    overflow: auto !important;
-  }
-  .ant-table-body::-webkit-scrollbar {
-    width: 7px;
-    height: 7px;
-  }
-  .ant-table-body::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0);
-    border-radius: 10px;
-    box-shadow: rgba(255, 255, 255, 0.3) 0 0 0 1px;
-  }
-  .ant-table-body:hover::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.45);
-  }
-  .ant-table-body::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.55);
-  }
-`;
 
 function CvTable({
   filteredInfo = [],
@@ -123,4 +101,4 @@ function CvTable({
   );
 }
 
-export { CvTable };
+export default CvTable;

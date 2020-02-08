@@ -1,16 +1,11 @@
 import { Button } from "antd";
 import React from "react";
-import styled from "styled-components";
+import {
+  StyledCloseButton,
+  StyledDivWrapper
+} from "./EditFavoriteListButton.styles";
 
-const StyledCloseButton = styled(Button)`
-  margin-left: 5px;
-`;
-
-const StyledDivWrapper = styled.div`
-  height: 40px;
-`;
-
-export function EditFavoriteListButton({
+export default function EditFavoriteListButton({
   addToFavoriteDisabled,
   onPrimaryClick,
   addToFavoriteActive,

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import PhoneInput from "react-phone-number-input";
 
-const StyledPhoneInput = styled(PhoneInput)`
+export const StyledPhoneInput = styled(PhoneInput)`
   border: 1px solid #d9d9d9;
   border-radius: 4px;
   display: flex;
@@ -49,4 +49,15 @@ const StyledPhoneInput = styled(PhoneInput)`
   }
 `;
 
-export default StyledPhoneInput;
+export const formItemLayout = {
+  labelCol: { sm: { span: 7 }, md: { span: 6 }, xxl: { span: 2, offset: 7 } },
+  wrapperCol: { sm: { span: 15 }, md: { span: 13 }, xxl: { span: 6 } }
+};
+export const buttonItemLayout = {
+  wrapperCol: {
+    xs: { span: 24, offset: 0 },
+    sm: { span: 15, offset: 7 },
+    md: { span: 13, offset: 6 },
+    xxl: { span: 6, offset: 9 }
+  }
+};

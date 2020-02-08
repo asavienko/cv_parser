@@ -1,14 +1,6 @@
 import React, { useRef, useState } from "react";
-import styled from "styled-components";
 import { Tooltip } from "antd";
-
-const StyledSpan = styled.span`
-  display: block;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  width: 150px;
-`;
+import { StyledSpan } from "./EllipsisTooltip.styles";
 
 function EllipsisTooltip({ title }) {
   const spanRef = useRef(null);
@@ -17,13 +9,13 @@ function EllipsisTooltip({ title }) {
     spanRef.current.clientWidth < spanRef.current.scrollWidth &&
       setVisible(visible);
   };
-  const stopPropagation = (e) => {
+  const stopPropagation = e => {
     e.stopPropagation();
   };
 
   return (
     <Tooltip
-      title={()=> <span onClick={stopPropagation}>{title}</span>}
+      title={() => <span onClick={stopPropagation}>{title}</span>}
       visible={visible}
       onVisibleChange={handleVisibleChange}
     >
@@ -32,4 +24,4 @@ function EllipsisTooltip({ title }) {
   );
 }
 
-export { EllipsisTooltip };
+export default EllipsisTooltip;

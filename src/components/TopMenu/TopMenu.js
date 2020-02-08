@@ -1,45 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Menu } from "antd";
-import styled from "styled-components";
 import { withRouter } from "react-router";
 import { clearCookieStorage } from "../../services/cookieStorage";
 import { Link } from "react-router-dom";
-
-const employ_logo =
-  process.env.PUBLIC_URL + "images/temporaryImages/employ_logo.svg";
-const lines_layout =
-  process.env.PUBLIC_URL + "images/temporaryImages/lines_layout.png";
+import {
+  employ_logo,
+  HeaderLayer,
+  lines_layout,
+  StyledLink,
+  StyledMenu
+} from "./TopMenu.styles";
+import { Menu } from "antd";
 
 const { Item } = Menu;
-
-const StyledMenu = styled(Menu)`
-  display: flex;
-  line-height: 45px;
-  ${({ show }) => show === "false" && `visibility: hidden`}
-`;
-const HeaderLayer = styled.div`
-  display: ${({ show }) => (show === "true" ? `none` : `block`)};
-  height: 46px;
-  width: 100%;
-  overflow: hidden;
-  position: absolute;
-  img:first-child {
-    transform: translate(17%, -33%) rotate(48deg) scaleX(-1);
-    height: 141px;
-  }
-  img:nth-child(2) {
-    width: 101%;
-    position: absolute;
-    opacity: 0.53;
-    left: 0;
-    transform: translate(0, -50%);
-  }
-`;
-
-const StyledLink = styled(Item)`
-  margin-left: auto;
-  padding-right: 20px;
-`;
 
 function TopMenu({ location: { pathname } }) {
   const [StateShowMenu, setStateRenderHeader] = useState("true");

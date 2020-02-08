@@ -3,19 +3,10 @@ import { Button, Form, Icon, Row } from "antd";
 import { PASSWORD_POLICY } from "../../constants/validation";
 import { Link } from "react-router-dom";
 import { StyledInput } from "../../styles";
-import { postRequest } from "../../services/fetchUtils";
-import openNotification from "../ReusableComponents/Notification";
-import { redirectFromSignInFunction } from "../../utils";
-
-const formLayout = {
-  wrapperCol: {
-    sm: { span: 16, offset: 4 },
-    md: { span: 12, offset: 6 },
-    lg: { span: 8, offset: 8 },
-    xl: { span: 6, offset: 9 },
-    xxl: { span: 4, offset: 10 }
-  }
-};
+import openNotification from "../../views/NotificationComponent";
+import { redirectFromSignInFunction } from "../../utils/userUtils";
+import { signInUser } from "../../services/userService";
+import { formLayout } from "./SignIn.styles";
 
 class SignIn extends React.Component {
   handleSubmit = e => {
@@ -26,7 +17,7 @@ class SignIn extends React.Component {
     } = this.props;
 
     const signInFunction = dataToSend => {
-      postRequest("/users/sign-in", dataToSend)
+      signInUser(dataToSend)
         .then(response => {
           const result = redirectFromSignInFunction({ response, history });
           if (!result) {
@@ -38,11 +29,11 @@ class SignIn extends React.Component {
             });
           }
         })
-        .catch(error =>
+        .catch((error = {}) =>
           openNotification({
             type: "error",
             message: "Что-то пошло не так",
-            description: error && error.err
+            description: error.err
           })
         );
     };
