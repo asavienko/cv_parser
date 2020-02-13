@@ -3,7 +3,6 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const totalCvs = require("./api/routes/totalCvs");
-const getDictionaryCity = require("./api/routes/getDictionaryCity");
 const parseAllResume = require("./api/routes/parseAllResume");
 const parseResumeDetails = require("./api/routes/parseResumeDetails");
 const errorHandler = require("./api/middleware/error-handler");
@@ -24,7 +23,6 @@ app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.get("/dictionary-city", getDictionaryCity);
 app.get("/total-cvs", totalCvs);
 app.get("/parse-all-resume", parseAllResume);
 app.get("/parse-resume-details", parseResumeDetails);

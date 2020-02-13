@@ -1,3 +1,5 @@
+const connectDb = require("../../database/connectMongoDb");
+
 const getCities = async () => {
   const client = await connectDb();
   const collection = client.db("rabotaua").collection("dictionaryCity");
