@@ -1,21 +1,22 @@
 const getAuthToken = require("../getAuthToken/getAuthToken");
-const connectMongoDb = require("../../database/connectMongoDb");
-const parseInformation = require("./parseDetails");
+const connectMongoDb = require("../../../database/connectMongoDb");
+const parsePages = require("./parsePages");
 
-const parseResumeDetails = async () => {
+const getResumeFromPages = async () => {
   const authToken = await getAuthToken();
   const options = { headers: { Cookie: authToken } };
   const client = await connectMongoDb();
-  const collectionResumes = client.db("rabotaua").collection("resumeIds");
+  const collectionResumes = client.db("rabotaua").collection("resumes");
   const collectionReports = client.db("rabotaua").collection("reports");
+
   const responseDB = await collectionReports.insertOne({
-    name: "Parse resumeId information",
+    name: "Parse all resume",
     startDate: new Date(),
     status: "started"
   });
   const reportId = responseDB.insertedId;
   try {
-    parseInformation({
+    parsePages({
       reportId,
       options,
       collectionReports,
@@ -31,4 +32,4 @@ const parseResumeDetails = async () => {
   return { message: "Successfully started" };
 };
 
-module.exports = parseResumeDetails;
+module.exports = getResumeFromPages;

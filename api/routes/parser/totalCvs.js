@@ -1,5 +1,5 @@
 const query = require("querystring");
-const countTotalCvs = require("../services/countTotalCvs");
+const countTotalCvs = require("../../services/parser/countTotalCvs");
 
 const totalCvs = async (req, res) => {
   const queryString = query.stringify(req.query);

@@ -20,9 +20,9 @@ const signIn = (req, res, next) => {
     .catch(err => next(err));
 };
 
-const getUser = ({ headers: { _id } }, res, next) => {
+const getCurrentUser = ({ user }, res, next) => {
   userServices
-    .getById(_id)
+    .getById(user.sub)
     .then(users => res.json(users))
     .catch(err => next(err));
 };
@@ -37,7 +37,7 @@ const getAll = (req, res, next) => {
 router.post("/sign-in", signIn);
 router.post("/sign-up", signUp);
 
-router.get("/get-current-user", getUser);
+router.get("/get-current-user", getCurrentUser);
 router.get("/", getAll);
 
 module.exports = router;

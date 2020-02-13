@@ -1,4 +1,4 @@
-const saveResumeDetails = require("../services/parseResumeDetails/parseResumeDetails");
+const saveResumeDetails = require("../../services/parser/parseResumeDetails/parseResumeDetails");
 
 const parseResumeDetails = async (req, res) => {
   try {

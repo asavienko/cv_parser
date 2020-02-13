@@ -31,11 +31,9 @@ const authenticate = async ({ email, password }) => {
     .aggregate(userPipelines.authenticate(email))
     .toArray();
   if (user && bcrypt.compareSync(password, user.hash)) {
-    const { hash, ...userWithoutHash } = user;
-    const token = jwt.sign({ sub: user._id }, SECRET);
-    console.log(token);
-
-    return { ...userWithoutHash, token };
+    const { hash, _id, ...userWithoutHashAndId } = user;
+    const token = jwt.sign({ sub: _id }, SECRET);
+    return { ...userWithoutHashAndId, token };
   }
 };
 
