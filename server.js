@@ -10,6 +10,7 @@ const errorHandler = require("./api/middleware/error-handler");
 const jwt = require("./api/middleware/jwt");
 const joiMiddleware = require("./api/middleware/joi");
 const usersApi = require("./api/routes/usersApi");
+const dictionariesApi = require("./api/routes/dictionariesApi");
 
 const app = express();
 
@@ -36,11 +37,12 @@ app.use(joiMiddleware());
 app.use(jwt());
 
 app.use("/users", usersApi);
+app.use("/dictionaries", dictionariesApi);
 
 app.use(errorHandler);
 
 /*
-Todo delete or refactor
+Todo delete or refactoring
 app.get("/cvlist", async (req, res) => {
   const query = req.query;
   try {
