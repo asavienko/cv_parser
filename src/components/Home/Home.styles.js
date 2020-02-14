@@ -2,9 +2,10 @@ import styled from "styled-components";
 import { Input, Select } from "antd";
 
 const { Search } = Input;
+const { Option } = Select;
 
 export const StyledSelect = styled(Select)`
-  width: 150px;
+  width: 200px;
 `;
 
 export const StyledSearch = styled(Search)`
@@ -14,3 +15,7 @@ export const StyledSearch = styled(Search)`
 export const StyledResponsiveSelect = styled(Select)`
   width: 100%;
 `;
+
+/*export const StyledOption = styled(Option)`
+  white-space: initial !important;
+`;*/

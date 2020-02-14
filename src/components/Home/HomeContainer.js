@@ -5,10 +5,11 @@ import openNotification from "../../views/NotificationComponent";
 import SearchModal from "./SearchModal/SearchModal";
 import InformationModal from "./SearchModal/InformationModal";
 import { StyledBoldSpan } from "../../styles";
-import { getDictionaryCity, getTotalCv } from "../../services/cvRequests";
+import { getTotalCv } from "../../services/cvRequests";
 import Home from "./Home";
 import HomeResponsive from "./HomeResponsive";
 import { Col, Row } from "antd";
+import { getCityDictionary } from "../../services/dictionaryService";
 
 function HomeContainer({ dictionaryCity, setDictionaryCity }) {
   const modalBasicData = { totalCv: 0 };
@@ -22,19 +23,15 @@ function HomeContainer({ dictionaryCity, setDictionaryCity }) {
   const [okButtonLoading, setOkButtonLoading] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      if (!dictionaryCity.length) {
-        try {
-          const response = await getDictionaryCity();
-          response.status === 200 && setDictionaryCity(response.data);
-        } catch {
+    !dictionaryCity.length &&
+      getCityDictionary()
+        .then(response => response.length && setDictionaryCity(response))
+        .catch(() =>
           openNotification({
             type: "error",
             message: "Не удалось загрузить списко городов"
-          });
-        }
-      }
-    })();
+          })
+        );
   }, [dictionaryCity, setDictionaryCity]);
 
   const onSelectFilter = (input, option) =>
@@ -118,6 +115,7 @@ function HomeContainer({ dictionaryCity, setDictionaryCity }) {
             onSelectFilter={onSelectFilter}
             onSelectChange={onSelectChange}
             dictionaryCity={dictionaryCity}
+            notFoundContent={"Город не найден"}
           />
         </Col>
         <Col xs={24} sm={24} lg={0}>
@@ -126,6 +124,7 @@ function HomeContainer({ dictionaryCity, setDictionaryCity }) {
             onSelectFilter={onSelectFilter}
             onSelectChange={onSelectChange}
             dictionaryCity={dictionaryCity}
+            notFoundContent={"Город не найден"}
           />
         </Col>
       </Row>

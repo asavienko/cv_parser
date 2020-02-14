@@ -10,7 +10,8 @@ const HomeResponsive = ({
   onSearchPressed,
   onSelectFilter,
   onSelectChange,
-  dictionaryCity
+  dictionaryCity,
+  notFoundContent
 }) => (
   <Row gutter={[, 24]}>
     <Col {...ColProps}>
@@ -19,12 +20,17 @@ const HomeResponsive = ({
         showSearch
         filterOption={onSelectFilter}
         onChange={onSelectChange}
+        notFoundContent={notFoundContent}
       >
         <Option value={0} key={0}>
           Вся Украина
         </Option>
         {dictionaryCity.map(record => (
-          <Option value={record.id} key={record.id}>
+          <Option
+            value={record.id}
+            key={record.id}
+            style={{ "white-space": "initial" }}
+          >
             {record.ru}
           </Option>
         ))}

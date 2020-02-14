@@ -13,6 +13,4 @@ const getTotalCv = async ({ regionId: regionid, keywords }) => {
   return await getRequest(url);
 };
 
-const getDictionaryCity = async () => await getRequest("/dictionary-city");
-
-export { getTotalCv, getDictionaryCity };
+export { getTotalCv };

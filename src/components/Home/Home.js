@@ -8,7 +8,8 @@ const Home = ({
   onSearchPressed,
   onSelectFilter,
   onSelectChange,
-  dictionaryCity
+  dictionaryCity,
+  notFoundContent
 }) => (
   <StyledSearch
     placeholder="Введите ключивые слова"
@@ -21,12 +22,17 @@ const Home = ({
         showSearch
         filterOption={onSelectFilter}
         onChange={onSelectChange}
+        notFoundContent={notFoundContent}
       >
         <Option value={0} key={0}>
           Вся Украина
         </Option>
         {dictionaryCity.map(record => (
-          <Option value={record.id} key={record.id}>
+          <Option
+            value={record.id}
+            key={record.id}
+            style={{ "white-space": "initial" }}
+          >
             {record.ru}
           </Option>
         ))}
