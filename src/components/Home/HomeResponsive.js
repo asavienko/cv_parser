@@ -11,9 +11,10 @@ const HomeResponsive = ({
   onSelectFilter,
   onSelectChange,
   dictionaryCity,
-  notFoundContent
+  notFoundContent,
+  loadingSites
 }) => (
-  <Row gutter={[, 24]}>
+  <Row gutter={[0, 24]}>
     <Col {...ColProps}>
       <StyledResponsiveSelect
         defaultValue={0}
@@ -21,6 +22,7 @@ const HomeResponsive = ({
         filterOption={onSelectFilter}
         onChange={onSelectChange}
         notFoundContent={notFoundContent}
+        loading={loadingSites}
       >
         <Option value={0} key={0}>
           Вся Украина
@@ -29,7 +31,7 @@ const HomeResponsive = ({
           <Option
             value={record.id}
             key={record.id}
-            style={{ "white-space": "initial" }}
+            style={{ whiteSpace: "initial" }}
           >
             {record.ru}
           </Option>

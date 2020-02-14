@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { Input, Select } from "antd";
 
 const { Search } = Input;
-const { Option } = Select;
 
 export const StyledSelect = styled(Select)`
   width: 200px;

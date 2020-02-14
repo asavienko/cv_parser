@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button, Form, Icon, Row, Spin } from "antd";
 import { PASSWORD_POLICY } from "../../constants/validation";
 import { Link } from "react-router-dom";

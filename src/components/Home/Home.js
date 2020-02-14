@@ -1,6 +1,6 @@
-import { StyledSearch, StyledSelect } from "./Home.styles";
+import {StyledSearch, StyledSelect} from "./Home.styles";
 import React from "react";
-import { Select } from "antd";
+import {Select} from "antd";
 
 const { Option } = Select;
 
@@ -9,7 +9,8 @@ const Home = ({
   onSelectFilter,
   onSelectChange,
   dictionaryCity,
-  notFoundContent
+  notFoundContent,
+  loadingSites
 }) => (
   <StyledSearch
     placeholder="Введите ключивые слова"
@@ -23,6 +24,7 @@ const Home = ({
         filterOption={onSelectFilter}
         onChange={onSelectChange}
         notFoundContent={notFoundContent}
+        loading={loadingSites}
       >
         <Option value={0} key={0}>
           Вся Украина
@@ -31,7 +33,7 @@ const Home = ({
           <Option
             value={record.id}
             key={record.id}
-            style={{ "white-space": "initial" }}
+            style={{ whiteSpace: "initial" }}
           >
             {record.ru}
           </Option>

@@ -17,21 +17,28 @@ function HomeContainer({ dictionaryCity, setDictionaryCity }) {
     regionId: 0,
     keywords: ""
   });
+  const [loadingSites, setLoadingSites] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalData, setModalData] = useState(modalBasicData);
   const [okButtonLoading, setOkButtonLoading] = useState(false);
 
   useEffect(() => {
-    !dictionaryCity.length &&
+    if (!dictionaryCity.length) {
+      setLoadingSites(true);
       getCityDictionary()
-        .then(response => response.length && setDictionaryCity(response))
-        .catch(() =>
+        .then(response => {
+          setLoadingSites(false);
+          response.length && setDictionaryCity(response);
+        })
+        .catch(() => {
+          setLoadingSites(false);
           openNotification({
             type: "error",
             message: "Не удалось загрузить списко городов"
-          })
-        );
+          });
+        });
+    }
   }, [dictionaryCity, setDictionaryCity]);
 
   const onSelectFilter = (input, option) =>
@@ -116,6 +123,7 @@ function HomeContainer({ dictionaryCity, setDictionaryCity }) {
             onSelectChange={onSelectChange}
             dictionaryCity={dictionaryCity}
             notFoundContent={"Город не найден"}
+            loadingSites={loadingSites}
           />
         </Col>
         <Col xs={24} sm={24} lg={0}>
@@ -125,6 +133,7 @@ function HomeContainer({ dictionaryCity, setDictionaryCity }) {
             onSelectChange={onSelectChange}
             dictionaryCity={dictionaryCity}
             notFoundContent={"Город не найден"}
+            loadingSites={loadingSites}
           />
         </Col>
       </Row>
