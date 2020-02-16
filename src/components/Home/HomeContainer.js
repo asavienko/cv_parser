@@ -7,8 +7,6 @@ import InformationModal from "./SearchModal/InformationModal";
 import { StyledBoldSpan } from "../../styles";
 import { getTotalCv } from "../../services/cvRequests";
 import Home from "./Home";
-import HomeResponsive from "./HomeResponsive";
-import { Col, Row } from "antd";
 import { getCityDictionary } from "../../services/dictionaryService";
 
 function HomeContainer({ dictionaryCity, setDictionaryCity }) {
@@ -115,28 +113,13 @@ function HomeContainer({ dictionaryCity, setDictionaryCity }) {
   };
   return (
     <React.Fragment>
-      <Row>
-        <Col xs={0} sm={0} lg={24}>
-          <Home
-            onSearchPressed={onSearchPressed}
-            onSelectFilter={onSelectFilter}
-            onSelectChange={onSelectChange}
-            dictionaryCity={dictionaryCity}
-            notFoundContent={"Город не найден"}
-            loadingSites={loadingSites}
-          />
-        </Col>
-        <Col xs={24} sm={24} lg={0}>
-          <HomeResponsive
-            onSearchPressed={onSearchPressed}
-            onSelectFilter={onSelectFilter}
-            onSelectChange={onSelectChange}
-            dictionaryCity={dictionaryCity}
-            notFoundContent={"Город не найден"}
-            loadingSites={loadingSites}
-          />
-        </Col>
-      </Row>
+      <Home
+        onSearchPressed={onSearchPressed}
+        onSelectFilter={onSelectFilter}
+        onSelectChange={onSelectChange}
+        dictionaryCity={dictionaryCity}
+        loadingSites={loadingSites}
+      />
       <SearchModal
         handleModalCancel={handleModalCancel}
         modalVisible={modalVisible}
