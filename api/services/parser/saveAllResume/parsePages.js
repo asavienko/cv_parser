@@ -1,46 +1,43 @@
-const fetch = require("node-fetch");
-const saveToDb = require("./saveResumeIdToDb");
-const saveReport = require("./saveReport");
-const _ = require("lodash");
+const fetch = require('node-fetch');
+const _ = require('lodash');
+const saveToDb = require('./saveResumeIdToDb');
+const saveReport = require('./saveReport');
 
 const parsePages = ({
   reportId,
   options,
   collectionReports,
-  collectionResumes
+  collectionResumes,
 }) => {
   let i = 0;
   function timeout(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
-  const parseEachPage = async previousPage => {
-    let currentPage = previousPage || i++;
+  const parseEachPage = async (previousPage) => {
+    const currentPage = previousPage || i++;
     const url = `https://rabota.ua/api/resume/search?period=6&searchtype=everywhere&sort=date&count=20&pg=${currentPage}`;
     try {
       const response = await fetch(url, options);
       const json = await response.json();
-
-      const data = _.get(json, "Documents.ResumeId", []).map(({ _id }) => ({
-        _id
+      const data = _.get(json, 'Documents.ResumeId', []).map(({ _id }) => ({
+        _id,
       }));
       if (!data.length) {
         throw new Error(
-          `No data in document. response.Message: ${json.Message}.`
+          `No data in document. response.Message: ${json.Message}.`,
         );
       }
       const reportMany = await saveToDb({
         data,
-        collectionResumes
+        collectionResumes,
       });
-      const report = reportMany.reduce((a, b) => {
-        return {
-          updatedDocumentsCount:
+      const report = reportMany.reduce((a, b) => ({
+        updatedDocumentsCount:
             a.updatedDocumentsCount + b.updatedDocumentsCount,
-          newDocumentsCount: a.newDocumentsCount + b.newDocumentsCount,
-          foundDocumentsInDbCount:
-            a.foundDocumentsInDbCount + b.foundDocumentsInDbCount
-        };
-      });
+        newDocumentsCount: a.newDocumentsCount + b.newDocumentsCount,
+        foundDocumentsInDbCount:
+            a.foundDocumentsInDbCount + b.foundDocumentsInDbCount,
+      }));
       report.parsedPage = currentPage;
       report.foundOnPage = data.length;
       report.time = new Date();
@@ -50,7 +47,7 @@ const parsePages = ({
       await saveReport(
         { error: error.message, parsedPage: currentPage, time: new Date() },
         reportId,
-        collectionReports
+        collectionReports,
       );
       await timeout(30000);
       parseEachPage(currentPage);

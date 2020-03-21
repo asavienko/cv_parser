@@ -1,4 +1,4 @@
-const getAuthToken = require("../getAuthToken/getAuthToken");
+const getAuthToken = require("../getAuthToken/getAuthTokenFromPage");
 const connectMongoDb = require("../../../database/connectMongoDb");
 const parseInformation = require("./parseDetails");
 

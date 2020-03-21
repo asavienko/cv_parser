@@ -42,8 +42,18 @@ const userSignIn = Joi.object({
 });
 
 const header = Joi.object().pattern(LETTERS_NUMBERS_DOTS, [
-  Joi.string().max(150).pattern(LETTERS_NUMBERS_DOTS),
+  Joi.string()
+    .max(150)
+    .pattern(LETTERS_NUMBERS_DOTS),
   Joi.number()
 ]);
 
-module.exports = { userSignUp, userSignIn, header };
+//max skip number 10 million
+const getCvByRequest = Joi.object({
+  skip: Joi.number()
+    .min(0)
+    .max(10 * Math.pow(10, 6)),
+  options: Joi.object({ request: Joi.string() })
+});
+
+module.exports = { userSignUp, userSignIn, header, getCvByRequest };

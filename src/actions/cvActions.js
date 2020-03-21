@@ -1,8 +1,8 @@
 import {
   SET_DICTIONARY_CITY,
   SET_FAVORITE,
-  SET_RAW_LIST
-} from "../constants/constantsActions";
+  SET_RAW_LIST,
+} from '../constants/constantsActions';
 
 export function setFavoriteListAction(favoriteCvList) {
   return { type: SET_FAVORITE, favoriteCvList };

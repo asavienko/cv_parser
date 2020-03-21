@@ -11,9 +11,9 @@ function Favorites({ favoriteCvList, setFavoriteList }) {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [salaryRange, setSalaryRange] = useState([]);
   const [salaryFilterRange, setSalaryFilterRange] = useState([]);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [cvInfo, setCvInfo] = useState({ visible: false, cvInformation: {} });
-  const [cvList, setCvList] = useState([]);
+  // const [cvList, setCvList] = useState([]);
   const [filteredInfo, setFilteredInfo] = useState({});
   useEffect(() => {
     if (favoriteCvList.length) {
@@ -36,15 +36,16 @@ function Favorites({ favoriteCvList, setFavoriteList }) {
     setSalaryRange(range);
   };
   const onSalaryRangeSet = () => {
-    const [min, max] = salaryRange;
-    const filteredArray = favoriteCvList.filter(({ salary }) => {
-      return numeral(salary).value() >= min && numeral(salary).value() <= max;
-    });
-    setCvList(filteredArray);
+    /* const [min, max] = salaryRange;
+  const filteredArray = favoriteCvList.filter(({ salary }) => {
+     return numeral(salary).value() >= min && numeral(salary).value() <= max;
+   });
+   setCvList(filteredArray);
+ */
   };
 
   const onSalaryRangeReset = () => {
-    setCvList(favoriteCvList);
+    // setCvList(favoriteCvList);
     setSalaryRange(salaryFilterRange);
   };
   const handleChange = (pagination, filters, sorter) => {
@@ -81,7 +82,9 @@ function Favorites({ favoriteCvList, setFavoriteList }) {
     onChange: onSelectChange
   };
   const addToFavoriteDisabled =
-    loading || (selectedRowKeys.length === 0 && addToFavoriteActive);
+    selectedRowKeys.length === 0 && addToFavoriteActive;
+  // loading || (selectedRowKeys.length === 0 && addToFavoriteActive);
+
   const rowSelection = addToFavoriteActive && rowSelectionConfig;
   return (
     <React.Fragment>
@@ -102,7 +105,7 @@ function Favorites({ favoriteCvList, setFavoriteList }) {
         onSalaryRangeReset={onSalaryRangeReset}
         onSalaryRangeChange={onSalaryRangeChange}
         salaryRange={salaryRange}
-        loading={loading}
+        // loading={loading}
         onRow={onRow}
         handleChange={handleChange}
         rowSelection={rowSelection}

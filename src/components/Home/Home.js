@@ -5,7 +5,7 @@ import {
   StyledResponsiveSelect
 } from "./Home.styles";
 import React from "react";
-import { Button, Col, Input, Row, Select } from "antd";
+import { Col, Row, Select } from "antd";
 
 const Home = ({
   onSearchPressed,
