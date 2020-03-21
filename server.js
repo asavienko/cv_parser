@@ -13,7 +13,6 @@ const dictionariesApi = require('./api/routes/dictionariesApi');
 const cvApi = require('./api/routes/cvApi');
 
 const app = express();
-
 const port = 5000;
 
 const corsOptions = {
