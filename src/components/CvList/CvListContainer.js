@@ -29,10 +29,8 @@ function CvListContainer({
           const current = Math.ceil((Start + Count) / Count);
           setPagination({ total: Total, pageSize: Count, current });
           console.log({ total: Total, pageSize: Count, current });
+          // todo delete current from object
 
-          if (!Array.isArray(Documents)) {
-            throw Error();
-          }
           setDisplayedCvList(Documents);
           setRawList(Documents);
         })
