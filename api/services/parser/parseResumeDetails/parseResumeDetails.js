@@ -1,5 +1,5 @@
-const getAuthToken = require("../getAuthToken/getAuthToken");
-const connectMongoDb = require("../../database/connectMongoDb");
+const getAuthToken = require("../getAuthToken/getAuthTokenFromPage");
+const connectMongoDb = require("../../../database/connectMongoDb");
 const parseInformation = require("./parseDetails");
 
 const parseResumeDetails = async () => {

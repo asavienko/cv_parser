@@ -1,11 +1,11 @@
-const SECRET = process.env.SECRET;
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const connectDb = require("../../database/connectMongoDb");
-const uniqid = require("uniqid");
-const { sameEmailCheck, userPipelines } = require("./helpers");
+const { SECRET } = process.env;
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const uniqid = require('uniqid');
+const connectDb = require('../../database/connectMongoDb');
+const { sameEmailCheck, userPipelines } = require('./helpers');
 
-const create = async userParam => {
+const create = async (userParam) => {
   const collection = await getUsersCollection();
   const [checkEmail] = await collection
     .aggregate(userPipelines.getSameEmail(userParam.email))
@@ -31,15 +31,15 @@ const authenticate = async ({ email, password }) => {
     .aggregate(userPipelines.authenticate(email))
     .toArray();
   if (user && bcrypt.compareSync(password, user.hash)) {
-    const { hash, ...userWithoutHash } = user;
-    const token = jwt.sign({ sub: user._id }, SECRET);
-    return { ...userWithoutHash, token };
+    const { hash, _id, ...userWithoutHashAndId } = user;
+    const token = jwt.sign({ sub: _id }, SECRET);
+    return { ...userWithoutHashAndId, token };
   }
 };
 
 const getUsersCollection = async () => {
   const client = await connectDb();
-  return client.db("rabotaua").collection("users");
+  return client.db('rabotaua').collection('users');
 };
 
 const getAll = async () => {
@@ -47,7 +47,7 @@ const getAll = async () => {
   return await collection.aggregate(userPipelines.getAll()).toArray();
 };
 
-const getById = async _id => {
+const getById = async (_id) => {
   const collection = await getUsersCollection();
   const user = await collection.aggregate(userPipelines.getById(_id)).toArray();
   return user;
@@ -58,7 +58,7 @@ const update = async (_id, userParam) => {
   const user = await collection.findOne({ _id });
 
   // validate
-  if (!user) throw "Юзер не найден";
+  if (!user) throw 'Юзер не найден';
 
   const checkEmail = sameEmailCheck({ user, userParam, collection });
 
@@ -76,7 +76,7 @@ const update = async (_id, userParam) => {
   await collection.updateOne({ _id }, { userParam });
 };
 
-const remove = async _id => {
+const remove = async (_id) => {
   const collection = await getUsersCollection();
   await collection.remove({ _id });
 };
@@ -87,5 +87,5 @@ module.exports = {
   getById,
   create,
   update,
-  remove
+  remove,
 };

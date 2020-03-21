@@ -8,7 +8,7 @@ import SignUp from "./SignUp";
 import { signInUser, signUpUser } from "../../services/userService";
 
 class SignUpContainer extends React.Component {
-  state = { confirmDirty: false };
+  state = { confirmDirty: false, loading: false };
 
   handleConfirmPasswordBlur = e => {
     const { value } = e.target;
@@ -16,8 +16,10 @@ class SignUpContainer extends React.Component {
     !confirmDirty && this.setState({ confirmDirty: !!value });
   };
 
-  signUpUserUtil = ({ signUpData, signInData, history }) =>
-    signUpUser(signUpData)
+  signUpUserUtil = ({ signUpData, signInData, history }) => {
+    this.setState({ loading: true });
+
+    return signUpUser(signUpData)
       .then(response => {
         if (response.success) {
           openNotification({
@@ -26,6 +28,7 @@ class SignUpContainer extends React.Component {
           });
           return true;
         }
+        this.setState({ loading: false });
         openNotification({
           type: "error",
           message: "Ошибка",
@@ -37,6 +40,7 @@ class SignUpContainer extends React.Component {
       .then(response => {
         const result =
           response && redirectFromSignInFunction({ response, history });
+        this.setState({ loading: false });
         if (!result) {
           openNotification({
             type: "error",
@@ -47,6 +51,7 @@ class SignUpContainer extends React.Component {
         }
       })
       .catch(error => {
+        this.setState({ loading: false });
         error &&
           openNotification({
             type: "error",
@@ -54,6 +59,7 @@ class SignUpContainer extends React.Component {
             description: "error"
           });
       });
+  };
 
   handleSubmit = e => {
     e.preventDefault();
@@ -123,6 +129,7 @@ class SignUpContainer extends React.Component {
         getFieldDecorator={getFieldDecorator}
         handleConfirmPasswordBlur={this.handleConfirmPasswordBlur}
         validatePhoneNumber={this.validatePhoneNumber}
+        loading={this.state.loading}
       />
     );
   }

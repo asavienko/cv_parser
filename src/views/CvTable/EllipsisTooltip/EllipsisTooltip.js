@@ -1,15 +1,15 @@
-import React, { useRef, useState } from "react";
-import { Tooltip } from "antd";
-import { StyledSpan } from "./EllipsisTooltip.styles";
+import React, { useRef, useState } from 'react';
+import { Tooltip } from 'antd';
+import { StyledSpan } from './EllipsisTooltip.styles';
 
 function EllipsisTooltip({ title }) {
   const spanRef = useRef(null);
   const [visible, setVisible] = useState(false);
-  const handleVisibleChange = visible => {
-    spanRef.current.clientWidth < spanRef.current.scrollWidth &&
-      setVisible(visible);
+  const handleVisibleChange = (visible) => {
+    spanRef.current.clientWidth < spanRef.current.scrollWidth
+      && setVisible(visible);
   };
-  const stopPropagation = e => {
+  const stopPropagation = (e) => {
     e.stopPropagation();
   };
 

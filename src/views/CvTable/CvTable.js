@@ -1,91 +1,54 @@
-import React from "react";
-import EllipsisTooltip from "./EllipsisTooltip";
-import * as numeral from "numeral";
-import RangeSlider from "./RangeSlider";
-import { StyledTable } from "./CvTable.styles";
-
-const shownDate = date => (date ? new Date(date).toLocaleDateString() : "");
+import React from 'react';
+import PropTypes from 'prop-types';
+import EllipsisTooltip from './EllipsisTooltip';
+import { StyledTable } from './CvTable.styles';
 
 function CvTable({
-  filteredInfo = [],
-  salaryFilterRange,
-  onSalaryRangeSet,
-  onSalaryRangeReset,
-  onSalaryRangeChange,
-  salaryRange,
+  cvList,
   loading,
   onRow,
-  cvList,
   handleChange,
-  rowSelection
+  rowSelection,
+  pagination,
 }) {
   const columns = [
     {
       width: 150,
-      title: "Имя",
-      dataIndex: "displayName",
-      key: "displayName"
-    },
-    {
-      title: "email",
-      dataIndex: "email",
-      key: "email",
-      filters: [{ text: "есть", value: true }, { text: "нет", value: false }],
-      filteredValue: filteredInfo.email || "",
-      onFilter: (value, { email }) => !!email === value
-    },
-    {
-      width: 150,
-      title: "Телефон",
-      dataIndex: "phone",
-      key: "phone",
-      filters: [{ text: "есть", value: true }, { text: "нет", value: false }],
-      filteredValue: filteredInfo.phone || "",
-      onFilter: (value, { phone }) => !!phone === value
+      title: 'Имя',
+      dataIndex: 'DisplayName',
+      key: 'displayName',
     },
     {
       width: 85,
-      title: "Возраст",
-      dataIndex: "age",
-      key: "age"
+      title: 'Возраст',
+      dataIndex: 'Age',
+      key: 'age',
     },
     {
       width: 185,
-      title: "Должность",
-      dataIndex: "speciality",
-      key: "speciality",
-      render: speciality => <EllipsisTooltip title={speciality} />
+      title: 'Должность',
+      dataIndex: 'Speciality',
+      key: 'speciality',
+      render: (speciality) => <EllipsisTooltip title={speciality} />,
     },
     {
       width: 130,
-      title: "Зарплата",
-      dataIndex: "salary",
-      key: "salary",
-      sorter: (a, b) => numeral(a.salary).value() - numeral(b.salary).value(),
-      filterDropdown: (
-        <RangeSlider
-          salaryFilterRange={salaryFilterRange}
-          onSalaryRangeSet={onSalaryRangeSet}
-          onSalaryRangeReset={onSalaryRangeReset}
-          onSalaryRangeChange={onSalaryRangeChange}
-          salaryRang={salaryRange}
-        />
-      )
+      title: 'Город',
+      dataIndex: 'CityName',
+      key: 'cityName',
+    },
+    {
+      width: 130,
+      title: 'Зарплата',
+      dataIndex: 'Salary',
+      key: 'salary',
     },
     {
       width: 100,
-      title: "Последнее изменение",
-      dataIndex: "lastModified",
-      key: "lastModified",
-      render: shownDate
+      title: 'Последнее изменение',
+      dataIndex: 'UpdatedDate',
+      key: 'lastModified',
     },
-    {
-      width: 100,
-      title: "Добавленно на работа юа",
-      dataIndex: "addDate",
-      key: "addDate",
-      render: shownDate
-    }
   ];
   return (
     <StyledTable
@@ -96,9 +59,27 @@ function CvTable({
       onChange={handleChange}
       columns={columns}
       rowSelection={rowSelection}
-      scroll={{ x: 1200, y: "calc(100vh - 258px)" }}
+      rowKey="ResumeId"
+      scroll={{ x: 1200, y: 'calc(100vh - 258px)' }}
+      pagination={pagination}
     />
   );
 }
+
+
+CvTable.propTypes = {
+  cvList: PropTypes.arrayOf(PropTypes.object),
+  loading: PropTypes.bool,
+  onRow: PropTypes.func,
+  handleChange: PropTypes.func,
+  rowSelection: PropTypes.func,
+};
+CvTable.defaultProps = {
+  cvList: [],
+  loading: false,
+  onRow: () => {},
+  handleChange: () => {},
+  rowSelection: () => {},
+};
 
 export default CvTable;

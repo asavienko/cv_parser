@@ -1,3 +1,3 @@
-import EllipsisTooltip from "./EllipsisTooltip";
+import EllipsisTooltip from './EllipsisTooltip';
 
 export default EllipsisTooltip;
