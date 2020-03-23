@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import EllipsisTooltip from "./EllipsisTooltip";
 import { StyledTable } from "./CvTable.styles";
 
 function CvTable({
@@ -15,12 +14,14 @@ function CvTable({
     {
       title: "Имя",
       dataIndex: "DisplayName",
-      key: "displayName"
+      key: "displayName",
+      width: 200
     },
     {
       title: "Возраст",
       dataIndex: "Age",
-      key: "age"
+      key: "age",
+      width: 120
     },
     {
       title: "Должность",
@@ -31,17 +32,20 @@ function CvTable({
     {
       title: "Город",
       dataIndex: "CityName",
-      key: "cityName"
+      key: "cityName",
+      width: 180
     },
     {
       title: "Зарплата",
       dataIndex: "Salary",
-      key: "salary"
+      key: "salary",
+      width: 150
     },
     {
       title: "Последнее изменение",
       dataIndex: "UpdatedDate",
-      key: "lastModified"
+      key: "lastModified",
+      width: 150
     }
   ];
   return (
@@ -54,7 +58,8 @@ function CvTable({
       columns={columns}
       rowSelection={rowSelection}
       rowKey="ResumeId"
-      scroll={{ x: 1200, y: "calc(100vh - 258px)" }}
+      scroll={{ x: 1000, y: "calc(100vh - 239px)" }}
+      // scroll={{ x: 1000, y: "calc(100vh - 283px)" }}
       pagination={pagination}
     />
   );
