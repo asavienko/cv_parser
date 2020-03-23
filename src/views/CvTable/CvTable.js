@@ -13,38 +13,32 @@ function CvTable({
 }) {
   const columns = [
     {
-      width: 150,
       title: "Имя",
       dataIndex: "DisplayName",
       key: "displayName"
     },
     {
-      width: 85,
       title: "Возраст",
       dataIndex: "Age",
       key: "age"
     },
     {
-      width: 185,
       title: "Должность",
       dataIndex: "Speciality",
-      key: "speciality",
-      render: speciality => <EllipsisTooltip title={speciality} />
+      key: "speciality"
+      // render: speciality => <EllipsisTooltip title={speciality} />
     },
     {
-      width: 130,
       title: "Город",
       dataIndex: "CityName",
       key: "cityName"
     },
     {
-      width: 130,
       title: "Зарплата",
       dataIndex: "Salary",
       key: "salary"
     },
     {
-      width: 100,
       title: "Последнее изменение",
       dataIndex: "UpdatedDate",
       key: "lastModified"
