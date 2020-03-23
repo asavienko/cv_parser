@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import * as numeral from "numeral";
+import PropTypes from "prop-types";
 import CvTable from "../../views/CvTable";
 import EditFavoriteListButton from "../../views/EditFavoriteListButton";
-import * as numeral from "numeral";
 import CvInformation from "../../views/CvInformation";
 import { setFavoriteListAction } from "../../actions/cvActions";
 
@@ -56,7 +57,7 @@ function Favorites({ favoriteCvList, setFavoriteList }) {
     */
   };
   const saveFavoriteList = () => {
-    let editedCvList = favoriteCvList.filter(cv => {
+    const editedCvList = favoriteCvList.filter(cv => {
       const hasSelectedKey = selectedRowKeys.some(key => cv.key === key);
       return !hasSelectedKey;
     });
@@ -87,7 +88,7 @@ function Favorites({ favoriteCvList, setFavoriteList }) {
 
   const rowSelection = addToFavoriteActive && rowSelectionConfig;
   return (
-    <React.Fragment>
+    <>
       <EditFavoriteListButton
         addToFavoriteDisabled={addToFavoriteDisabled}
         addToFavoriteActive={addToFavoriteActive}
@@ -115,9 +116,19 @@ function Favorites({ favoriteCvList, setFavoriteList }) {
         cvInfo={cvInfo}
         onCvInformationClose={onCvInformationClose}
       />
-    </React.Fragment>
+    </>
   );
 }
+
+Favorites.prototype = {
+  favoriteCvList: PropTypes.arrayOf(PropTypes.object),
+  setFavoriteList: PropTypes.func
+};
+
+Favorites.defaultProptype = {
+  favoriteCvList: [],
+  setFavoriteList: () => {}
+};
 
 const mapStateToProps = ({ cvReducer: { favoriteCvList } }) => ({
   favoriteCvList
@@ -127,4 +138,7 @@ const mapDispatchToProps = dispatch => ({
   setFavoriteList: favoriteList => dispatch(setFavoriteListAction(favoriteList))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Favorites);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Favorites);

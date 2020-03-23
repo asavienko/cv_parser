@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import CvInformation from "../../views/CvInformation";
 import CvTable from "../../views/CvTable";
 import {
@@ -91,7 +92,7 @@ function CvListContainer({
   const addToFavoriteDisabled =
     loading || (selectedRowKeys.length === 0 && addToFavoriteActive);
 
-  const rowSelection = addToFavoriteActive && rowSelectionConfig;
+  const rowSelection = addToFavoriteActive ? rowSelectionConfig : null;
   return (
     <>
       <EditFavoriteListButton
@@ -116,6 +117,20 @@ function CvListContainer({
   );
 }
 
+CvListContainer.prototype = {
+  rawList: PropTypes.arrayOf(PropTypes.object),
+  favoriteCvList: PropTypes.arrayOf(PropTypes.object),
+  setRawList: PropTypes.func,
+  setFavoriteList: PropTypes.func
+};
+
+CvListContainer.defaulProptypes = {
+  rawList: [],
+  favoriteCvList: [],
+  setRawList: () => {},
+  setFavoriteList: () => {}
+};
+
 const mapStateToProps = ({ cvReducer: { favoriteCvList, rawList } }) => ({
   favoriteCvList,
   rawList
@@ -126,4 +141,7 @@ const mapDispatchToProps = dispatch => ({
   setFavoriteList: favoriteList => dispatch(setFavoriteListAction(favoriteList))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CvListContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CvListContainer);

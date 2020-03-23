@@ -8,6 +8,7 @@ import { StyledBoldSpan } from "../../styles";
 import { getTotalCv } from "../../services/cvRequests";
 import Home from "./Home";
 import { getCityDictionary } from "../../services/dictionaryService";
+import PropTypes from "prop-types";
 
 function HomeContainer({ dictionaryCity, setDictionaryCity }) {
   const modalBasicData = { totalCv: 0 };
@@ -133,6 +134,16 @@ function HomeContainer({ dictionaryCity, setDictionaryCity }) {
   );
 }
 
+HomeContainer.prototype = {
+  dictionaryCity: PropTypes.arrayOf(PropTypes.object),
+  setDictionaryCity: PropTypes.func
+};
+
+HomeContainer.defaultProptype = {
+  dictionaryCity: [{ id: 0, ru: "Харьков" }],
+  setDictionaryCity: () => {}
+};
+
 const mapStateToProps = ({ cvReducer: { dictionaryCity } }) => ({
   dictionaryCity
 });
@@ -142,4 +153,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(setDictionaryCityAction(dictionaryCity))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HomeContainer);

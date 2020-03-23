@@ -1,6 +1,7 @@
 import React from "react";
 import { Col, Row, Select } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
+import PropTypes from "prop-types";
 import {
   ResponsiveInput,
   StyledButton,
@@ -51,5 +52,21 @@ const Home = ({
     </Col>
   </Row>
 );
+
+Home.prototype = {
+  onSearchPressed: PropTypes.func,
+  onSelectFilter: PropTypes.func,
+  onSelectChange: PropTypes.func,
+  dictionaryCity: PropTypes.arrayOf(PropTypes.object),
+  loadingSites: PropTypes.bool
+};
+
+Home.defaultProptype = {
+  onSearchPressed: () => {},
+  onSelectFilter: () => {},
+  onSelectChange: () => {},
+  dictionaryCity: [{ id: 0, ru: "Харьков" }],
+  loadingSites: false
+};
 
 export default Home;

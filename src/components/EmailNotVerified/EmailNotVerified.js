@@ -9,8 +9,8 @@ const EmailNotVerified = () => {
     <Result
       status="info"
       title="Еще один шаг до конца регестрации!"
-      subTitle={
-        <React.Fragment>
+      subTitle={(
+        <>
           Для окончания регестрации, необходимо позвонить по телефону:
           <StyledPhone href="tel:123-456-7890">+38 099 123 4567</StyledPhone>
           Или дождаться когда мы свяжемся с Вами самостоятельно.
@@ -19,8 +19,8 @@ const EmailNotVerified = () => {
               Выйти
             </Link>
           </Row>
-        </React.Fragment>
-      }
+        </>
+      )}
     />
   );
 };
