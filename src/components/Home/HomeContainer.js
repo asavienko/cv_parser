@@ -134,12 +134,12 @@ function HomeContainer({ dictionaryCity, setDictionaryCity }) {
   );
 }
 
-HomeContainer.prototype = {
+HomeContainer.propTypes = {
   dictionaryCity: PropTypes.arrayOf(PropTypes.object),
   setDictionaryCity: PropTypes.func
 };
 
-HomeContainer.defaultProptype = {
+HomeContainer.defaultProps = {
   dictionaryCity: [{ id: 0, ru: "Харьков" }],
   setDictionaryCity: () => {}
 };

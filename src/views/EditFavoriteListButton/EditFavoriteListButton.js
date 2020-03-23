@@ -1,10 +1,10 @@
 import { Button } from "antd";
 import React from "react";
+import { CloseOutlined } from "@ant-design/icons";
 import {
   StyledCloseButton,
   StyledDivWrapper
 } from "./EditFavoriteListButton.styles";
-import { CloseOutlined } from "@ant-design/icons";
 
 export default function EditFavoriteListButton({
   addToFavoriteDisabled,

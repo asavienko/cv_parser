@@ -117,14 +117,14 @@ function CvListContainer({
   );
 }
 
-CvListContainer.prototype = {
+CvListContainer.propTypes = {
   rawList: PropTypes.arrayOf(PropTypes.object),
   favoriteCvList: PropTypes.arrayOf(PropTypes.object),
   setRawList: PropTypes.func,
   setFavoriteList: PropTypes.func
 };
 
-CvListContainer.defaulProptypes = {
+CvListContainer.defaultProps = {
   rawList: [],
   favoriteCvList: [],
   setRawList: () => {},

@@ -53,15 +53,14 @@ const Home = ({
   </Row>
 );
 
-Home.prototype = {
+Home.propTypes = {
   onSearchPressed: PropTypes.func,
   onSelectFilter: PropTypes.func,
   onSelectChange: PropTypes.func,
   dictionaryCity: PropTypes.arrayOf(PropTypes.object),
   loadingSites: PropTypes.bool
 };
-
-Home.defaultProptype = {
+Home.defaultProps = {
   onSearchPressed: () => {},
   onSelectFilter: () => {},
   onSelectChange: () => {},

@@ -120,12 +120,12 @@ function Favorites({ favoriteCvList, setFavoriteList }) {
   );
 }
 
-Favorites.prototype = {
+Favorites.propTypes = {
   favoriteCvList: PropTypes.arrayOf(PropTypes.object),
   setFavoriteList: PropTypes.func
 };
 
-Favorites.defaultProptype = {
+Favorites.defaultProps = {
   favoriteCvList: [],
   setFavoriteList: () => {}
 };
