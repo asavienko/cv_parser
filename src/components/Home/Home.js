@@ -1,47 +1,48 @@
+import React from 'react';
+import { Col, Row, Select } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 import {
   ResponsiveInput,
   StyledButton,
   StyledOptionDiv,
-  StyledResponsiveSelect
-} from "./Home.styles";
-import React from "react";
-import { Col, Row, Select } from "antd";
+  StyledResponsiveSelect,
+} from './Home.styles';
 
 const Home = ({
   onSearchPressed,
   onSelectFilter,
   onSelectChange,
   dictionaryCity,
-  loadingSites
+  loadingSites,
 }) => (
   <Row span={22}>
-    <Col xs={24} sm={24} lg={4}>
+    <Col xs={24} sm={24} lg={7} xl={6}>
       <StyledResponsiveSelect
-        defaultValue={0}
+        defaultValue="Вся Украина"
         showSearch
         filterOption={onSelectFilter}
         onChange={onSelectChange}
-        notFoundContent={"Город не найден"}
+        notFoundContent="Город не найден"
         loading={loadingSites}
-        size={"large"}
+        size="large"
       >
-        <Select.Option value={0} key={0}>
+        <Select.Option value="Вся Украина" key={0}>
           Вся Украина
         </Select.Option>
-        {dictionaryCity.map(record => (
-          <Select.Option value={record.id} key={record.id}>
-            <StyledOptionDiv> {record.ru}</StyledOptionDiv>
+        {dictionaryCity.map((record) => (
+          <Select.Option value={record.ru} key={record.id}>
+            {record.ru}
           </Select.Option>
         ))}
       </StyledResponsiveSelect>
     </Col>
-    <Col xs={24} sm={24} lg={17} xl={18}>
+    <Col xs={24} sm={24} lg={14} xl={16}>
       <ResponsiveInput placeholder="Введите ключивые слова" size="large" />
     </Col>
     <Col xs={24} sm={24} lg={3} xl={2}>
       <StyledButton
         type="primary"
-        icon="search"
+        icon={<SearchOutlined />}
         size="large"
         onClick={onSearchPressed}
         block

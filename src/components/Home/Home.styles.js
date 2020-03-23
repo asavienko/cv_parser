@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { Button, Input, Select } from "antd";
+import styled from 'styled-components';
+import { Button, Input, Select } from 'antd';
 
 export const ResponsiveInput = styled(Input)`
   @media (min-width: 992px) {
@@ -23,8 +23,4 @@ export const StyledResponsiveSelect = styled(Select)`
       border-radius: 4px 0 0 4px;
     }
   }
-`;
-
-export const StyledOptionDiv = styled.div`
-  white-space: nowrap;
 `;
