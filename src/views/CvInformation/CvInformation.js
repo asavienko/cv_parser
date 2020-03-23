@@ -1,6 +1,9 @@
-import React from "react";
-import { Button, Col, Row, Timeline } from "antd";
-import { StyledBoldSpan } from "../../styles";
+import React from 'react';
+import { DownloadOutlined } from '@ant-design/icons';
+import {
+  Button, Col, Row, Timeline,
+} from 'antd';
+import { StyledBoldSpan } from '../../styles';
 import {
   CenteredCol,
   ColStyledSpeciality,
@@ -13,23 +16,31 @@ import {
   StyledRow,
   StyledSalary,
   StyledTimeline,
-  StyledTitle
-} from "./CvInforvation.styles";
+  StyledTitle,
+} from './CvInforvation.styles';
 
-const DescrBlock = ({ description, name, location, yearOfEnding, comment }) => (
+const DescrBlock = ({
+  description, name, location, yearOfEnding, comment,
+}) => (
   <StyledDescrEl>
     {name ? (
       location ? (
-        <React.Fragment>
+        <>
           <StyledBoldSpan>{name}</StyledBoldSpan>
-          <span> {location}</span>
-        </React.Fragment>
+          <span>
+            {' '}
+            {location}
+          </span>
+        </>
       ) : (
         <StyledBoldSpan>{name}</StyledBoldSpan>
       )
     ) : null}
     {yearOfEnding && (
-      <StyledAdditionalInfo>Год окончания: {yearOfEnding}</StyledAdditionalInfo>
+      <StyledAdditionalInfo>
+        Год окончания:
+        {yearOfEnding}
+      </StyledAdditionalInfo>
     )}
     {description && <div dangerouslySetInnerHTML={{ __html: description }} />}
     {comment && <div dangerouslySetInnerHTML={{ __html: comment }} />}
@@ -55,8 +66,8 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
       additionals,
       educations,
       experience,
-      skills
-    }
+      skills,
+    },
   } = cvInfo && cvInfo.cvInformation && cvInfo;
 
   return (
@@ -74,25 +85,45 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
                 <StyledBoldSpan>{`${surname} ${name}`}</StyledBoldSpan>
               </p>
               {birthDate && (
-                <p>{`Дата рождения: ${new Date(
-                  birthDate
-                ).toLocaleDateString()}`}</p>
+                <p>
+                  {`Дата рождения: ${new Date(
+                    birthDate,
+                  ).toLocaleDateString()}`}
+                </p>
               )}
-              {cityName && <p>Регион: {cityName}</p>}
-              {phone && <p>Телефон: {phone}</p>}
-              {email && <p>E-mail: {email}</p>}
+              {cityName && (
+              <p>
+                Регион:
+                {cityName}
+              </p>
+              )}
+              {phone && (
+              <p>
+                Телефон:
+                {phone}
+              </p>
+              )}
+              {email && (
+              <p>
+                E-mail:
+                {email}
+              </p>
+              )}
             </Col>
           </Row>
         </Col>
         <ColStyledSpeciality span={24}>
           <StyledTitle level={4}>
-            {speciality} <StyledSalary>{salary}</StyledSalary>
+            {speciality}
+            {' '}
+            <StyledSalary>{salary}</StyledSalary>
           </StyledTitle>
         </ColStyledSpeciality>
         {lastModified && (
           <CenteredCol span={24}>
             <StyledSalary>
-              обновленно на работа.юа:{" "}
+              обновленно на работа.юа:
+              {' '}
               {new Date(lastModified).toLocaleDateString()}
             </StyledSalary>
           </CenteredCol>
@@ -101,7 +132,7 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
           <Col span={24}>
             <StyledBlockTitle>Опыт работы</StyledBlockTitle>
             <StyledTimeline mode="alternate">
-              {experience.map(item => (
+              {experience.map((item) => (
                 <Timeline.Item>
                   <Row>
                     <StyledBoldSpan>
@@ -110,8 +141,16 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
                   </Row>
                   <Row>
                     <StyledAdditionalInfo>
-                      {item.StartDate} - {item.EndDate}{" "}
-                      <StyledDatesDiff>({item.DatesDiff})</StyledDatesDiff>
+                      {item.StartDate}
+                      {' '}
+                      -
+                      {item.EndDate}
+                      {' '}
+                      <StyledDatesDiff>
+                        (
+                        {item.DatesDiff}
+                        )
+                      </StyledDatesDiff>
                     </StyledAdditionalInfo>
                   </Row>
                   <Row>{item.Company.toUpperCase()}</Row>
@@ -123,7 +162,7 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
         {educations && educations.length > 0 && (
           <Col span={24}>
             <StyledBlockTitle>Образование</StyledBlockTitle>
-            {educations.map(item => (
+            {educations.map((item) => (
               <DescrBlock
                 name={item.name}
                 location={item.location}
@@ -137,7 +176,7 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
         {skills && skills.length > 0 && (
           <Col span={24}>
             <StyledBlockTitle>Навыки</StyledBlockTitle>
-            {skills.map(item => (
+            {skills.map((item) => (
               <DescrBlock description={item.description} />
             ))}
           </Col>
@@ -145,7 +184,7 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
         {additionals && additionals.length > 0 && (
           <Col span={24}>
             <StyledBlockTitle>Дополнительная информация</StyledBlockTitle>
-            {additionals.map(item => (
+            {additionals.map((item) => (
               <DescrBlock name={item.name} description={item.description} />
             ))}
           </Col>
@@ -156,7 +195,7 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
         <Button target="_blank" rel="noopener noreferref" href={url}>
           URL
         </Button>
-        <Button icon="download" download>
+        <Button icon={<DownloadOutlined />} download>
           Скачать PDF
         </Button>
       </StyledFooter>

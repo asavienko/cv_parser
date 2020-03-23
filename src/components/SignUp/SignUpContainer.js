@@ -1,11 +1,10 @@
 import React from "react";
-import { Form } from "antd";
 import openNotification from "../../views/NotificationComponent";
 import "react-phone-number-input/style.css";
-import { isPossiblePhoneNumber } from "react-phone-number-input";
-import { redirectFromSignInFunction } from "../../utils/userUtils";
+import {isPossiblePhoneNumber} from "react-phone-number-input";
+import {redirectFromSignInFunction} from "../../utils/userUtils";
 import SignUp from "./SignUp";
-import { signInUser, signUpUser } from "../../services/userService";
+import {signInUser, signUpUser} from "../../services/userService";
 
 class SignUpContainer extends React.Component {
   state = { confirmDirty: false, loading: false };
@@ -119,14 +118,12 @@ class SignUpContainer extends React.Component {
   };
 
   render() {
-    const { getFieldDecorator } = this.props.form;
 
     return (
       <SignUp
         compareToFirstPassword={this.compareToFirstPassword}
         validateToNextPassword={this.validateToNextPassword}
         handleSubmit={this.handleSubmit}
-        getFieldDecorator={getFieldDecorator}
         handleConfirmPasswordBlur={this.handleConfirmPasswordBlur}
         validatePhoneNumber={this.validatePhoneNumber}
         loading={this.state.loading}
@@ -135,4 +132,4 @@ class SignUpContainer extends React.Component {
   }
 }
 
-export default Form.create({ name: "validate_new_user" })(SignUpContainer);
+export default SignUpContainer
