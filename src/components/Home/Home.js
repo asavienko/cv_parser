@@ -1,19 +1,18 @@
-import React from 'react';
-import { Col, Row, Select } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import React from "react";
+import { Col, Row, Select } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import {
   ResponsiveInput,
   StyledButton,
-  StyledOptionDiv,
-  StyledResponsiveSelect,
-} from './Home.styles';
+  StyledResponsiveSelect
+} from "./Home.styles";
 
 const Home = ({
   onSearchPressed,
   onSelectFilter,
   onSelectChange,
   dictionaryCity,
-  loadingSites,
+  loadingSites
 }) => (
   <Row span={22}>
     <Col xs={24} sm={24} lg={7} xl={6}>
@@ -29,7 +28,7 @@ const Home = ({
         <Select.Option value="Вся Украина" key={0}>
           Вся Украина
         </Select.Option>
-        {dictionaryCity.map((record) => (
+        {dictionaryCity.map(record => (
           <Select.Option value={record.ru} key={record.id}>
             {record.ru}
           </Select.Option>

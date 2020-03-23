@@ -1,3 +1,3 @@
-import EditFavoriteListButton from "./EditFavoriteListButton"
+import EditFavoriteListButton from "./EditFavoriteListButton";
 
-export default EditFavoriteListButton
+export default EditFavoriteListButton;

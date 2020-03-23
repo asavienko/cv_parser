@@ -4,6 +4,7 @@ import {
   StyledCloseButton,
   StyledDivWrapper
 } from "./EditFavoriteListButton.styles";
+import { CloseOutlined } from "@ant-design/icons";
 
 export default function EditFavoriteListButton({
   addToFavoriteDisabled,
@@ -30,7 +31,7 @@ export default function EditFavoriteListButton({
         <StyledCloseButton
           type="danger"
           shape="circle"
-          icon="close"
+          icon={<CloseOutlined />}
           onClick={onCancelClick}
         />
       )}

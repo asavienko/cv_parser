@@ -1,10 +1,10 @@
 import React from "react";
 import openNotification from "../../views/NotificationComponent";
 import "react-phone-number-input/style.css";
-import {isPossiblePhoneNumber} from "react-phone-number-input";
-import {redirectFromSignInFunction} from "../../utils/userUtils";
+import { isPossiblePhoneNumber } from "react-phone-number-input";
+import { redirectFromSignInFunction } from "../../utils/userUtils";
 import SignUp from "./SignUp";
-import {signInUser, signUpUser} from "../../services/userService";
+import { signInUser, signUpUser } from "../../services/userService";
 
 class SignUpContainer extends React.Component {
   state = { confirmDirty: false, loading: false };
@@ -93,32 +93,23 @@ class SignUpContainer extends React.Component {
     });
   };
 
-  validateToNextPassword = (rule, value, callback) => {
-    const { form } = this.props;
-    const { confirmDirty } = this.state;
-    if (value && confirmDirty) {
-      form.validateFields(["confirmPassword"], { force: true });
+  compareToFirstPassword = ({ getFieldValue }) => ({
+    validator(rule, value) {
+      return !value || getFieldValue("password") === value
+        ? Promise.resolve()
+        : Promise.reject("Вы ввели разные пароли");
     }
-    callback();
-  };
+  });
 
-  compareToFirstPassword = (rule, value, callback) => {
-    const { form } = this.props;
-    if (value && value !== form.getFieldValue("password")) {
-      return callback("Вы ввели разные пароли");
-    } else {
-      return callback();
+  validatePhoneNumber = {
+    validator(rule, value) {
+      return !value || isPossiblePhoneNumber(value)
+        ? Promise.resolve()
+        : Promise.reject("Вы ввели не корректный номер");
     }
-  };
-
-  validatePhoneNumber = (rule, value, callback) => {
-    !value || isPossiblePhoneNumber(value)
-      ? callback()
-      : callback("Вы ввели не корректный номер");
   };
 
   render() {
-
     return (
       <SignUp
         compareToFirstPassword={this.compareToFirstPassword}
@@ -132,4 +123,4 @@ class SignUpContainer extends React.Component {
   }
 }
 
-export default SignUpContainer
+export default SignUpContainer;

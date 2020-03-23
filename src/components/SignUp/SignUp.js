@@ -1,18 +1,22 @@
-import React from 'react';
-import ru from 'react-phone-number-input/locale/ru';
+import React from "react";
+import ru from "react-phone-number-input/locale/ru";
+import { Button, Form, Input, Spin } from "antd";
 import {
-  Button, Form, Input, Spin,
-} from 'antd';
-import { LETTERS_VALIDATION, PASSWORD_POLICY } from '../../constants/validation';
-import { buttonItemLayout, formItemLayout, StyledPhoneInput } from './SignUp.styles';
+  LETTERS_VALIDATION,
+  PASSWORD_POLICY
+} from "../../constants/validation";
+import {
+  buttonItemLayout,
+  formItemLayout,
+  StyledPhoneInput
+} from "./SignUp.styles";
 
 const SignUp = ({
   handleSubmit,
-  validateToNextPassword,
   compareToFirstPassword,
   handleConfirmPasswordBlur,
   validatePhoneNumber,
-  loading,
+  loading
 }) => (
   <Spin spinning={loading}>
     <Form onSubmit={handleSubmit} {...formItemLayout}>
@@ -21,14 +25,14 @@ const SignUp = ({
         label="E-mail"
         rules={[
           {
-            type: 'email',
-            message: 'Вы ввели не коректный email.',
+            type: "email",
+            message: "Вы ввели не коректный email."
           },
           {
             required: true,
-            message: 'Пожалуйста введите Ваш E-mail!.',
+            message: "Пожалуйста введите Ваш E-mail!."
           },
-          { max: 90, message: 'Максимальная длина поля 90 символов.' },
+          { max: 90, message: "Максимальная длина поля 90 символов." }
         ]}
       >
         <Input />
@@ -40,17 +44,14 @@ const SignUp = ({
         rules={[
           {
             required: true,
-            message: 'Пожалуйста, введите пароль.',
-          },
-          {
-            validator: validateToNextPassword,
+            message: "Пожалуйста, введите пароль."
           },
           {
             pattern: PASSWORD_POLICY,
             message:
-            'Ваш пароль должен содержать минимум 8 знаков включая: буквы верхнего и нижнего регистра, цифры. Все буквы латинского алфавита (Например: abcdefG8).',
+              "Ваш пароль должен содержать минимум 8 знаков включая: буквы верхнего и нижнего регистра, цифры. Все буквы латинского алфавита (Например: abcdefG8)."
           },
-          { max: 90, message: 'Максимальная длина поля 90 символов.' },
+          { max: 90, message: "Максимальная длина поля 90 символов." }
         ]}
       >
         <Input.Password />
@@ -58,15 +59,14 @@ const SignUp = ({
       <Form.Item
         label="Подтвердите пароль"
         name="confirmPassword"
+        dependencies={["password"]}
         hasFeedback
         rules={[
           {
             required: true,
-            message: 'Пожалуйста подтвердите пароль.',
+            message: "Пожалуйста подтвердите пароль."
           },
-          {
-            validator: compareToFirstPassword,
-          },
+          compareToFirstPassword
         ]}
       >
         <Input.Password onBlur={handleConfirmPasswordBlur} />
@@ -77,18 +77,12 @@ const SignUp = ({
         rules={[
           {
             required: true,
-            message: 'Пожалуйста введите ваш номер телефона.',
+            message: "Пожалуйста введите ваш номер телефона."
           },
-          {
-            validator: validatePhoneNumber,
-          },
+          validatePhoneNumber
         ]}
       >
-        <StyledPhoneInput
-          country="UA"
-          labels={ru}
-          placeholder="Ваш телефон"
-        />
+        <StyledPhoneInput country="UA" labels={ru} placeholder="Ваш телефон" />
       </Form.Item>
       <Form.Item
         name="name"
@@ -96,10 +90,10 @@ const SignUp = ({
         rules={[
           {
             pattern: LETTERS_VALIDATION,
-            message: 'Это поле может содержать только буквы.',
-            transform: (value) => value && value.trim(),
+            message: "Это поле может содержать только буквы.",
+            transform: value => value && value.trim()
           },
-          { max: 90, message: 'Максимальная длина поля 90 символов.' },
+          { max: 90, message: "Максимальная длина поля 90 символов." }
         ]}
       >
         <Input placeholder="Введите имя" />
@@ -110,10 +104,10 @@ const SignUp = ({
         rules={[
           {
             pattern: LETTERS_VALIDATION,
-            message: 'Это поле может содержать только буквы',
-            transform: (value) => value && value.trim(),
+            message: "Это поле может содержать только буквы",
+            transform: value => value && value.trim()
           },
-          { max: 90, message: 'Максимальная длина поля 90 символов' },
+          { max: 90, message: "Максимальная длина поля 90 символов" }
         ]}
       >
         <Input placeholder="Введите фамилию" />

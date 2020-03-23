@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { Button, Input, Select } from 'antd';
+import styled from "styled-components";
+import { Button, Input, Select } from "antd";
 
 export const ResponsiveInput = styled(Input)`
   @media (min-width: 992px) {

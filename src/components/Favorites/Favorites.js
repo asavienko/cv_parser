@@ -127,7 +127,4 @@ const mapDispatchToProps = dispatch => ({
   setFavoriteList: favoriteList => dispatch(setFavoriteListAction(favoriteList))
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Favorites);
+export default connect(mapStateToProps, mapDispatchToProps)(Favorites);

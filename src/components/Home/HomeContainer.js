@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from "react";
-import {connect} from "react-redux";
-import {setDictionaryCityAction} from "../../actions/cvActions";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { setDictionaryCityAction } from "../../actions/cvActions";
 import openNotification from "../../views/NotificationComponent";
 import SearchModal from "./SearchModal/SearchModal";
 import InformationModal from "./SearchModal/InformationModal";
-import {StyledBoldSpan} from "../../styles";
-import {getTotalCv} from "../../services/cvRequests";
+import { StyledBoldSpan } from "../../styles";
+import { getTotalCv } from "../../services/cvRequests";
 import Home from "./Home";
-import {getCityDictionary} from "../../services/dictionaryService";
+import { getCityDictionary } from "../../services/dictionaryService";
 
 function HomeContainer({ dictionaryCity, setDictionaryCity }) {
   const modalBasicData = { totalCv: 0 };
@@ -39,7 +39,8 @@ function HomeContainer({ dictionaryCity, setDictionaryCity }) {
     }
   }, [dictionaryCity, setDictionaryCity]);
 
-  const onSelectFilter = (input, option) =>option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+  const onSelectFilter = (input, option) =>
+    option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 
   const onSelectChange = value => {
     const editedSearchRequest = searchRequest;
@@ -141,7 +142,4 @@ const mapDispatchToProps = dispatch => ({
     dispatch(setDictionaryCityAction(dictionaryCity))
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(HomeContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);

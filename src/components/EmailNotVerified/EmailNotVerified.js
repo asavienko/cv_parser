@@ -2,7 +2,7 @@ import React from "react";
 import { Result, Row } from "antd";
 import { Link } from "react-router-dom";
 import { clearCookieStorage } from "../../services/cookieStorage";
-import {StyledPhone} from "./EmailNotVerified.styles";
+import { StyledPhone } from "./EmailNotVerified.styles";
 
 const EmailNotVerified = () => {
   return (

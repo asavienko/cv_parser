@@ -1,8 +1,8 @@
-import { getRequest, postRequest } from './fetchUtils';
+import { getRequest, postRequest } from "./fetchUtils";
 
 const cvUrls = () => ({
-  getTotalCv: '/total-cvs',
-  getCvByRequest: 'cv/get-by-request',
+  getTotalCv: "/total-cvs",
+  getCvByRequest: "cv/get-by-request"
 });
 
 const getTotalCv = async ({ regionId: regionid, keywords }) => {
@@ -11,13 +11,14 @@ const getTotalCv = async ({ regionId: regionid, keywords }) => {
     regionid,
     keywords,
     period: 7,
-    searchtype: 'everywhere',
+    searchtype: "everywhere",
     moveability: 0,
-    sort: 'date',
+    sort: "date"
   });
   return await getRequest(url);
 };
 
-const getCvByRequest = (body = { skip: '5', options: { request: 'abc' } }) => postRequest(cvUrls().getCvByRequest, body);
+const getCvByRequest = (body = { skip: "5", options: { request: "abc" } }) =>
+  postRequest(cvUrls().getCvByRequest, body);
 
 export { getTotalCv, getCvByRequest };

@@ -1,7 +1,7 @@
-const initBrowser = require('./initBrowser');
-const login = require('./login');
-const getAuthTokenCookies = require('./getAuthTokenCookies');
-const connectDb = require('../../../database/connectMongoDb');
+const initBrowser = require("./initBrowser");
+const login = require("./login");
+const getAuthTokenCookies = require("./getAuthTokenCookies");
+const connectDb = require("../../../database/connectMongoDb");
 
 const getAuthTokenFromPage = async () => {
   try {
@@ -11,7 +11,7 @@ const getAuthTokenFromPage = async () => {
     const token = await getAuthTokenCookies(enteredPage);
     await browser.close();
     const client = await connectDb();
-    const tokensCollection = client.db('rabotaua').collection('tokens');
+    const tokensCollection = client.db("rabotaua").collection("tokens");
     await tokensCollection.insertOne({ token });
     return token;
   } catch (e) {

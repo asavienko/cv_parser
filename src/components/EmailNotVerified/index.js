@@ -1,3 +1,3 @@
-import EmailNotVerified from './EmailNotVerified';
+import EmailNotVerified from "./EmailNotVerified";
 
 export default EmailNotVerified;
