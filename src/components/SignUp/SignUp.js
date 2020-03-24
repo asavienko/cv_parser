@@ -10,6 +10,7 @@ import {
   formItemLayout,
   StyledPhoneInput
 } from "./SignUp.styles";
+import PropTypes from "prop-types";
 
 const SignUp = ({
   handleSubmit,
@@ -120,5 +121,20 @@ const SignUp = ({
     </Form>
   </Spin>
 );
+
+SignUp.propTypes = {
+  handleSubmit: PropTypes.func,
+  compareToFirstPassword: PropTypes.func,
+  handleConfirmPasswordBlur: PropTypes.func,
+  validatePhoneNumber: PropTypes.func,
+  loading: PropTypes.bool
+};
+SignUp.defaultProps = {
+  handleSubmit: () => {},
+  compareToFirstPassword: () => {},
+  handleConfirmPasswordBlur: () => {},
+  validatePhoneNumber: () => {},
+  loading: false
+};
 
 export default SignUp;

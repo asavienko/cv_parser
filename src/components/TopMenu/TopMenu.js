@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router";
-import { clearCookieStorage } from "../../services/cookieStorage";
 import { Link } from "react-router-dom";
+import { Menu } from "antd";
+import PropTypes from "prop-types";
+import { clearCookieStorage } from "../../services/cookieStorage";
 import {
-  employ_logo,
+  employLogo,
   HeaderLayer,
-  lines_layout,
+  linesLayout,
   StyledLink,
   StyledMenu
 } from "./TopMenu.styles";
-import { Menu } from "antd";
 
 const { Item } = Menu;
 
@@ -28,10 +29,10 @@ function TopMenu({ location: { pathname } }) {
     }
   }, [pathname]);
   return (
-    <React.Fragment>
+    <>
       <HeaderLayer show={StateShowMenu}>
-        <img src={employ_logo} alt="logo" />
-        <img src={lines_layout} alt="logo_layout" />
+        <img src={employLogo} alt="logo" />
+        <img src={linesLayout} alt="logo_layout" />
       </HeaderLayer>
       <StyledMenu mode="horizontal" show={StateShowMenu}>
         <Item key="home">
@@ -49,8 +50,12 @@ function TopMenu({ location: { pathname } }) {
           </Link>
         </StyledLink>
       </StyledMenu>
-    </React.Fragment>
+    </>
   );
 }
+
+TopMenu.propTypes = { location: PropTypes.objectOf(PropTypes.string) };
+
+TopMenu.defaultProps = { location: { pathName: "/" } };
 
 export default withRouter(TopMenu);

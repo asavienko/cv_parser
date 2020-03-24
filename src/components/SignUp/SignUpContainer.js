@@ -113,7 +113,6 @@ class SignUpContainer extends React.Component {
     return (
       <SignUp
         compareToFirstPassword={this.compareToFirstPassword}
-        validateToNextPassword={this.validateToNextPassword}
         handleSubmit={this.handleSubmit}
         handleConfirmPasswordBlur={this.handleConfirmPasswordBlur}
         validatePhoneNumber={this.validatePhoneNumber}

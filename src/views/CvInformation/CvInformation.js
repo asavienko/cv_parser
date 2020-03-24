@@ -1,6 +1,7 @@
 import React from "react";
 import { DownloadOutlined } from "@ant-design/icons";
 import { Button, Col, Row, Timeline } from "antd";
+import PropTypes from "prop-types";
 import { StyledBoldSpan } from "../../styles";
 import {
   CenteredCol,
@@ -17,7 +18,13 @@ import {
   StyledTitle
 } from "./CvInforvation.styles";
 
-const DescrBlock = ({ description, name, location, yearOfEnding, comment }) => (
+const DescriptionBlock = ({
+  description,
+  name,
+  location,
+  yearOfEnding,
+  comment
+}) => (
   <StyledDescrEl>
     {name ? (
       location ? (
@@ -143,7 +150,7 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
           <Col span={24}>
             <StyledBlockTitle>Образование</StyledBlockTitle>
             {educations.map(item => (
-              <DescrBlock
+              <DescriptionBlock
                 name={item.name}
                 location={item.location}
                 description={item.speciality}
@@ -157,7 +164,7 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
           <Col span={24}>
             <StyledBlockTitle>Навыки</StyledBlockTitle>
             {skills.map(item => (
-              <DescrBlock description={item.description} />
+              <DescriptionBlock description={item.description} />
             ))}
           </Col>
         )}
@@ -165,7 +172,10 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
           <Col span={24}>
             <StyledBlockTitle>Дополнительная информация</StyledBlockTitle>
             {additionals.map(item => (
-              <DescrBlock name={item.name} description={item.description} />
+              <DescriptionBlock
+                name={item.name}
+                description={item.description}
+              />
             ))}
           </Col>
         )}
@@ -182,5 +192,20 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
     </StyledDrawer>
   );
 }
+
+CvInformation.propTypes = {
+  cvInfo: PropTypes.objectOf(
+    PropTypes.string,
+    PropTypes.object,
+    PropTypes.array,
+    PropTypes.number
+  ),
+  onCvInformationClose: PropTypes.func
+};
+
+CvInformation.defaultProps = {
+  cvInfo: { url: "http://", salary: 0, name: "Не удалось загрузить данные" },
+  onCvInformationClose: () => {}
+};
 
 export default CvInformation;

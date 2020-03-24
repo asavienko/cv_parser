@@ -32,5 +32,5 @@ export const StyledLink = styled(Item)`
   padding-right: 20px;
 `;
 
-export const employ_logo = `${process.env.PUBLIC_URL}images/temporaryImages/employ_logo.svg`;
-export const lines_layout = `${process.env.PUBLIC_URL}images/temporaryImages/lines_layout.png`;
+export const employLogo = `${process.env.PUBLIC_URL}images/temporaryImages/employ_logo.svg`;
+export const linesLayout = `${process.env.PUBLIC_URL}images/temporaryImages/lines_layout.png`;

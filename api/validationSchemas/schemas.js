@@ -48,7 +48,7 @@ const header = Joi.object().pattern(LETTERS_NUMBERS_DOTS, [
   Joi.number()
 ]);
 
-//max skip number 10 million
+// max skip number 10 million
 const getCvByRequest = Joi.object({
   skip: Joi.number()
     .min(0)

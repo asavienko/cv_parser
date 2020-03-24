@@ -1,6 +1,7 @@
 import { Modal, Spin } from "antd";
 import React from "react";
-import { StyledBoldSpan } from "../../../styles";
+import PropTypes from "prop-types";
+import { StyledBoldSpan } from "../../../../styles";
 
 function SearchModal({
   modalVisible,
@@ -23,11 +24,33 @@ function SearchModal({
     >
       <Spin tip="Ищем резюме..." spinning={modalLoading}>
         <p>
-          По вашему запросу найденно: <StyledBoldSpan>{totalCv}</StyledBoldSpan>{" "}
+          По вашему запросу найденно: 
+          {' '}
+          <StyledBoldSpan>{totalCv}</StyledBoldSpan>
+          {" "}
           резюме
         </p>
       </Spin>
     </Modal>
   );
 }
+
+SearchModal.propTypes = {
+  modalData: PropTypes.objectOf(PropTypes.number),
+  modalVisible: PropTypes.bool,
+  modalLoading: PropTypes.bool,
+  okButtonLoading: PropTypes.bool,
+  handleModalCancel: PropTypes.func,
+  handleModalOk: PropTypes.func
+};
+
+SearchModal.defaultProps = {
+  modalData: { totalCvs: 0 },
+  modalVisible: false,
+  modalLoading: false,
+  okButtonLoading: false,
+  handleModalCancel: () => {},
+  handleModalOk: () => {}
+};
+
 export default SearchModal;
