@@ -30,8 +30,11 @@ const SecuredRoute = ({ component: Component, path, ...rest }) => (
   />
 );
 
-SecuredRoute.propTypes = { component: PropTypes.node, path: PropTypes.string };
+SecuredRoute.propTypes = {
+  component: PropTypes.elementType.isRequired,
+  path: PropTypes.string
+};
 
-SecuredRoute.defaultProps = { component: React.fragment, path: "/" };
+SecuredRoute.defaultProps = { path: "/" };
 
 export default SecuredRoute;

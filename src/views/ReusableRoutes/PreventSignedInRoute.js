@@ -24,7 +24,7 @@ const PreventSignedInRoute = ({ component: Component, ...rest }) => (
 );
 
 PreventSignedInRoute.propTypes = {
-  component: PropTypes.objectOf(PropTypes.node)
+  component: PropTypes.elementType.isRequired
 };
 
 export default PreventSignedInRoute;

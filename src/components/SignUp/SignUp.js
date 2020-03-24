@@ -1,6 +1,7 @@
 import React from "react";
 import ru from "react-phone-number-input/locale/ru";
 import { Button, Form, Input, Spin } from "antd";
+import PropTypes from "prop-types";
 import {
   LETTERS_VALIDATION,
   PASSWORD_POLICY
@@ -10,7 +11,6 @@ import {
   formItemLayout,
   StyledPhoneInput
 } from "./SignUp.styles";
-import PropTypes from "prop-types";
 
 const SignUp = ({
   handleSubmit,
@@ -126,14 +126,18 @@ SignUp.propTypes = {
   handleSubmit: PropTypes.func,
   compareToFirstPassword: PropTypes.func,
   handleConfirmPasswordBlur: PropTypes.func,
-  validatePhoneNumber: PropTypes.func,
+  validatePhoneNumber: PropTypes.objectOf(PropTypes.func),
   loading: PropTypes.bool
 };
 SignUp.defaultProps = {
   handleSubmit: () => {},
   compareToFirstPassword: () => {},
   handleConfirmPasswordBlur: () => {},
-  validatePhoneNumber: () => {},
+  validatePhoneNumber: {
+    validator(rule, value) {
+      return undefined;
+    }
+  },
   loading: false
 };
 
