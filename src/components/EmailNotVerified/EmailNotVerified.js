@@ -14,7 +14,7 @@ const EmailNotVerified = () => {
           Для окончания регестрации, необходимо позвонить по телефону:
           <StyledPhone href="tel:123-456-7890">+38 099 123 4567</StyledPhone>
           Или дождаться когда мы свяжемся с Вами самостоятельно.
-          <Row>
+          <Row justify="center">
             <Link to="/sign-in" onClick={clearCookieStorage}>
               Выйти
             </Link>
