@@ -33,10 +33,13 @@ function CvListContainer({
           const { Documents, Raw } = response;
           const { Total, Count, Start } = JSON.parse(Raw);
           const current = Math.ceil((Start + Count) / Count);
-          const currentPagination = { total: Total, pageSize: Count, current };
-          setPagination(currentPagination);
           // todo delete current from object
-
+          const currentPagination = {
+            total: Total,
+            pageSize: Count,
+            current
+          };
+          setPagination(currentPagination);
           setDisplayedCvList(Documents);
           setRawList([currentPagination, ...Documents]);
         })
