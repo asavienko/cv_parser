@@ -8,7 +8,7 @@ import { signInUser, signUpUser } from "../../services/userService";
 
 class SignUpContainer extends React.Component {
   state = { confirmDirty: false, loading: false };
-
+  form = React.createRef();
   handleConfirmPasswordBlur = e => {
     const { value } = e.target;
     const { confirmDirty } = this.state;
@@ -60,10 +60,7 @@ class SignUpContainer extends React.Component {
       });
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-    const { validateFields } = this.props.form;
-
+  handleSubmit = ({ validateFields }) => {
     const onSuccess = async values => {
       const { history } = this.props;
       const {
@@ -82,15 +79,15 @@ class SignUpContainer extends React.Component {
 
       await this.signUpUserUtil({ signUpData, signInData, history });
     };
-    validateFields((err, values) => {
-      err
-        ? openNotification({
-            type: "warning",
-            message: "Заполните все обязательные поля",
-            description: "Поля со звездочкой * обязательны для заполнения."
-          })
-        : onSuccess(values);
-    });
+    validateFields()
+      .then(values => onSuccess(values))
+      .catch(() =>
+        openNotification({
+          type: "warning",
+          message: "Заполните все обязательные поля",
+          description: "Поля со звездочкой * обязательны для заполнения."
+        })
+      );
   };
 
   compareToFirstPassword = ({ getFieldValue }) => ({
