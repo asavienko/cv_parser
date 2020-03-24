@@ -8,6 +8,8 @@ const userUrls = () => ({
 
 export const getCurrentUser = () => getRequest(userUrls().getCurrentUser);
 
-export const signInUser = signInData => postRequest(userUrls().signInUser, signInData);
+export const signInUser = signInData =>
+  postRequest(userUrls().signInUser, signInData);
 
-export const signUpUser = signUpData => postRequest(userUrls().signUpUser, signUpData);
+export const signUpUser = signUpData =>
+  postRequest(userUrls().signUpUser, signUpData);

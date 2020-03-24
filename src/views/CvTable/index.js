@@ -1,3 +1,3 @@
-import CvTable from './CvTable';
+import CvTable from "./CvTable";
 
 export default CvTable;

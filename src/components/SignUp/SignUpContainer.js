@@ -1,5 +1,4 @@
 import React from "react";
-import { Form } from "antd";
 import openNotification from "../../views/NotificationComponent";
 import "react-phone-number-input/style.css";
 import { isPossiblePhoneNumber } from "react-phone-number-input";
@@ -9,7 +8,7 @@ import { signInUser, signUpUser } from "../../services/userService";
 
 class SignUpContainer extends React.Component {
   state = { confirmDirty: false, loading: false };
-
+  form = React.createRef();
   handleConfirmPasswordBlur = e => {
     const { value } = e.target;
     const { confirmDirty } = this.state;
@@ -61,10 +60,7 @@ class SignUpContainer extends React.Component {
       });
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-    const { validateFields } = this.props.form;
-
+  handleSubmit = ({ validateFields }) => {
     const onSuccess = async values => {
       const { history } = this.props;
       const {
@@ -83,50 +79,38 @@ class SignUpContainer extends React.Component {
 
       await this.signUpUserUtil({ signUpData, signInData, history });
     };
-    validateFields((err, values) => {
-      err
-        ? openNotification({
-            type: "warning",
-            message: "Заполните все обязательные поля",
-            description: "Поля со звездочкой * обязательны для заполнения."
-          })
-        : onSuccess(values);
-    });
+    validateFields()
+      .then(values => onSuccess(values))
+      .catch(() =>
+        openNotification({
+          type: "warning",
+          message: "Заполните все обязательные поля",
+          description: "Поля со звездочкой * обязательны для заполнения."
+        })
+      );
   };
 
-  validateToNextPassword = (rule, value, callback) => {
-    const { form } = this.props;
-    const { confirmDirty } = this.state;
-    if (value && confirmDirty) {
-      form.validateFields(["confirmPassword"], { force: true });
+  compareToFirstPassword = ({ getFieldValue }) => ({
+    validator(rule, value) {
+      return !value || getFieldValue("password") === value
+        ? Promise.resolve()
+        : Promise.reject("Вы ввели разные пароли");
     }
-    callback();
-  };
+  });
 
-  compareToFirstPassword = (rule, value, callback) => {
-    const { form } = this.props;
-    if (value && value !== form.getFieldValue("password")) {
-      return callback("Вы ввели разные пароли");
-    } else {
-      return callback();
+  validatePhoneNumber = {
+    validator(rule, value) {
+      return !value || isPossiblePhoneNumber(value)
+        ? Promise.resolve()
+        : Promise.reject("Вы ввели не корректный номер");
     }
-  };
-
-  validatePhoneNumber = (rule, value, callback) => {
-    !value || isPossiblePhoneNumber(value)
-      ? callback()
-      : callback("Вы ввели не корректный номер");
   };
 
   render() {
-    const { getFieldDecorator } = this.props.form;
-
     return (
       <SignUp
         compareToFirstPassword={this.compareToFirstPassword}
-        validateToNextPassword={this.validateToNextPassword}
         handleSubmit={this.handleSubmit}
-        getFieldDecorator={getFieldDecorator}
         handleConfirmPasswordBlur={this.handleConfirmPasswordBlur}
         validatePhoneNumber={this.validatePhoneNumber}
         loading={this.state.loading}
@@ -135,4 +119,4 @@ class SignUpContainer extends React.Component {
   }
 }
 
-export default Form.create({ name: "validate_new_user" })(SignUpContainer);
+export default SignUpContainer;

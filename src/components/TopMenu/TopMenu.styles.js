@@ -6,10 +6,10 @@ const { Item } = Menu;
 export const StyledMenu = styled(Menu)`
   display: flex;
   line-height: 45px;
-  ${({ show }) => show === "false" && `visibility: hidden`}
+  ${({ show }) => show === "false" && "visibility: hidden"}
 `;
 export const HeaderLayer = styled.div`
-  display: ${({ show }) => (show === "true" ? `none` : `block`)};
+  display: ${({ show }) => (show === "true" ? "none" : "block")};
   height: 46px;
   width: 100%;
   overflow: hidden;
@@ -32,8 +32,5 @@ export const StyledLink = styled(Item)`
   padding-right: 20px;
 `;
 
-export const employ_logo =
-  process.env.PUBLIC_URL + "images/temporaryImages/employ_logo.svg";
-export const lines_layout =
-  process.env.PUBLIC_URL + "images/temporaryImages/lines_layout.png";
-
+export const employLogo = `${process.env.PUBLIC_URL}images/temporaryImages/employ_logo.svg`;
+export const linesLayout = `${process.env.PUBLIC_URL}images/temporaryImages/lines_layout.png`;

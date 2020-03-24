@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import EllipsisTooltip from './EllipsisTooltip';
-import { StyledTable } from './CvTable.styles';
+import React from "react";
+import PropTypes from "prop-types";
+import { StyledTable } from "./CvTable.styles";
+import EllipsisTooltip from "./EllipsisTooltip";
 
 function CvTable({
   cvList,
@@ -9,46 +9,45 @@ function CvTable({
   onRow,
   handleChange,
   rowSelection,
-  pagination,
+  pagination
 }) {
   const columns = [
     {
-      width: 150,
-      title: 'Имя',
-      dataIndex: 'DisplayName',
-      key: 'displayName',
+      title: "Имя",
+      dataIndex: "DisplayName",
+      key: "displayName",
+      width: 200
     },
     {
-      width: 85,
-      title: 'Возраст',
-      dataIndex: 'Age',
-      key: 'age',
+      title: "Возраст",
+      dataIndex: "Age",
+      key: "age",
+      width: 80
     },
     {
-      width: 185,
-      title: 'Должность',
-      dataIndex: 'Speciality',
-      key: 'speciality',
-      render: (speciality) => <EllipsisTooltip title={speciality} />,
+      title: "Должность",
+      dataIndex: "Speciality",
+      key: "speciality",
+      render: speciality => <EllipsisTooltip title={speciality} />
     },
     {
-      width: 130,
-      title: 'Город',
-      dataIndex: 'CityName',
-      key: 'cityName',
+      title: "Город",
+      dataIndex: "CityName",
+      key: "cityName",
+      width: 130
     },
     {
-      width: 130,
-      title: 'Зарплата',
-      dataIndex: 'Salary',
-      key: 'salary',
+      title: "Зарплата",
+      dataIndex: "Salary",
+      key: "salary",
+      width: 120
     },
     {
-      width: 100,
-      title: 'Последнее изменение',
-      dataIndex: 'UpdatedDate',
-      key: 'lastModified',
-    },
+      title: "Последнее изменение",
+      dataIndex: "UpdatedDate",
+      key: "lastModified",
+      width: 140
+    }
   ];
   return (
     <StyledTable
@@ -60,26 +59,27 @@ function CvTable({
       columns={columns}
       rowSelection={rowSelection}
       rowKey="ResumeId"
-      scroll={{ x: 1200, y: 'calc(100vh - 258px)' }}
+      scroll={{ x: 1000, y: "calc(100vh - 239px)" }}
       pagination={pagination}
     />
   );
 }
 
-
 CvTable.propTypes = {
   cvList: PropTypes.arrayOf(PropTypes.object),
   loading: PropTypes.bool,
+  rowSelection: PropTypes.bool,
   onRow: PropTypes.func,
   handleChange: PropTypes.func,
-  rowSelection: PropTypes.func,
+  pagination: PropTypes.objectOf(PropTypes.number)
 };
 CvTable.defaultProps = {
   cvList: [],
   loading: false,
+  rowSelection: false,
   onRow: () => {},
   handleChange: () => {},
-  rowSelection: () => {},
+  pagination: { total: 0, pageSize: 0, current: 1 }
 };
 
 export default CvTable;

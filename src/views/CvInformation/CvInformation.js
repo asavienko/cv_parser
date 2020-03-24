@@ -1,5 +1,7 @@
 import React from "react";
+import { DownloadOutlined } from "@ant-design/icons";
 import { Button, Col, Row, Timeline } from "antd";
+import PropTypes from "prop-types";
 import { StyledBoldSpan } from "../../styles";
 import {
   CenteredCol,
@@ -7,7 +9,6 @@ import {
   StyledAdditionalInfo,
   StyledBlockTitle,
   StyledDatesDiff,
-  StyledDescrEl,
   StyledDrawer,
   StyledFooter,
   StyledRow,
@@ -15,26 +16,7 @@ import {
   StyledTimeline,
   StyledTitle
 } from "./CvInforvation.styles";
-
-const DescrBlock = ({ description, name, location, yearOfEnding, comment }) => (
-  <StyledDescrEl>
-    {name ? (
-      location ? (
-        <React.Fragment>
-          <StyledBoldSpan>{name}</StyledBoldSpan>
-          <span> {location}</span>
-        </React.Fragment>
-      ) : (
-        <StyledBoldSpan>{name}</StyledBoldSpan>
-      )
-    ) : null}
-    {yearOfEnding && (
-      <StyledAdditionalInfo>Год окончания: {yearOfEnding}</StyledAdditionalInfo>
-    )}
-    {description && <div dangerouslySetInnerHTML={{ __html: description }} />}
-    {comment && <div dangerouslySetInnerHTML={{ __html: comment }} />}
-  </StyledDescrEl>
-);
+import DescriptionBlock from "../CvTable/DescriptionBlock";
 
 function CvInformation({ cvInfo, onCvInformationClose }) {
   const {
@@ -57,7 +39,7 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
       experience,
       skills
     }
-  } = cvInfo && cvInfo.cvInformation && cvInfo;
+  } = cvInfo;
 
   return (
     <StyledDrawer
@@ -74,13 +56,28 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
                 <StyledBoldSpan>{`${surname} ${name}`}</StyledBoldSpan>
               </p>
               {birthDate && (
-                <p>{`Дата рождения: ${new Date(
-                  birthDate
-                ).toLocaleDateString()}`}</p>
+                <p>
+                  {`Дата рождения: ${new Date(birthDate).toLocaleDateString()}`}
+                </p>
               )}
-              {cityName && <p>Регион: {cityName}</p>}
-              {phone && <p>Телефон: {phone}</p>}
-              {email && <p>E-mail: {email}</p>}
+              {cityName && (
+                <p>
+                  Регион:
+                  {cityName}
+                </p>
+              )}
+              {phone && (
+                <p>
+                  Телефон:
+                  {phone}
+                </p>
+              )}
+              {email && (
+                <p>
+                  E-mail:
+                  {email}
+                </p>
+              )}
             </Col>
           </Row>
         </Col>
@@ -110,7 +107,8 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
                   </Row>
                   <Row>
                     <StyledAdditionalInfo>
-                      {item.StartDate} - {item.EndDate}{" "}
+                      {`
+                      ${item.StartDate} -${item.EndDate} `}
                       <StyledDatesDiff>({item.DatesDiff})</StyledDatesDiff>
                     </StyledAdditionalInfo>
                   </Row>
@@ -124,7 +122,7 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
           <Col span={24}>
             <StyledBlockTitle>Образование</StyledBlockTitle>
             {educations.map(item => (
-              <DescrBlock
+              <DescriptionBlock
                 name={item.name}
                 location={item.location}
                 description={item.speciality}
@@ -138,7 +136,7 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
           <Col span={24}>
             <StyledBlockTitle>Навыки</StyledBlockTitle>
             {skills.map(item => (
-              <DescrBlock description={item.description} />
+              <DescriptionBlock description={item.description} />
             ))}
           </Col>
         )}
@@ -146,7 +144,10 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
           <Col span={24}>
             <StyledBlockTitle>Дополнительная информация</StyledBlockTitle>
             {additionals.map(item => (
-              <DescrBlock name={item.name} description={item.description} />
+              <DescriptionBlock
+                name={item.name}
+                description={item.description}
+              />
             ))}
           </Col>
         )}
@@ -156,12 +157,33 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
         <Button target="_blank" rel="noopener noreferref" href={url}>
           URL
         </Button>
-        <Button icon="download" download>
+        <Button icon={<DownloadOutlined />} download>
           Скачать PDF
         </Button>
       </StyledFooter>
     </StyledDrawer>
   );
 }
+
+CvInformation.propTypes = {
+  cvInfo: PropTypes.shape({
+    visible: PropTypes.bool,
+    cvInformation: PropTypes.object
+  }),
+  onCvInformationClose: PropTypes.func
+};
+
+CvInformation.defaultProps = {
+  cvInfo: {
+    visible: false,
+    cvInformation: {
+      salary: 0,
+      displayName: "Не удалось загрузить данные",
+      surname: "Не удалось загрузить данные",
+      name: ""
+    }
+  },
+  onCvInformationClose: () => {}
+};
 
 export default CvInformation;

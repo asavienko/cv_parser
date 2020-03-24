@@ -1,66 +1,83 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import CvInformation from '../../views/CvInformation';
-import CvTable from '../../views/CvTable';
-import { setFavoriteListAction, setRawListAction } from '../../actions/cvActions';
-import EditFavoriteListButton from '../../views/EditFavoriteListButton';
-import openNotification from '../../views/NotificationComponent';
-import { getCvByRequest } from '../../services/cvRequests';
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import CvInformation from "../../views/CvInformation";
+import CvTable from "../../views/CvTable";
+import {
+  setFavoriteListAction,
+  setRawListAction
+} from "../../actions/cvActions";
+import EditFavoriteListButton from "../../views/EditFavoriteListButton";
+import openNotification from "../../views/NotificationComponent";
+import { getCvByRequest } from "../../services/cvRequests";
 
 function CvListContainer({
   rawList,
   setRawList,
   favoriteCvList,
-  setFavoriteList,
+  setFavoriteList
 }) {
   const [displayedCvList, setDisplayedCvList] = useState([]);
   const [cvInfo, setCvInfo] = useState({ visible: false, cvInformation: {} });
   const [loading, setLoading] = useState(false);
-  const [pagination, setPagination] = useState({ total: 1, pageSize: 1, current: 1 });
+  const [pagination, setPagination] = useState({
+    total: 1,
+    pageSize: 1,
+    current: 1
+  });
   useEffect(() => {
     if (!rawList.length) {
       setLoading(true);
       getCvByRequest()
         .then((response = {}) => {
-          const {
-            Documents, Raw,
-          } = response;
+          const { Documents, Raw } = response;
           const { Total, Count, Start } = JSON.parse(Raw);
           const current = Math.ceil((Start + Count) / Count);
-          setPagination({ total: Total, pageSize: Count, current });
-          console.log({ total: Total, pageSize: Count, current });
           // todo delete current from object
-
+          const currentPagination = {
+            total: Total,
+            pageSize: Count,
+            current
+          };
+          setPagination(currentPagination);
           setDisplayedCvList(Documents);
-          setRawList(Documents);
+          setRawList([currentPagination, ...Documents]);
         })
-        .catch(() => openNotification({
-          type: 'error',
-          message: 'Не удалось загрузить данные',
-        }))
+        .catch(() =>
+          openNotification({
+            type: "error",
+            message: "Не удалось загрузить данные"
+          })
+        )
         .finally(() => {
           setLoading(false);
         });
+    } else {
+      const [currentPagination, ...list] = rawList;
+      setPagination(currentPagination);
+      setDisplayedCvList(list);
     }
   }, [rawList, setRawList]);
 
-
-  const onRow = (record) => ({
-    onClick: () => setCvInfo({ visible: true, cvInformation: record }),
+  const onRow = record => ({
+    onClick: () => setCvInfo({ visible: true, cvInformation: record })
   });
 
-  const onCvInformationClose = () => setCvInfo({ visible: false, cvInformation: {} });
+  const onCvInformationClose = () =>
+    setCvInfo({ visible: false, cvInformation: {} });
 
   const [addToFavoriteActive, setAddToFavoriteActive] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   const saveFavoriteList = () => {
-    const selectedCvList = selectedRowKeys.map((key) => rawList.find((cv) => cv.key === key));
+    const selectedCvList = selectedRowKeys.map(key =>
+      rawList.find(cv => cv.key === key)
+    );
     setFavoriteList(selectedCvList);
     setAddToFavoriteActive(false);
   };
   const editFavoriteList = () => {
-    const favoriteKeys = favoriteCvList.map((cv) => cv.key);
+    const favoriteKeys = favoriteCvList.map(cv => cv.key);
     setSelectedRowKeys(favoriteKeys);
     setAddToFavoriteActive(true);
   };
@@ -71,17 +88,18 @@ function CvListContainer({
     setAddToFavoriteActive(false);
     setSelectedRowKeys([]);
   };
-  const onSelectChange = (value) => {
+  const onSelectChange = value => {
     setSelectedRowKeys(value);
   };
 
   const rowSelectionConfig = {
     selectedRowKeys,
-    onChange: onSelectChange,
+    onChange: onSelectChange
   };
-  const addToFavoriteDisabled = loading || (selectedRowKeys.length === 0 && addToFavoriteActive);
+  const addToFavoriteDisabled =
+    loading || (selectedRowKeys.length === 0 && addToFavoriteActive);
 
-  const rowSelection = addToFavoriteActive && rowSelectionConfig;
+  const rowSelection = addToFavoriteActive ? rowSelectionConfig : null;
   return (
     <>
       <EditFavoriteListButton
@@ -106,17 +124,31 @@ function CvListContainer({
   );
 }
 
+CvListContainer.propTypes = {
+  rawList: PropTypes.arrayOf(PropTypes.object),
+  favoriteCvList: PropTypes.arrayOf(PropTypes.object),
+  setRawList: PropTypes.func,
+  setFavoriteList: PropTypes.func
+};
+
+CvListContainer.defaultProps = {
+  rawList: [],
+  favoriteCvList: [],
+  setRawList: () => {},
+  setFavoriteList: () => {}
+};
+
 const mapStateToProps = ({ cvReducer: { favoriteCvList, rawList } }) => ({
   favoriteCvList,
-  rawList,
+  rawList
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  setRawList: (rawList) => dispatch(setRawListAction(rawList)),
-  setFavoriteList: (favoriteList) => dispatch(setFavoriteListAction(favoriteList)),
+const mapDispatchToProps = dispatch => ({
+  setRawList: rawList => dispatch(setRawListAction(rawList)),
+  setFavoriteList: favoriteList => dispatch(setFavoriteListAction(favoriteList))
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(CvListContainer);

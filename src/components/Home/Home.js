@@ -1,11 +1,12 @@
+import React from "react";
+import { Col, Row, Select } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import PropTypes from "prop-types";
 import {
   ResponsiveInput,
   StyledButton,
-  StyledOptionDiv,
   StyledResponsiveSelect
 } from "./Home.styles";
-import React from "react";
-import { Col, Row, Select } from "antd";
 
 const Home = ({
   onSearchPressed,
@@ -15,33 +16,33 @@ const Home = ({
   loadingSites
 }) => (
   <Row span={22}>
-    <Col xs={24} sm={24} lg={4}>
+    <Col xs={24} sm={24} lg={7} xl={6}>
       <StyledResponsiveSelect
-        defaultValue={0}
+        defaultValue="Вся Украина"
         showSearch
         filterOption={onSelectFilter}
         onChange={onSelectChange}
-        notFoundContent={"Город не найден"}
+        notFoundContent="Город не найден"
         loading={loadingSites}
-        size={"large"}
+        size="large"
       >
-        <Select.Option value={0} key={0}>
+        <Select.Option value="Вся Украина" key={0}>
           Вся Украина
         </Select.Option>
         {dictionaryCity.map(record => (
-          <Select.Option value={record.id} key={record.id}>
-            <StyledOptionDiv> {record.ru}</StyledOptionDiv>
+          <Select.Option value={record.ru} key={record.id}>
+            {record.ru}
           </Select.Option>
         ))}
       </StyledResponsiveSelect>
     </Col>
-    <Col xs={24} sm={24} lg={17} xl={18}>
+    <Col xs={24} sm={24} lg={14} xl={16}>
       <ResponsiveInput placeholder="Введите ключивые слова" size="large" />
     </Col>
     <Col xs={24} sm={24} lg={3} xl={2}>
       <StyledButton
         type="primary"
-        icon="search"
+        icon={<SearchOutlined />}
         size="large"
         onClick={onSearchPressed}
         block
@@ -51,5 +52,20 @@ const Home = ({
     </Col>
   </Row>
 );
+
+Home.propTypes = {
+  onSearchPressed: PropTypes.func,
+  onSelectFilter: PropTypes.func,
+  onSelectChange: PropTypes.func,
+  dictionaryCity: PropTypes.arrayOf(PropTypes.object),
+  loadingSites: PropTypes.bool
+};
+Home.defaultProps = {
+  onSearchPressed: () => {},
+  onSelectFilter: () => {},
+  onSelectChange: () => {},
+  dictionaryCity: [{ id: 0, ru: "Харьков" }],
+  loadingSites: false
+};
 
 export default Home;

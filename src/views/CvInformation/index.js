@@ -1,3 +1,3 @@
-import CvInformation from "./CvInformation"
+import CvInformation from "./CvInformation";
 
-export default CvInformation
+export default CvInformation;

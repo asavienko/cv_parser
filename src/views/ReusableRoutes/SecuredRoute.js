@@ -1,5 +1,6 @@
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
+import PropTypes from "prop-types";
 import { getUserFromCookieStorage } from "../../services/cookieStorage";
 
 const SecuredRoute = ({ component: Component, path, ...rest }) => (
@@ -28,5 +29,12 @@ const SecuredRoute = ({ component: Component, path, ...rest }) => (
     }}
   />
 );
+
+SecuredRoute.propTypes = {
+  component: PropTypes.elementType.isRequired,
+  path: PropTypes.string
+};
+
+SecuredRoute.defaultProps = { path: "/" };
 
 export default SecuredRoute;

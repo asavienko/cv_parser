@@ -1,3 +1,3 @@
-import CvListContainer from './CvListContainer';
+import CvListContainer from "./CvListContainer";
 
 export default CvListContainer;

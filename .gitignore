@@ -27,3 +27,6 @@ yarn-error.log*
 
 
 
+/src/IGNORE/
+/src/components/Home/IGNORE/
+/src/views/CvTable/IGNORE/

@@ -24,7 +24,3 @@ export const StyledResponsiveSelect = styled(Select)`
     }
   }
 `;
-
-export const StyledOptionDiv = styled.div`
-  white-space: nowrap;
-`;

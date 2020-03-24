@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
+import { BrowserRouter as Router, Redirect, Switch } from "react-router-dom";
 import CvList from "./components/CvList";
 import TopMenu from "./components/TopMenu";
-import { BrowserRouter as Router, Redirect, Switch } from "react-router-dom";
 import Home from "./components/Home";
 import Favorites from "./components/Favorites";
 import SignUp from "./components/SignUp";
