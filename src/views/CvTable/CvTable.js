@@ -59,7 +59,7 @@ function CvTable({
       columns={columns}
       rowSelection={rowSelection}
       rowKey="ResumeId"
-      scroll={{ x: 1100, y: "calc(100vh - 239px)" }}
+      scroll={{ x: 1000, y: "calc(100vh - 239px)" }}
       pagination={pagination}
     />
   );
@@ -68,17 +68,17 @@ function CvTable({
 CvTable.propTypes = {
   cvList: PropTypes.arrayOf(PropTypes.object),
   loading: PropTypes.bool,
+  rowSelection: PropTypes.bool,
   onRow: PropTypes.func,
   handleChange: PropTypes.func,
-  rowSelection: PropTypes.func,
   pagination: PropTypes.objectOf(PropTypes.number)
 };
 CvTable.defaultProps = {
   cvList: [],
   loading: false,
+  rowSelection: false,
   onRow: () => {},
   handleChange: () => {},
-  rowSelection: () => {},
   pagination: { total: 0, pageSize: 0, current: 1 }
 };
 

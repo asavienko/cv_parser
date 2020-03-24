@@ -33,12 +33,12 @@ function CvListContainer({
           const { Documents, Raw } = response;
           const { Total, Count, Start } = JSON.parse(Raw);
           const current = Math.ceil((Start + Count) / Count);
-          setPagination({ total: Total, pageSize: Count, current });
-          console.log({ total: Total, pageSize: Count, current });
+          const currentPagination = { total: Total, pageSize: Count, current };
+          setPagination(currentPagination);
           // todo delete current from object
 
           setDisplayedCvList(Documents);
-          setRawList(Documents);
+          setRawList([currentPagination, ...Documents]);
         })
         .catch(() =>
           openNotification({
@@ -49,6 +49,10 @@ function CvListContainer({
         .finally(() => {
           setLoading(false);
         });
+    } else {
+      const [currentPagination, ...list] = rawList;
+      setPagination(currentPagination);
+      setDisplayedCvList(list);
     }
   }, [rawList, setRawList]);
 

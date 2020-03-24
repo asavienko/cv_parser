@@ -9,7 +9,6 @@ import {
   StyledAdditionalInfo,
   StyledBlockTitle,
   StyledDatesDiff,
-  StyledDescrEl,
   StyledDrawer,
   StyledFooter,
   StyledRow,
@@ -17,38 +16,7 @@ import {
   StyledTimeline,
   StyledTitle
 } from "./CvInforvation.styles";
-
-const DescriptionBlock = ({
-  description,
-  name,
-  location,
-  yearOfEnding,
-  comment
-}) => (
-  <StyledDescrEl>
-    {name ? (
-      location ? (
-        <>
-          <StyledBoldSpan>{name}</StyledBoldSpan>
-          <span> 
-            {' '}
-            {location}
-          </span>
-        </>
-      ) : (
-        <StyledBoldSpan>{name}</StyledBoldSpan>
-      )
-    ) : null}
-    {yearOfEnding && (
-      <StyledAdditionalInfo>
-        Год окончания:
-        {yearOfEnding}
-      </StyledAdditionalInfo>
-    )}
-    {description && <div dangerouslySetInnerHTML={{ __html: description }} />}
-    {comment && <div dangerouslySetInnerHTML={{ __html: comment }} />}
-  </StyledDescrEl>
-);
+import DescriptionBlock from "../CvTable/DescriptionBlock";
 
 function CvInformation({ cvInfo, onCvInformationClose }) {
   const {
@@ -71,7 +39,7 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
       experience,
       skills
     }
-  } = cvInfo && cvInfo.cvInformation && cvInfo;
+  } = cvInfo;
 
   return (
     <StyledDrawer
@@ -208,17 +176,23 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
 }
 
 CvInformation.propTypes = {
-  cvInfo: PropTypes.objectOf(
-    PropTypes.string,
-    PropTypes.object,
-    PropTypes.array,
-    PropTypes.number
-  ),
+  cvInfo: PropTypes.shape({
+    visible: PropTypes.bool,
+    cvInformation: PropTypes.object
+  }),
   onCvInformationClose: PropTypes.func
 };
 
 CvInformation.defaultProps = {
-  cvInfo: { url: "http://", salary: 0, name: "Не удалось загрузить данные" },
+  cvInfo: {
+    visible: false,
+    cvInformation: {
+      salary: 0,
+      displayName: "Не удалось загрузить данные",
+      surname: "Не удалось загрузить данные",
+      name: ""
+    }
+  },
   onCvInformationClose: () => {}
 };
 
