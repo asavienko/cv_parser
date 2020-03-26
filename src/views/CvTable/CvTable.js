@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { StyledTable } from "./CvTable.styles";
 import EllipsisTooltip from "./EllipsisTooltip";
@@ -49,6 +49,7 @@ function CvTable({
       width: 140
     }
   ];
+
   return (
     <StyledTable
       size="small"
@@ -60,7 +61,7 @@ function CvTable({
       columns={columns}
       rowSelection={rowSelection}
       rowKey="ResumeId"
-      scroll={{ x: 1000, y: "calc(100vh - 239px)" }}
+      scroll={{ x: 1000, y: true }}
     />
   );
 }

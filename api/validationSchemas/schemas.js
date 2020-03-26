@@ -63,13 +63,13 @@ const getCvByRequest = Joi.object({
   sort: Joi.string()
     .min(0)
     .max(40),
-  page: Joi.number()
+  pg: Joi.number()
     .min(0)
     .max(10 * Math.pow(10, 6)),
-  ageFrom: Joi.number()
+  agefrom: Joi.number()
     .min(0)
     .max(150),
-  ageTo: Joi.number()
+  agefo: Joi.number()
     .min(0)
     .max(150),
   sex: Joi.number()

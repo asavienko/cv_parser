@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import CvInformation from "../../views/CvInformation";
@@ -30,46 +30,58 @@ function CvListContainer({
     period: 6,
     searchType: "everywhere",
     sort: "date",
-    page: 1
+    pg: 1
   });
 
-  const newRequest = (newFilters = {}) => {
-    setLoading(true);
-    getCvByRequest(newFilters)
-      .then((response = {}) => {
-        const { Documents, Raw } = response;
-        const { Total } = JSON.parse(Raw);
-        setPagination(prevState => ({ ...prevState, total: Total }));
-        setDisplayedCvList(Documents);
-        setRawList([
-          ...rawList,
-          { filters: { ...filters, ...newFilters }, documents: Documents }
-        ]);
-      })
-      .catch(() =>
-        openNotification({
-          type: "error",
-          message: "Не удалось загрузить данные"
+  const newRequest = useCallback(
+    (newFilters = {}) => {
+      setLoading(true);
+      getCvByRequest(newFilters)
+        .then((response = {}) => {
+          const { Documents, Total, Raw } = response;
+          const { Count } = JSON.parse(Raw);
+          setPagination(prevState => ({
+            ...prevState,
+            total: Total,
+            pageSize: Count
+          }));
+          setDisplayedCvList(Documents);
+          setRawList([
+            ...rawList,
+            { filters: { ...filters, ...newFilters }, documents: Documents }
+          ]);
         })
-      )
-      .finally(() => {
-        setLoading(false);
-      });
-  };
+        .catch(() =>
+          openNotification({
+            type: "error",
+            message: "Не удалось загрузить данные"
+          })
+        )
+        .finally(() => {
+          setLoading(false);
+        });
+    },
+    [filters, rawList, setRawList]
+  );
+
+  const findTheSameRawListInStore = ({
+    rawList: rawListFromStore = [],
+    newFilters
+  }) =>
+    rawListFromStore.length &&
+    rawList.find(obj => obj.filters.pg === newFilters.pg);
+
   useEffect(() => {
     if (!rawList.length) {
       newRequest();
     }
-  });
+  }, [rawList, newRequest]);
 
   const handleChange = newPagination => {
-    const newFilters = { ...filters, page: newPagination.current };
+    const newFilters = { ...filters, pg: newPagination.current };
     setPagination(newPagination);
     setFilters(newFilters);
-
-    const foundResult = rawList.find(
-      obj => obj.filters.page === newFilters.page
-    );
+    const foundResult = findTheSameRawListInStore({ rawList, newFilters });
     return foundResult
       ? setDisplayedCvList(foundResult.documents)
       : newRequest(newFilters);
