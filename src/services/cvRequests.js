@@ -18,7 +18,7 @@ const getTotalCv = async ({ regionId: regionid, keywords }) => {
   return await getRequest(url);
 };
 
-const getCvByRequest = (body = { skip: "5", options: { request: "abc" } }) =>
+const getCvByRequest = (body) =>
   postRequest(cvUrls().getCvByRequest, body);
 
 export { getTotalCv, getCvByRequest };

@@ -1,14 +1,11 @@
 const fetch = require("node-fetch");
 const _ = require("lodash");
+const generateRabotaUaUrls = require("../generateRabotaUaUrls");
 
 const timeout = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-const parseRabotauaPages = async ({
-  url = "https://rabota.ua/api/resume/search?period=6&searchtype=everywhere&sort=date&count=20",
-  currentPage = 1,
-  options
-}) => {
-  const requestUrl = `${url}&pg=${currentPage}`;
+const parseRabotauaPages = async ({ searchRequest = {}, options }) => {
+  const requestUrl = generateRabotaUaUrls.getCvListUrl(searchRequest);
   try {
     const response = await fetch(requestUrl, options);
     const json = await response.json();

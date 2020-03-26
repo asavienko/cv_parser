@@ -13,7 +13,7 @@ async function request(url, method, body) {
     const headers = new Headers();
     headers.append("Accept", "application/json");
     headers.append("Content-Type", "application/json");
-    for (let key in extendedHeaders) {
+    for (const key in extendedHeaders) {
       headers.append(key, extendedHeaders[key]);
     }
     const targetURL = new URL(url, target);
