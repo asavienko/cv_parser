@@ -75,7 +75,7 @@ function CvListContainer({
   const [renderCounter, setRenderCounter] = useState(0);
 
   useEffect(() => {
-    if (renderCounter === 0 && !rawList.length) {
+    if (!renderCounter && !rawList.length) {
       newRequest();
       setRenderCounter(1);
     }
