@@ -25,6 +25,7 @@ function CvListContainer({
     pageSize: 20,
     current: 1
   });
+
   const [filters, setFilters] = useState({
     keywords: "",
     period: 6,
@@ -71,9 +72,12 @@ function CvListContainer({
     rawListFromStore.length &&
     rawList.find(obj => obj.filters.pg === newFilters.pg);
 
+  const [renderCounter, setRenderCounter] = useState(0);
+
   useEffect(() => {
-    if (!rawList.length) {
+    if (renderCounter === 0 && !rawList.length) {
       newRequest();
+      setRenderCounter(1);
     }
   }, [rawList, newRequest]);
 

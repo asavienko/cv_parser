@@ -1,9 +1,10 @@
 const serialize = obj => {
   const str = [];
-  for (const key in obj)
-    if (obj.hasOwnProperty(key) && obj[key]) {
-      str.push(`${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`);
+  Object.entries(obj).map(([key, value]) => {
+    if (value) {
+      return str.push(`${key}=${value}`);
     }
+  });
   return str.join("&");
 };
 

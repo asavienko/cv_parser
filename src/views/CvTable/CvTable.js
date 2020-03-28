@@ -53,7 +53,7 @@ function CvTable({
   return (
     <StyledTable
       size="small"
-      pagination={pagination}
+      pagination={{ ...pagination, showQuickJumper: true }}
       loading={loading}
       onRow={onRow}
       dataSource={cvData}
