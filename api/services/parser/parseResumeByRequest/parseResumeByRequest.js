@@ -12,10 +12,10 @@ const getResumeFromPages = async searchRequest => {
       .sort({ _id: -1 })
       .limit(1)
       .toArray();
-    const isValidToken = await checkIsAuthTokenValid(token);
-    const authToken = isValidToken ? token : await getAuthToken();
+    const isTokenValid = await checkIsAuthTokenValid(token);
+    const authToken = isTokenValid ? token : await getAuthToken();
     const options = { headers: { Cookie: authToken } };
-    return await parseRabotauaPages({ options });
+    return await parseRabotauaPages({ options, searchRequest });
   } catch (e) {
     return e;
   }

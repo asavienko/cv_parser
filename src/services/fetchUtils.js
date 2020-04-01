@@ -13,9 +13,9 @@ async function request(url, method, body) {
     const headers = new Headers();
     headers.append("Accept", "application/json");
     headers.append("Content-Type", "application/json");
-    for (let key in extendedHeaders) {
-      headers.append(key, extendedHeaders[key]);
-    }
+    Object.entries(extendedHeaders).forEach(([key, value]) =>
+      headers.append(key, value)
+    );
     const targetURL = new URL(url, target);
     const response = await fetch(targetURL, {
       method,

@@ -50,10 +50,39 @@ const header = Joi.object().pattern(LETTERS_NUMBERS_DOTS, [
 
 // max skip number 10 million
 const getCvByRequest = Joi.object({
-  skip: Joi.number()
+  keywords: Joi.string()
+    .allow("")
+    .max(100),
+  period: Joi.number()
+    .min(1)
+    .max(7),
+  searchType: Joi.string()
+    .min(0)
+    .max(40),
+  sort: Joi.string()
+    .min(0)
+    .max(40),
+  pg: Joi.number()
     .min(0)
     .max(10 * Math.pow(10, 6)),
-  options: Joi.object({ request: Joi.string() })
+  agefrom: Joi.number()
+    .min(0)
+    .max(150),
+  agefo: Joi.number()
+    .min(0)
+    .max(150),
+  sex: Joi.number()
+    .min(1)
+    .max(2),
+  salaryfrom: Joi.number()
+    .min(0)
+    .max(1000000),
+  hasphoto: Joi.number()
+    .min(0)
+    .max(1),
+  experienceid: Joi.number()
+    .min(1)
+    .max(3)
 });
 
 module.exports = { userSignUp, userSignIn, header, getCvByRequest };

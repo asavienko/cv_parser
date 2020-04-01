@@ -4,6 +4,10 @@ import { Table } from "antd";
 export const StyledTable = styled(Table)`
   .ant-table-body {
     overflow: auto !important;
+    height: ${() => `${window.innerHeight - 240}px`};
+  }
+  .ant-table-placeholder {
+    height: ${() => `${window.innerHeight - 256}px`};
   }
   .ant-table-body::-webkit-scrollbar {
     width: 7px;

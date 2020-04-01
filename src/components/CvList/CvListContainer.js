@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import CvInformation from "../../views/CvInformation";
@@ -10,6 +10,7 @@ import {
 import EditFavoriteListButton from "../../views/EditFavoriteListButton";
 import openNotification from "../../views/NotificationComponent";
 import { getCvByRequest } from "../../services/cvRequests";
+import { defaultFilterParamsForCvList } from "../../constants/filters";
 
 function CvListContainer({
   rawList,
@@ -21,27 +22,30 @@ function CvListContainer({
   const [cvInfo, setCvInfo] = useState({ visible: false, cvInformation: {} });
   const [loading, setLoading] = useState(false);
   const [pagination, setPagination] = useState({
-    total: 1,
-    pageSize: 1,
+    total: 20,
+    pageSize: 20,
     current: 1
   });
-  useEffect(() => {
-    if (!rawList.length) {
+
+  const [filters, setFilters] = useState(defaultFilterParamsForCvList);
+
+  const newRequest = useCallback(
+    (newFilters = {}) => {
       setLoading(true);
-      getCvByRequest()
+      getCvByRequest(newFilters)
         .then((response = {}) => {
-          const { Documents, Raw } = response;
-          const { Total, Count, Start } = JSON.parse(Raw);
-          const current = Math.ceil((Start + Count) / Count);
-          // todo delete current from object
-          const currentPagination = {
+          const { Documents, Total, Raw } = response;
+          const { Count } = JSON.parse(Raw);
+          setPagination(prevState => ({
+            ...prevState,
             total: Total,
-            pageSize: Count,
-            current
-          };
-          setPagination(currentPagination);
+            pageSize: Count
+          }));
           setDisplayedCvList(Documents);
-          setRawList([currentPagination, ...Documents]);
+          setRawList([
+            ...rawList,
+            { filters: { ...filters, ...newFilters }, documents: Documents }
+          ]);
         })
         .catch(() =>
           openNotification({
@@ -52,12 +56,35 @@ function CvListContainer({
         .finally(() => {
           setLoading(false);
         });
-    } else {
-      const [currentPagination, ...list] = rawList;
-      setPagination(currentPagination);
-      setDisplayedCvList(list);
+    },
+    [filters, rawList, setRawList]
+  );
+
+  const findTheSameRawListInStore = ({
+    rawList: rawListFromStore = [],
+    newFilters
+  }) =>
+    rawListFromStore.length &&
+    rawList.find(obj => obj.filters.pg === newFilters.pg);
+
+  const [renderCounter, setRenderCounter] = useState(0);
+
+  useEffect(() => {
+    if (!renderCounter && !rawList.length) {
+      newRequest(filters);
+      setRenderCounter(1);
     }
-  }, [rawList, setRawList]);
+  }, [rawList, newRequest]);
+
+  const handleChange = newPagination => {
+    const newFilters = { ...filters, pg: newPagination.current };
+    setPagination(newPagination);
+    setFilters(newFilters);
+    const foundResult = findTheSameRawListInStore({ rawList, newFilters });
+    return foundResult
+      ? setDisplayedCvList(foundResult.documents)
+      : newRequest(newFilters);
+  };
 
   const onRow = record => ({
     onClick: () => setCvInfo({ visible: true, cvInformation: record })
@@ -110,9 +137,10 @@ function CvListContainer({
         onCancelClick={cancelAddingToFavorite}
       />
       <CvTable
-        cvList={displayedCvList}
+        cvData={displayedCvList}
         loading={loading}
         onRow={onRow}
+        handleChange={handleChange}
         rowSelection={rowSelection}
         pagination={pagination}
       />

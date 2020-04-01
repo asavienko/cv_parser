@@ -14,7 +14,7 @@ function Favorites({ favoriteCvList, setFavoriteList }) {
   const [salaryFilterRange, setSalaryFilterRange] = useState([]);
   // const [loading, setLoading] = useState(false);
   const [cvInfo, setCvInfo] = useState({ visible: false, cvInformation: {} });
-  // const [cvList, setCvList] = useState([]);
+  // const [cvData, setCvList] = useState([]);
   const [filteredInfo, setFilteredInfo] = useState({});
   useEffect(() => {
     if (favoriteCvList.length) {
@@ -100,7 +100,7 @@ function Favorites({ favoriteCvList, setFavoriteList }) {
         mainButtonText="Удалить"
       />
       <CvTable
-        cvList={favoriteCvList}
+        cvData={favoriteCvList}
         salaryFilterRange={salaryFilterRange}
         onSalaryRangeSet={onSalaryRangeSet}
         onSalaryRangeReset={onSalaryRangeReset}

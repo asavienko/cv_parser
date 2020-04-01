@@ -4,7 +4,7 @@ import { StyledTable } from "./CvTable.styles";
 import EllipsisTooltip from "./EllipsisTooltip";
 
 function CvTable({
-  cvList,
+  cvData,
   loading,
   onRow,
   handleChange,
@@ -49,24 +49,26 @@ function CvTable({
       width: 140
     }
   ];
+
   return (
     <StyledTable
       size="small"
+      pagination={{ ...pagination, showQuickJumper: true }}
       loading={loading}
       onRow={onRow}
-      dataSource={cvList}
+      dataSource={cvData}
       onChange={handleChange}
       columns={columns}
       rowSelection={rowSelection}
       rowKey="ResumeId"
-      scroll={{ x: 1000, y: "calc(100vh - 239px)" }}
-      pagination={pagination}
+      scroll={{ x: 1000, y: true }}
+      bordered
     />
   );
 }
 
 CvTable.propTypes = {
-  cvList: PropTypes.arrayOf(PropTypes.object),
+  cvData: PropTypes.arrayOf(PropTypes.object),
   loading: PropTypes.bool,
   rowSelection: PropTypes.bool,
   onRow: PropTypes.func,
@@ -74,7 +76,7 @@ CvTable.propTypes = {
   pagination: PropTypes.objectOf(PropTypes.number)
 };
 CvTable.defaultProps = {
-  cvList: [],
+  cvData: [{}],
   loading: false,
   rowSelection: false,
   onRow: () => {},

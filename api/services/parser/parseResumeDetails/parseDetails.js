@@ -29,7 +29,7 @@ const parseDetails = ({
         await saveReport(report, reportId, collectionReports);
         parseEachResume(null, skip);
         return;
-      } else if (responseStatus === 204) {
+      } if (responseStatus === 204) {
         const report = await saveErrorStatus({
           responseStatus,
           collectionResumes,

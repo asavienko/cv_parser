@@ -26,14 +26,14 @@ export const checkUser = () => {
           type: "error",
           message: "Что-то пошло не так.",
           description:
-            "Если ошибка повторится, обратитесь к администратору. " +
-            JSON.stringify(err)
+            `Если ошибка повторится, обратитесь к администратору. ${ 
+            JSON.stringify(err)}`
         });
       });
 };
 
 export const redirectFromSignInFunction = ({ response, history }) => {
-  if (!!response.token) {
+  if (response.token) {
     updateUserInCookieStorage(response);
     history.push(response.emailVerified ? "/" : "/email-not-verified");
     return true;
