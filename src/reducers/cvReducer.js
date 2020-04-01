@@ -7,6 +7,7 @@ import {
 const initState = {
   favoriteCvList: [],
   rawList: [],
+  rawListTotal: 0,
   dictionaryCity: []
 };
 

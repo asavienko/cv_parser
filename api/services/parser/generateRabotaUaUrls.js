@@ -24,11 +24,9 @@ const generateRabotaUaUrls = {
       sort,
       ...restData
     });
-
     const requestUrl = new URL(this.defaultSearchListUrl);
     requestUrl.search = new URLSearchParams(searchString);
     console.log(requestUrl.href);
-
     return requestUrl.href;
   },
   cv() {}

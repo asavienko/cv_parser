@@ -11,23 +11,25 @@ import EditFavoriteListButton from "../../views/EditFavoriteListButton";
 import openNotification from "../../views/NotificationComponent";
 import { getCvByRequest } from "../../services/cvRequests";
 import { defaultFilterParamsForCvList } from "../../constants/filters";
+import FiltersSet from "./FiltersSet/FiltersSet";
+import { Col, Row } from "antd";
 
-function CvListContainer({
+const CvListContainer = ({
   rawList,
   setRawList,
   favoriteCvList,
   setFavoriteList
-}) {
+}) => {
   const [displayedCvList, setDisplayedCvList] = useState([]);
   const [cvInfo, setCvInfo] = useState({ visible: false, cvInformation: {} });
   const [loading, setLoading] = useState(false);
+  const [filters, setFilters] = useState(defaultFilterParamsForCvList);
+  const [renderCounter, setRenderCounter] = useState(0);
   const [pagination, setPagination] = useState({
     total: 20,
     pageSize: 20,
     current: 1
   });
-
-  const [filters, setFilters] = useState(defaultFilterParamsForCvList);
 
   const newRequest = useCallback(
     (newFilters = {}) => {
@@ -62,28 +64,38 @@ function CvListContainer({
 
   const findTheSameRawListInStore = ({
     rawList: rawListFromStore = [],
-    newFilters
+    filters: currentFilters
   }) =>
     rawListFromStore.length &&
-    rawList.find(obj => obj.filters.pg === newFilters.pg);
-
-  const [renderCounter, setRenderCounter] = useState(0);
+    rawListFromStore.find(obj => obj.filters.pg === currentFilters.pg);
 
   useEffect(() => {
     if (!renderCounter && !rawList.length) {
       newRequest(filters);
       setRenderCounter(1);
     }
-  }, [rawList, newRequest]);
+    if (!renderCounter && rawList.length) {
+      const foundResult = findTheSameRawListInStore({
+        rawList,
+        filters
+      });
+      foundResult
+        ? setDisplayedCvList(foundResult.documents)
+        : newRequest(filters);
+    }
+  }, [rawList, newRequest, filters, renderCounter]);
 
   const handleChange = newPagination => {
-    const newFilters = { ...filters, pg: newPagination.current };
+    const currentFilters = { ...filters, pg: newPagination.current };
     setPagination(newPagination);
-    setFilters(newFilters);
-    const foundResult = findTheSameRawListInStore({ rawList, newFilters });
+    setFilters(currentFilters);
+    const foundResult = findTheSameRawListInStore({
+      rawList,
+      filters: currentFilters
+    });
     return foundResult
       ? setDisplayedCvList(foundResult.documents)
-      : newRequest(newFilters);
+      : newRequest(currentFilters);
   };
 
   const onRow = record => ({
@@ -129,13 +141,20 @@ function CvListContainer({
   const rowSelection = addToFavoriteActive ? rowSelectionConfig : null;
   return (
     <>
-      <EditFavoriteListButton
-        addToFavoriteDisabled={addToFavoriteDisabled}
-        addToFavoriteActive={addToFavoriteActive}
-        cvCounts={selectedRowKeys.length}
-        onPrimaryClick={onAddToFavoriteButtonClick}
-        onCancelClick={cancelAddingToFavorite}
-      />
+      <Row>
+        <Col span={4}>
+          <EditFavoriteListButton
+            addToFavoriteDisabled={addToFavoriteDisabled}
+            addToFavoriteActive={addToFavoriteActive}
+            cvCounts={selectedRowKeys.length}
+            onPrimaryClick={onAddToFavoriteButtonClick}
+            onCancelClick={cancelAddingToFavorite}
+          />
+        </Col>
+        <Col span={20}>
+          <FiltersSet />
+        </Col>
+      </Row>
       <CvTable
         cvData={displayedCvList}
         loading={loading}
@@ -150,7 +169,7 @@ function CvListContainer({
       />
     </>
   );
-}
+};
 
 CvListContainer.propTypes = {
   rawList: PropTypes.arrayOf(PropTypes.object),
@@ -176,7 +195,4 @@ const mapDispatchToProps = dispatch => ({
   setFavoriteList: favoriteList => dispatch(setFavoriteListAction(favoriteList))
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CvListContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(CvListContainer);
