@@ -10,6 +10,7 @@ import {
 import EditFavoriteListButton from "../../views/EditFavoriteListButton";
 import openNotification from "../../views/NotificationComponent";
 import { getCvByRequest } from "../../services/cvRequests";
+import { defaultFilterParamsForCvList } from "../../constants/filters";
 
 function CvListContainer({
   rawList,
@@ -26,13 +27,7 @@ function CvListContainer({
     current: 1
   });
 
-  const [filters, setFilters] = useState({
-    keywords: "",
-    period: 6,
-    searchType: "everywhere",
-    sort: "date",
-    pg: 1
-  });
+  const [filters, setFilters] = useState(defaultFilterParamsForCvList);
 
   const newRequest = useCallback(
     (newFilters = {}) => {
@@ -76,7 +71,7 @@ function CvListContainer({
 
   useEffect(() => {
     if (!renderCounter && !rawList.length) {
-      newRequest();
+      newRequest(filters);
       setRenderCounter(1);
     }
   }, [rawList, newRequest]);

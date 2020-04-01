@@ -52,7 +52,6 @@ const header = Joi.object().pattern(LETTERS_NUMBERS_DOTS, [
 const getCvByRequest = Joi.object({
   keywords: Joi.string()
     .allow("")
-    .min(0)
     .max(100),
   period: Joi.number()
     .min(1)
@@ -85,6 +84,5 @@ const getCvByRequest = Joi.object({
     .min(1)
     .max(3)
 });
-
 
 module.exports = { userSignUp, userSignIn, header, getCvByRequest };
