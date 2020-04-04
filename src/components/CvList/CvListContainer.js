@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { Col, Row } from "antd";
 import CvInformation from "../../views/CvInformation";
 import CvTable from "../../views/CvTable";
 import {
@@ -12,7 +13,7 @@ import openNotification from "../../views/NotificationComponent";
 import { getCvByRequest } from "../../services/cvRequests";
 import { defaultFilterParamsForCvList } from "../../constants/filters";
 import FiltersSet from "./FiltersSet/FiltersSet";
-import { Col, Row } from "antd";
+import { preventEmptyValues } from "../../utils/index";
 
 const CvListContainer = ({
   rawList,
@@ -34,7 +35,7 @@ const CvListContainer = ({
   const newRequest = useCallback(
     (newFilters = {}) => {
       setLoading(true);
-      getCvByRequest(newFilters)
+      getCvByRequest(preventEmptyValues(newFilters))
         .then((response = {}) => {
           const { Documents, Total, Raw } = response;
           const { Count } = JSON.parse(Raw);
@@ -142,7 +143,7 @@ const CvListContainer = ({
   return (
     <>
       <Row>
-        <Col span={4}>
+        <Col span={5}>
           <EditFavoriteListButton
             addToFavoriteDisabled={addToFavoriteDisabled}
             addToFavoriteActive={addToFavoriteActive}
@@ -151,7 +152,7 @@ const CvListContainer = ({
             onCancelClick={cancelAddingToFavorite}
           />
         </Col>
-        <Col span={20}>
+        <Col span={19}>
           <FiltersSet />
         </Col>
       </Row>
