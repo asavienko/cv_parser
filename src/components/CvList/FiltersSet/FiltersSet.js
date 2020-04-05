@@ -54,7 +54,6 @@ const FiltersSet = () => {
     setValue({});
   };
 
-
   return (
     <Row justify="space-around">
       <Col>
