@@ -39,7 +39,7 @@ const gender = (
 
 const FiltersSet = () => {
   const [visible, setVisible] = useState(false);
-  const [value, setValue] = useState({});
+  const [filter, setFilter] = useState({});
   const [inputSalary, setInputSalary] = useState([0, 100000]);
   const [inputAge, setInputAge] = useState([0, 100]);
 
@@ -51,14 +51,14 @@ const FiltersSet = () => {
   };
 
   const resetFilters = () => {
-    setValue({});
+    setFilter({});
   };
 
   return (
     <Row justify="space-around">
       <Col>
         <Popover
-          content={(
+          content={
             <StyledPopoverContent>
               <Slider
                 range
@@ -72,8 +72,10 @@ const FiltersSet = () => {
                 ]}
                 onChange={onSalaryChange}
                 tipFormatter={value =>
-                  `${value} грн`.replace(/(100000)/, "$1+")}
+                  `${value} грн`.replace(/(100000)/, "$1+")
+                }
               />
+
               <SalaryInput
                 placeholder="грн"
                 value={inputSalary[0]}
@@ -89,7 +91,7 @@ const FiltersSet = () => {
                 formatter={value => `${value}`.replace(/(100000)/, "$1+")}
               />
             </StyledPopoverContent>
-          )}
+          }
           title="Ожидаемая зарплата"
           trigger="click"
           key="salary"
@@ -100,7 +102,7 @@ const FiltersSet = () => {
 
       <Col>
         <Popover
-          content={(
+          content={
             <StyledPopoverContent>
               <Slider
                 range
@@ -123,7 +125,7 @@ const FiltersSet = () => {
                 onChange={value => onAgeChange([inputAge[0], value])}
               />
             </StyledPopoverContent>
-          )}
+          }
           title="Возраст кандидата"
           trigger="click"
           key="age"
@@ -156,7 +158,7 @@ const FiltersSet = () => {
         </StyledExpander>
       </Col>
       <Col>
-        <Button type="primary" onClick={() => console.log(value)}>
+        <Button type="primary" onClick={() => console.log(filter)}>
           Применить
         </Button>
       </Col>

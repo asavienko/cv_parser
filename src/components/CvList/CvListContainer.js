@@ -74,12 +74,14 @@ const CvListContainer = ({
     if (!renderCounter && !rawList.length) {
       newRequest(filters);
       setRenderCounter(1);
+      return;
     }
     if (!renderCounter && rawList.length) {
       const foundResult = findTheSameRawListInStore({
         rawList,
         filters
       });
+
       foundResult
         ? setDisplayedCvList(foundResult.documents)
         : newRequest(filters);
@@ -121,9 +123,8 @@ const CvListContainer = ({
     setSelectedRowKeys(favoriteKeys);
     setAddToFavoriteActive(true);
   };
-  const onAddToFavoriteButtonClick = () => {
+  const onAddToFavoriteButtonClick = () =>
     addToFavoriteActive ? saveFavoriteList() : editFavoriteList();
-  };
   const cancelAddingToFavorite = () => {
     setAddToFavoriteActive(false);
     setSelectedRowKeys([]);
