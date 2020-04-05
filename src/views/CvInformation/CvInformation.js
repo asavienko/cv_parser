@@ -83,13 +83,16 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
         </Col>
         <ColStyledSpeciality span={24}>
           <StyledTitle level={4}>
-            {speciality} <StyledSalary>{salary}</StyledSalary>
+            {speciality} 
+            {' '}
+            <StyledSalary>{salary}</StyledSalary>
           </StyledTitle>
         </ColStyledSpeciality>
         {lastModified && (
           <CenteredCol span={24}>
             <StyledSalary>
-              обновленно на работа.юа:{" "}
+              обновленно на работа.юа:
+              {" "}
               {new Date(lastModified).toLocaleDateString()}
             </StyledSalary>
           </CenteredCol>
@@ -109,7 +112,11 @@ function CvInformation({ cvInfo, onCvInformationClose }) {
                     <StyledAdditionalInfo>
                       {`
                       ${item.StartDate} -${item.EndDate} `}
-                      <StyledDatesDiff>({item.DatesDiff})</StyledDatesDiff>
+                      <StyledDatesDiff>
+                        (
+                        {item.DatesDiff}
+                        )
+                      </StyledDatesDiff>
                     </StyledAdditionalInfo>
                   </Row>
                   <Row>{item.Company.toUpperCase()}</Row>
