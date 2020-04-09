@@ -61,7 +61,7 @@ function CvTable({
       columns={columns}
       rowSelection={rowSelection}
       rowKey="ResumeId"
-      scroll={{ x: true }}
+      scroll={{ x: 1000 }}
       bordered
     />
   );

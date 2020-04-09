@@ -81,9 +81,6 @@ const CvListContainer = ({
         rawList,
         filters
       });
-adasd
-
-
       foundResult
         ? setDisplayedCvList(foundResult.documents)
         : newRequest(filters);
@@ -145,8 +142,8 @@ adasd
   const rowSelection = addToFavoriteActive ? rowSelectionConfig : null;
   return (
     <>
-      <Row>
-        <Col span={5}>
+      <Row align={"space-between"}>
+        <Col>
           <EditFavoriteListButton
             addToFavoriteDisabled={addToFavoriteDisabled}
             addToFavoriteActive={addToFavoriteActive}
@@ -155,9 +152,7 @@ adasd
             onCancelClick={cancelAddingToFavorite}
           />
         </Col>
-        <Col span={19}>
-          <FiltersSet />
-        </Col>
+        <FiltersSet />
       </Row>
       <CvTable
         cvData={displayedCvList}
