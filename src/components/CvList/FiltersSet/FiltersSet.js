@@ -46,7 +46,7 @@ const FiltersSet = () => {
       <Row gutter={10}>
         <Col>
           <Popover
-            content={
+            content={(
               <StyledPopoverContent>
                 <Slider
                   range
@@ -60,8 +60,7 @@ const FiltersSet = () => {
                   ]}
                   onChange={onSalaryChange}
                   tipFormatter={value =>
-                    `${value} грн`.replace(/(100000)/, "$1+")
-                  }
+                    `${value} грн`.replace(/(100000)/, "$1+")}
                 />
 
                 <SalaryInput
@@ -79,7 +78,7 @@ const FiltersSet = () => {
                   formatter={value => `${value}`.replace(/(100000)/, "$1+")}
                 />
               </StyledPopoverContent>
-            }
+            )}
             title="Ожидаемая зарплата"
             trigger="click"
             key="salary"
@@ -89,7 +88,7 @@ const FiltersSet = () => {
         </Col>
         <Col>
           <Popover
-            content={
+            content={(
               <StyledPopoverContent>
                 <Slider
                   range
@@ -112,7 +111,7 @@ const FiltersSet = () => {
                   onChange={value => onAgeChange([inputAge[0], value])}
                 />
               </StyledPopoverContent>
-            }
+            )}
             title="Возраст кандидата"
             trigger="click"
             key="age"
@@ -122,7 +121,7 @@ const FiltersSet = () => {
         </Col>
         <Col>
           <Popover
-            content={
+            content={(
               <Checkbox.Group
                 options={[
                   { label: "Мужской", value: 1 },
@@ -130,7 +129,7 @@ const FiltersSet = () => {
                 ]}
                 onChange={onSexChange}
               />
-            }
+            )}
             title="Пол"
             trigger="click"
             key="sex"
@@ -140,7 +139,7 @@ const FiltersSet = () => {
         </Col>
         <Col>
           <Popover
-            content={
+            content={(
               <Checkbox.Group
                 options={[
                   { label: "Без фото", value: 0 },
@@ -148,7 +147,7 @@ const FiltersSet = () => {
                 ]}
                 onChange={onHasPhotoChange}
               />
-            }
+            )}
             title="Фото"
             trigger="click"
             key="hasPhoto"
@@ -158,13 +157,13 @@ const FiltersSet = () => {
         </Col>
         <Col>
           <Popover
-            content={
+            content={(
               <Checkbox.Group value={experience} onChange={onExperienceChange}>
                 <Checkbox value={1}>От 1-го до 2-х лет</Checkbox>
                 <Checkbox value={2}> От 2-х до 5-ти лет</Checkbox>
                 <Checkbox value={3}> Более 5-ти лет</Checkbox>
               </Checkbox.Group>
-            }
+            )}
             title="Опыт работы на данной позиции"
             trigger="click"
             key="experience"
