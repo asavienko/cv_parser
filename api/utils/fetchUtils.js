@@ -23,8 +23,13 @@ const request = async (
       body
     };
     const response = await fetch(url, requestOptions);
+    const {status} = response;
+
+    if (status !== 200) {
+      throw new Error("error with request to resource");
+    }
     const json = await response.json();
-    if (!_.has(json, "Documents")) {
+    if (!json) {
       throw new Error(
         `No data in document. response.Message: ${json.Message}.`
       );
@@ -35,8 +40,6 @@ const request = async (
     throw new Error(e);
   }
 };
-
-
 
 const getRequest = async (url, options = {}) => {
   return request(url, "GET", options);

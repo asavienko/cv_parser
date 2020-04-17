@@ -11,7 +11,7 @@ import {
 import EditFavoriteListButton from "../../views/EditFavoriteListButton";
 import openNotification from "../../views/NotificationComponent";
 import { getCvByRequest } from "../../services/cvRequests";
-import { defaultFilterParamsForCvList } from "../../constants/filters";
+import { DEFAULT_FILTERS } from "../../constants/filters";
 import FiltersSet from "./FiltersSet/FiltersSet";
 import { preventEmptyValues } from "../../utils/index";
 
@@ -22,9 +22,10 @@ const CvListContainer = ({
   setFavoriteList
 }) => {
   const [displayedCvList, setDisplayedCvList] = useState([]);
-  const [cvInfo, setCvInfo] = useState({ visible: false, cvInformation: {} });
+  const [cvInfoVisible, setCvInfoVisible] = useState(false);
+  const [resumeId, setResumeId] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [filters, setFilters] = useState(defaultFilterParamsForCvList);
+  const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const [renderCounter, setRenderCounter] = useState(0);
   const [pagination, setPagination] = useState({
     total: 20,
@@ -100,12 +101,14 @@ const CvListContainer = ({
       : newRequest(currentFilters);
   };
 
-  const onRow = record => ({
-    onClick: () => setCvInfo({ visible: true, cvInformation: record })
+  const onRow = ({ ResumeId: resumeIdFromRow }) => ({
+    onClick: () => {
+      setCvInfoVisible(true);
+      setResumeId(resumeIdFromRow);
+    }
   });
 
-  const onCvInformationClose = () =>
-    setCvInfo({ visible: false, cvInformation: {} });
+  const onCvInformationClose = () => setCvInfoVisible(false);
 
   const [addToFavoriteActive, setAddToFavoriteActive] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -137,13 +140,15 @@ const CvListContainer = ({
     onChange: onSelectChange
   };
   const addToFavoriteDisabled =
-    loading || (selectedRowKeys.length === 0 && addToFavoriteActive);
+    loading ||
+    !rawList.length ||
+    (selectedRowKeys.length === 0 && addToFavoriteActive);
 
   const rowSelection = addToFavoriteActive ? rowSelectionConfig : null;
   return (
     <>
-      <Row align={"space-between"}>
-        <Col>
+      <Row justify="space-between">
+        <Col span={4}>
           <EditFavoriteListButton
             addToFavoriteDisabled={addToFavoriteDisabled}
             addToFavoriteActive={addToFavoriteActive}
@@ -152,7 +157,13 @@ const CvListContainer = ({
             onCancelClick={cancelAddingToFavorite}
           />
         </Col>
-        <FiltersSet />
+        <Col span={20}>
+          <FiltersSet
+            disabled={loading}
+            requestToServer={newRequest}
+            setFilters={setFilters}
+          />
+        </Col>
       </Row>
       <CvTable
         cvData={displayedCvList}
@@ -163,8 +174,9 @@ const CvListContainer = ({
         pagination={pagination}
       />
       <CvInformation
-        cvInfo={cvInfo}
+        visible={cvInfoVisible}
         onCvInformationClose={onCvInformationClose}
+        resumeId={resumeId}
       />
     </>
   );

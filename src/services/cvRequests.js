@@ -2,7 +2,9 @@ import { getRequest, postRequest } from "./fetchUtils";
 
 const cvUrls = () => ({
   getTotalCv: "/total-cvs",
-  getCvByRequest: "cv/get-by-request"
+  getCvByRequest: "cv/get-by-request",
+  getCvInfo: "cv/get-cv-info",
+  getCvPage: "cv/get-cv-page"
 });
 
 const getTotalCv = async ({ regionId: regionid, keywords }) => {
@@ -18,7 +20,10 @@ const getTotalCv = async ({ regionId: regionid, keywords }) => {
   return await getRequest(url);
 };
 
-const getCvByRequest = (body) =>
-  postRequest(cvUrls().getCvByRequest, body);
+const getCvByRequest = body => postRequest(cvUrls().getCvByRequest, body);
 
-export { getTotalCv, getCvByRequest };
+const getCvInfo = id => postRequest(cvUrls().getCvInfo, { id });
+
+const getCvPage = id => postRequest(cvUrls().getCvPage, { id });
+
+export { getTotalCv, getCvByRequest, getCvInfo };

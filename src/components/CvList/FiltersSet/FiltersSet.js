@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import { Button, Checkbox, Col, Popover, Row, Slider } from "antd";
+import React from "react";
+import { Button, Checkbox, Col, Form, Popover, Row, Slider } from "antd";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import {
   AgeInput,
   SalaryInput,
@@ -7,186 +9,278 @@ import {
   StyledDividerSpan,
   StyledPopoverContent
 } from "./FiltersSet.styles";
+import { setFiltersAction, setRawListAction } from "../../../actions/cvActions";
+import { DEFAULT_FILTERS } from "../../../constants/filters";
 
-const FiltersSet = () => {
-  const [visible, setVisible] = useState(false);
-  const [filter, setFilter] = useState({});
-  const [inputSalary, setInputSalary] = useState([0, 100000]);
-  const [inputAge, setInputAge] = useState([0, 100]);
-  const [sex, setSex] = useState(false);
-  const [hasPhoto, setHasPhoto] = useState(false);
-  const [experience, setExperience] = useState([]);
+const initialValues = {
+  salaryFrom: 0,
+  salaryTo: 100000,
+  salarySlider: [0, 100000],
+  ageFrom: 0,
+  ageTo: 100,
+  ageSlider: [0, 100]
+};
 
-  const onSalaryChange = inputValue => {
-    setInputSalary(inputValue);
+const FiltersSet = ({
+  disabled,
+  requestToServer,
+  setFilters,
+  filtersFromStore,
+  setRawList
+}) => {
+  const [form] = Form.useForm();
+
+  const onSalarySliderChange = ([salaryFrom, salaryTo]) => {
+    form.setFieldsValue({ salaryFrom, salaryTo });
   };
-  const onAgeChange = inputValue => {
-    setInputAge(inputValue);
+  const onSalaryFromChange = value => {
+    const [, sliderTo] = form.getFieldValue("salarySlider");
+    form.setFieldsValue({ salarySlider: [value, sliderTo] });
+  };
+  const onSalaryToChange = value => {
+    const [sliderFrom] = form.getFieldValue("salarySlider");
+    form.setFieldsValue({ salarySlider: [sliderFrom, value] });
   };
 
-  const resetFilters = () => {
-    setFilter({});
+  const onAgeSliderChange = ([ageFrom, ageTo]) => {
+    form.setFieldsValue({ ageFrom, ageTo });
   };
-  const onSexChange = checkedValues => {
-    !checkedValues.length || checkedValues.length === 2
-      ? setSex(false)
-      : setSex(checkedValues[0]);
+  const onAgeFromChange = value => {
+    const [, sliderTo] = form.getFieldValue("ageSlider");
+    form.setFieldsValue({ ageSlider: [value, sliderTo] });
   };
-  const onHasPhotoChange = checkedValues => {
-    !checkedValues.length || checkedValues.length === 2
-      ? setHasPhoto(false)
-      : setHasPhoto(checkedValues[0]);
+  const onAgeToChange = value => {
+    const [sliderFrom] = form.getFieldValue("ageSlider");
+    form.setFieldsValue({ ageSlider: [sliderFrom, value] });
   };
+
   const onExperienceChange = checkedValue => {
-    setExperience([checkedValue[checkedValue.length - 1]]);
+    form.setFieldsValue({
+      experienceid: [checkedValue[checkedValue.length - 1]]
+    });
+  };
+
+  const onFinish = ({
+    salarySlider,
+    ageSlider,
+    sex: sexArr = [],
+    hasphoto: hasPhotoArr = [],
+    experienceid: experienceIdArr = [],
+    ...filters
+  }) => {
+    const objectSex = sexArr.length === 1 ? { sex: sexArr[0] } : {};
+    const objectPhoto =
+      hasPhotoArr.length === 1 ? { hasPhoto: hasPhotoArr[0] } : {};
+    const objectExperience =
+      experienceIdArr.length === 1 ? { experienceId: experienceIdArr[0] } : {};
+
+    const filtersToSend = {
+      ...filters,
+      ...objectSex,
+      ...objectPhoto,
+      ...objectExperience
+    };
+    setRawList();
+    setFilters(filtersToSend);
+    requestToServer(filtersToSend);
+  };
+  const onResetFilters = () => {
+    setFilters({});
+    setRawList();
+    requestToServer(DEFAULT_FILTERS);
   };
 
   return (
-    <>
-      <Row gutter={10}>
-        <Col>
-          <Popover
-            content={(
-              <StyledPopoverContent>
-                <Slider
-                  range
-                  min={0}
-                  max={100000}
-                  step={100}
-                  defaultValue={[0, 100000]}
-                  value={[
-                    typeof inputSalary[0] === "number" ? inputSalary[0] : 0,
-                    typeof inputSalary[1] === "number" ? inputSalary[1] : 100000
-                  ]}
-                  onChange={onSalaryChange}
-                  tipFormatter={value =>
-                    `${value} грн`.replace(/(100000)/, "$1+")}
-                />
-
-                <SalaryInput
-                  placeholder="грн"
-                  value={inputSalary[0]}
-                  step={100}
-                  onChange={value => onSalaryChange([value, inputSalary[1]])}
-                />
-                <StyledDividerSpan>-</StyledDividerSpan>
-                <SalaryInput
-                  placeholder="грн"
-                  value={inputSalary[1]}
-                  step={100}
-                  onChange={value => onSalaryChange([inputSalary[0], value])}
-                  formatter={value => `${value}`.replace(/(100000)/, "$1+")}
-                />
-              </StyledPopoverContent>
-            )}
-            title="Ожидаемая зарплата"
-            trigger="click"
-            key="salary"
-          >
-            <Button>Зарплата</Button>
-          </Popover>
-        </Col>
-        <Col>
-          <Popover
-            content={(
-              <StyledPopoverContent>
-                <Slider
-                  range
-                  min={0}
-                  max={100}
-                  defaultValue={[0, 100]}
-                  value={[
-                    typeof inputAge[0] === "number" ? inputAge[0] : 0,
-                    typeof inputAge[1] === "number" ? inputAge[1] : 100000
-                  ]}
-                  onChange={onAgeChange}
-                />
-                <AgeInput
-                  value={inputAge[0]}
-                  onChange={value => onAgeChange([value, inputAge[1]])}
-                />
-                <StyledDividerSpan>-</StyledDividerSpan>
-                <AgeInput
-                  value={inputAge[1]}
-                  onChange={value => onAgeChange([inputAge[0], value])}
-                />
-              </StyledPopoverContent>
-            )}
-            title="Возраст кандидата"
-            trigger="click"
-            key="age"
-          >
-            <Button>Возраст</Button>
-          </Popover>
-        </Col>
-        <Col>
-          <Popover
-            content={(
-              <Checkbox.Group
-                options={[
-                  { label: "Мужской", value: 1 },
-                  { label: "Женский", value: 2 }
-                ]}
-                onChange={onSexChange}
-              />
-            )}
-            title="Пол"
-            trigger="click"
-            key="sex"
-          >
-            <Button>Пол</Button>
-          </Popover>
-        </Col>
-        <Col>
-          <Popover
-            content={(
-              <Checkbox.Group
-                options={[
-                  { label: "Без фото", value: 0 },
-                  { label: "С фото", value: 1 }
-                ]}
-                onChange={onHasPhotoChange}
-              />
-            )}
-            title="Фото"
-            trigger="click"
-            key="hasPhoto"
-          >
-            <Button>Фото</Button>
-          </Popover>
-        </Col>
-        <Col>
-          <Popover
-            content={(
-              <Checkbox.Group value={experience} onChange={onExperienceChange}>
-                <Checkbox value={1}>От 1-го до 2-х лет</Checkbox>
-                <Checkbox value={2}> От 2-х до 5-ти лет</Checkbox>
-                <Checkbox value={3}> Более 5-ти лет</Checkbox>
-              </Checkbox.Group>
-            )}
-            title="Опыт работы на данной позиции"
-            trigger="click"
-            key="experience"
-          >
-            <Button>Опыт работы</Button>
-          </Popover>
-        </Col>
+    <Form
+      form={form}
+      onFinish={onFinish}
+      name="filterSet"
+      initialValues={initialValues}
+    >
+      <Row justify="space-between">
+        <Row gutter={24}>
+          <Col>
+            <Popover
+              content={
+                <StyledPopoverContent>
+                  <Form.Item name="salarySlider">
+                    <Slider
+                      range
+                      min={0}
+                      max={100000}
+                      step={100}
+                      onChange={onSalarySliderChange}
+                      tipFormatter={value =>
+                        `${value} грн`.replace(/(100000)/, "$1+")
+                      }
+                    />
+                  </Form.Item>
+                  <Row>
+                    <Form.Item name="salaryFrom">
+                      <SalaryInput
+                        placeholder="грн"
+                        step={100}
+                        onChange={onSalaryFromChange}
+                      />
+                    </Form.Item>
+                    <StyledDividerSpan>-</StyledDividerSpan>
+                    <Form.Item name="salaryTo">
+                      <SalaryInput
+                        placeholder="грн"
+                        step={100}
+                        onChange={onSalaryToChange}
+                        formatter={value =>
+                          `${value}`.replace(/(100000)/, "$1+")
+                        }
+                      />
+                    </Form.Item>
+                  </Row>
+                </StyledPopoverContent>
+              }
+              title="Ожидаемая зарплата"
+              trigger="click"
+              key="salary"
+            >
+              <Button disabled={disabled}>Зарплата</Button>
+            </Popover>
+          </Col>
+          <Col>
+            <Popover
+              content={
+                <StyledPopoverContent>
+                  <Form.Item name="ageSlider">
+                    <Slider
+                      range
+                      min={0}
+                      max={100}
+                      onChange={onAgeSliderChange}
+                    />
+                  </Form.Item>
+                  <Row justify="center">
+                    <Form.Item name="ageFrom">
+                      <AgeInput onChange={onAgeFromChange} />
+                    </Form.Item>
+                    <StyledDividerSpan>-</StyledDividerSpan>
+                    <Form.Item name="ageTo">
+                      <AgeInput onChange={onAgeToChange} />
+                    </Form.Item>
+                  </Row>
+                </StyledPopoverContent>
+              }
+              title="Возраст кандидата"
+              trigger="click"
+              key="age"
+            >
+              <Button disabled={disabled}>Возраст</Button>
+            </Popover>
+          </Col>
+          <Col>
+            <Popover
+              content={
+                <Form.Item name="sex">
+                  <Checkbox.Group
+                    options={[
+                      { label: "Мужской", value: 1 },
+                      { label: "Женский", value: 2 }
+                    ]}
+                  />
+                </Form.Item>
+              }
+              title="Пол"
+              trigger="click"
+              key="sex"
+            >
+              <Button disabled={disabled}>Пол</Button>
+            </Popover>
+          </Col>
+          <Col>
+            <Popover
+              content={
+                <Form.Item name="hasphoto">
+                  <Checkbox.Group
+                    options={[
+                      { label: "Без фото", value: 0 },
+                      { label: "С фото", value: 1 }
+                    ]}
+                  />
+                </Form.Item>
+              }
+              title="Фото"
+              trigger="click"
+              key="hasPhoto"
+            >
+              <Button disabled={disabled}>Фото</Button>
+            </Popover>
+          </Col>
+          <Col>
+            <Popover
+              content={
+                <Form.Item name="experienceid">
+                  <Checkbox.Group onChange={onExperienceChange}>
+                    <Checkbox value={1}>От 1-го до 2-х лет</Checkbox>
+                    <Checkbox value={2}> От 2-х до 5-ти лет</Checkbox>
+                    <Checkbox value={3}> Более 5-ти лет</Checkbox>
+                  </Checkbox.Group>
+                </Form.Item>
+              }
+              title="Опыт работы на данной позиции"
+              trigger="click"
+              key="experience"
+            >
+              <Button disabled={disabled}>Опыт работы</Button>
+            </Popover>
+          </Col>
+        </Row>
+        <Row gutter={24}>
+          <StyledDivider type="vertical" />
+          <Col>
+            <Button type="primary" htmlType="submit" disabled={disabled}>
+              Применить
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              type="danger"
+              disabled={disabled}
+              htmlType="button"
+              onClick={onResetFilters}
+            >
+              Очистить
+            </Button>
+          </Col>
+        </Row>
       </Row>
-      <Row gutter={20}>
-        <StyledDivider type="vertical" />
-        <Col>
-          <Button type="primary" onClick={() => console.log(filter)}>
-            Применить
-          </Button>
-        </Col>
-        <Col>
-          <Button type="danger" onClick={resetFilters}>
-            Очистить
-          </Button>
-        </Col>
-      </Row>
-    </>
+    </Form>
   );
 };
 
-export default FiltersSet;
+FiltersSet.propTypes = {
+  disabled: PropTypes.bool,
+  filtersFromStore: PropTypes.objectOf(PropTypes.string, PropTypes.number),
+  onFinish: PropTypes.func,
+  onResetFilters: PropTypes.func,
+  requestToServer: PropTypes.func,
+  setFilters: PropTypes.func,
+  setRawList: PropTypes.func
+};
+
+FiltersSet.defaultProps = {
+  disabled: false,
+  filtersFromStore: {},
+  onFinish: () => {},
+  onResetFilters: () => {},
+  requestToServer: () => {},
+  setFilters: () => {},
+  setRawList: () => {}
+};
+
+const mapDispatchToProps = dispatch => ({
+  setFilters: filters => dispatch(setFiltersAction(filters)),
+  setRawList: rawList => dispatch(setRawListAction(rawList))
+});
+
+const mapStateToProps = ({ filters: filtersFromStore }) => ({
+  filtersFromStore
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(FiltersSet);
