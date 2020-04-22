@@ -4,6 +4,10 @@ const router = express.Router();
 const parseResumeByRequest = require("../services/parser/parseResumeByRequest/parseResumeByRequest");
 const parseCvInfo = require("../services/parser/parseCvInfo/parseCvInfo");
 
+const fetch = require("node-fetch");
+
+const $ = require("cheerio");
+
 const getCvByRequest = (req, res, next) => {
   parseResumeByRequest(req.body)
     .then(response => {
@@ -16,12 +20,16 @@ const getCvByRequest = (req, res, next) => {
     .catch(error => next(error));
 };
 
-const getCvInfo = ({ body: { id } }, res, next) => {
-  parseCvInfo(id)
+const getCvInfo = async ({ body: { id } }, res, next) => {
+  /*  parseCvInfo(id)
     .then((result = {}) => {
       result.error ? next(result.error) : res.json(result);
     })
-    .catch(error => next(error));
+    .catch(error => next(error));*/
+  const response = await fetch(`https://rabota.ua/cv/${id}`);
+  const html = await response.text();
+  const form = $("#resume_holder", html);
+  res.json(form.html());
 };
 
 router.post("/get-by-request", getCvByRequest);

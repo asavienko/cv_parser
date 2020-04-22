@@ -1,15 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { StyledDrawer } from "./CvInforvation.styles";
+import { StyledWrapper } from "./StyledWrapper.styles";
+import { getCvInfo } from "../../services/cvRequests";
 
 function CvInformation({ visible, onCvInformationClose, resumeId }) {
+  const [string, setString] = useState("");
+  useEffect(() => {
+    visible
+      ? getCvInfo(resumeId).then(response => setString(response))
+      : setString("");
+  }, [visible, string]);
+
   return (
-    <StyledDrawer visible={visible} onClose={onCvInformationClose}>
-      <iframe
-        src={`https://rabota.ua/cv/${resumeId}`}
-        width={"100%"}
-        height={"100%"}
-      />
+    <StyledDrawer
+      visible={visible}
+      onClose={onCvInformationClose}
+      destroyOnClose
+    >
+      <StyledWrapper dangerouslySetInnerHTML={{ __html: string }} />
     </StyledDrawer>
   );
 }
