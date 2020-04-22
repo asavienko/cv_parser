@@ -65,24 +65,34 @@ const getCvByRequest = Joi.object({
   pg: Joi.number()
     .min(0)
     .max(10 * Math.pow(10, 6)),
-  agefrom: Joi.number()
+  salaryFrom: Joi.number()
+    .min(0)
+    .max(1000000),
+  salaryTo: Joi.number()
+    .min(0)
+    .max(1000000),
+  ageFrom: Joi.number()
     .min(0)
     .max(150),
-  agefo: Joi.number()
+  ageTo: Joi.number()
     .min(0)
     .max(150),
   sex: Joi.number()
     .min(1)
     .max(2),
-  salaryfrom: Joi.number()
-    .min(0)
-    .max(1000000),
-  hasphoto: Joi.number()
+  hasPhoto: Joi.number()
     .min(0)
     .max(1),
-  experienceid: Joi.number()
+  experienceId: Joi.number()
     .min(1)
     .max(3)
 });
 
-module.exports = { userSignUp, userSignIn, header, getCvByRequest };
+// max skip number 10 with 15 zeros
+const getCvInfo = Joi.object({
+  id: Joi.number()
+    .min(1)
+    .max(10 * Math.pow(10, 15))
+});
+
+module.exports = { userSignUp, userSignIn, header, getCvByRequest, getCvInfo };

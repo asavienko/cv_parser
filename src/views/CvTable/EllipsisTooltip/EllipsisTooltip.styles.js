@@ -5,5 +5,5 @@ export const StyledSpan = styled.span`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  width: 100%;
+  min-width: 200px;
 `;

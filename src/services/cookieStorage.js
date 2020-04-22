@@ -2,9 +2,7 @@ import Cookies from "js-cookie";
 
 export const clearCookieStorage = () => {
   const allCookies = Cookies.get();
-  for (let key in allCookies) {
-    Cookies.remove(key);
-  }
+  Object.keys(allCookies).forEach(key => Cookies.remove(key));
 };
 
 export const getUserFromCookieStorage = () => {

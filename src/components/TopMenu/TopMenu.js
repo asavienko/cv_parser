@@ -39,7 +39,7 @@ function TopMenu({ location: { pathname } }) {
           <Link to="/">Главная</Link>
         </Item>
         <Item key="favorites">
-          <Link to="/favorites">Избранные</Link>
+          <Link to="/favorites">Сохраненные</Link>
         </Item>
         <Item key="list">
           <Link to="/list">Список</Link>

@@ -16,6 +16,11 @@ module.exports = {
   },
   plugins: ["react"],
   rules: {
-    "react/jsx-filename-extension": [2, { extensions: [".js", ".jsx"] }]
+    "react/jsx-filename-extension": [2, { extensions: [".js", ".jsx"] }],
+    // "no-unused-expressions": [0]
+    "no-unused-expressions": [
+      2,
+      { allowTernary: true, allowShortCircuit: true }
+    ]
   }
 };

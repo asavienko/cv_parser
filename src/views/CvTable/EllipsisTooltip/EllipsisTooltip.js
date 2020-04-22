@@ -3,6 +3,7 @@ import { Tooltip } from "antd";
 import { StyledSpan } from "./EllipsisTooltip.styles";
 
 function EllipsisTooltip({ title }) {
+
   const spanRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const handleVisibleChange = visible => {

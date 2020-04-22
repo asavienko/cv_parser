@@ -1,24 +1,14 @@
-const getAuthToken = require("../getAuthToken/getAuthTokenFromPage");
-const parseRabotauaPages = require("./parseRabotauaPages");
-const connectDb = require("../../../database/connectMongoDb");
-const checkIsAuthTokenValid = require("../getAuthToken/checkIsAuthTokenValid");
+const { getRequest } = require("../../../utils/fetchUtils");
+const { SEARCH_URL } = require("../../../constants/rabotaUaUrls");
 
-const getResumeFromPages = async searchRequest => {
+const parseResumeByRequest = async requestBody => {
   try {
-    const client = await connectDb();
-    const collection = client.db("rabotaua").collection("tokens");
-    const [{ token }] = await collection
-      .find()
-      .sort({ _id: -1 })
-      .limit(1)
-      .toArray();
-    const isTokenValid = await checkIsAuthTokenValid(token);
-    const authToken = isTokenValid ? token : await getAuthToken();
-    const options = { headers: { Cookie: authToken } };
-    return await parseRabotauaPages({ options, searchRequest });
+    const requestUrl = new URL(SEARCH_URL);
+    requestUrl.search = new URLSearchParams(requestBody);
+    return getRequest(requestUrl, { checkAuth: true });
   } catch (e) {
     return e;
   }
 };
 
-module.exports = getResumeFromPages;
+module.exports = parseResumeByRequest;

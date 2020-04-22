@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Col, Drawer, Row, Timeline } from "antd";
+import { Drawer, Spin } from "antd";
 
 export const StyledDrawer = styled(Drawer)`
   .ant-drawer-body {
@@ -9,56 +9,38 @@ export const StyledDrawer = styled(Drawer)`
     width: 50% !important;
   }
 `;
-export const StyledRow = styled(Row)`
-  position: fixed;
-  overflow: auto;
-  padding: 24px;
-  height: calc(100% - 108px);
-`;
-export const StyledFooter = styled.div`
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  border-top: 1px solid #e9e9e9;
-  padding: 10px 16px;
-  display: flex;
-  justify-content: space-around;
+
+export const StyledSpin = styled(Spin)`
+  height: 100vh !important;
+  max-height: unset !important;
 `;
 
-export const ColStyledSpeciality = styled(Col)`
-  text-align: center;
-  margin-top: 10px;
-`;
-export const StyledSalary = styled.span`
-  color: RGBA(208, 208, 208, 1);
-  white-space: nowrap;
-`;
-export const CenteredCol = styled(Col)`
-  text-align: center;
-`;
-export const StyledTitle = styled.div`
-  color: rgba(0, 0, 0, 0.85);
-  font-size: 17px;
-  font-weight: 500;
-`;
-export const StyledBlockTitle = styled.div`
-  border-bottom: 1px solid #e9e9e9;
-  width: 100%;
-  margin-top: 10px;
-  font-weight: 500;
-  font-size: 18px;
-`;
-export const StyledDescrEl = styled.div`
-  margin-top: 10px;
-`;
-export const StyledAdditionalInfo = styled.span`
-  display: block;
-  font-size: 12px;
-  color: RGBA(208, 208, 208, 1);
-`;
-export const StyledTimeline = styled(Timeline)`
-  margin-top: 10px;
-`;
-export const StyledDatesDiff = styled.span`
-  white-space: nowrap;
+export const StyledWrapper = styled.div`
+  padding: 0 30px 30px;
+
+  & #ctl00_centerZone_BriefResume1_CvView1_cvHeader_Breadcrumb1_breadcrumbs {
+    display: none !important;
+  }
+
+  & .rua-p-t_13.rua-g-left {
+    display: none !important;
+  }
+  & a.ga_print.rua-p-c-default.rua-b-none {
+    display: none !important;
+  }
+  & .main-info {
+    display: flex;
+  }
+  & .main-info div:nth-child(2) {
+    padding-left: 40px !important;
+  }
+  & .rua-g-clearfix {
+    padding-top: 0px !important;
+  }
+  & #ctl00_centerZone_BriefResume1_CvView1_cvHeader_plhNotLogged {
+    display: none !important;
+  }
+  & .rua-g-right {
+    display: none !important;
+  }
 `;
