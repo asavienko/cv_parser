@@ -149,7 +149,6 @@ const CvListContainer = ({
         loading={loading}
         onRow={onRow}
         handleChange={handleChange}
-        rowSelection={rowSelection}
         pagination={pagination}
       />
       <CvInformation
