@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { StyledDrawer } from "./CvInforvation.styles";
-import { StyledWrapper } from "./StyledWrapper.styles";
+import {
+  StyledDrawer,
+  StyledSpin,
+  StyledWrapper
+} from "./CvInforvation.styles";
 import { getCvInfo } from "../../services/cvRequests";
 
 function CvInformation({ visible, onCvInformationClose, resumeId }) {
   const [string, setString] = useState("");
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     visible
-      ? getCvInfo(resumeId).then(response => setString(response))
+      ? setLoading(true) ||
+        getCvInfo(resumeId).then(response => {
+          setLoading(false);
+          setString(response);
+        })
       : setString("");
   }, [visible, string]);
 
@@ -18,7 +26,9 @@ function CvInformation({ visible, onCvInformationClose, resumeId }) {
       onClose={onCvInformationClose}
       destroyOnClose
     >
-      <StyledWrapper dangerouslySetInnerHTML={{ __html: string }} />
+      <StyledSpin spinning={loading}>
+        <StyledWrapper dangerouslySetInnerHTML={{ __html: string }} />
+      </StyledSpin>
     </StyledDrawer>
   );
 }
