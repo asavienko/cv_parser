@@ -5,33 +5,28 @@ import { Col, Row } from "antd";
 import CvInformation from "../../views/CvInformation";
 import CvTable from "../../views/CvTable";
 import {
-  setFavoriteListAction,
+  setFiltersAction,
+  setPaginationAction,
   setRawListAction
 } from "../../actions/cvActions";
-import EditFavoriteListButton from "../../views/EditFavoriteListButton";
 import openNotification from "../../views/NotificationComponent";
 import { getCvByRequest } from "../../services/cvRequests";
-import { DEFAULT_FILTERS } from "../../constants/filters";
 import FiltersSet from "./FiltersSet/FiltersSet";
 import { preventEmptyValues } from "../../utils/index";
 
 const CvListContainer = ({
   rawList,
   setRawList,
-  favoriteCvList,
-  setFavoriteList
+  pagination,
+  setPagination,
+  filters,
+  setFilters
 }) => {
   const [displayedCvList, setDisplayedCvList] = useState([]);
   const [cvInfoVisible, setCvInfoVisible] = useState(false);
   const [resumeId, setResumeId] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const [renderCounter, setRenderCounter] = useState(0);
-  const [pagination, setPagination] = useState({
-    total: 20,
-    pageSize: 20,
-    current: 1
-  });
 
   const newRequest = useCallback(
     (newFilters = {}) => {
@@ -40,15 +35,27 @@ const CvListContainer = ({
         .then((response = {}) => {
           const { Documents, Total, Raw } = response;
           const { Count } = JSON.parse(Raw);
-          setPagination(prevState => ({
-            ...prevState,
-            total: Total,
-            pageSize: Count
-          }));
+          let newPagination;
+
+          setPagination(state => {
+            newPagination = {
+              ...state,
+              current: newFilters.pg,
+              total: Total,
+              pageSize: Count
+            };
+            return newPagination;
+          });
+          setPagination(newPagination);
+
+          setFilters(newFilters);
           setDisplayedCvList(Documents);
           setRawList([
             ...rawList,
-            { filters: { ...filters, ...newFilters }, documents: Documents }
+            {
+              filters: { ...filters, ...newFilters },
+              documents: Documents
+            }
           ]);
         })
         .catch(() =>
@@ -83,7 +90,9 @@ const CvListContainer = ({
         filters
       });
       foundResult
-        ? setDisplayedCvList(foundResult.documents)
+        ? setDisplayedCvList(foundResult.documents) ||
+          setFilters(filters) ||
+          setPagination(pagination)
         : newRequest(filters);
     }
   }, [rawList, newRequest, filters, renderCounter]);
@@ -97,7 +106,9 @@ const CvListContainer = ({
       filters: currentFilters
     });
     return foundResult
-      ? setDisplayedCvList(foundResult.documents)
+      ? setDisplayedCvList(foundResult.documents) ||
+          setFilters(filters) ||
+          setPagination(pagination)
       : newRequest(currentFilters);
   };
 
@@ -110,27 +121,8 @@ const CvListContainer = ({
 
   const onCvInformationClose = () => setCvInfoVisible(false);
 
-  const [addToFavoriteActive, setAddToFavoriteActive] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
-  const saveFavoriteList = () => {
-    const selectedCvList = selectedRowKeys.map(key =>
-      rawList.find(cv => cv.key === key)
-    );
-    setFavoriteList(selectedCvList);
-    setAddToFavoriteActive(false);
-  };
-  const editFavoriteList = () => {
-    const favoriteKeys = favoriteCvList.map(cv => cv.key);
-    setSelectedRowKeys(favoriteKeys);
-    setAddToFavoriteActive(true);
-  };
-  const onAddToFavoriteButtonClick = () =>
-    addToFavoriteActive ? saveFavoriteList() : editFavoriteList();
-  const cancelAddingToFavorite = () => {
-    setAddToFavoriteActive(false);
-    setSelectedRowKeys([]);
-  };
   const onSelectChange = value => {
     setSelectedRowKeys(value);
   };
@@ -139,24 +131,11 @@ const CvListContainer = ({
     selectedRowKeys,
     onChange: onSelectChange
   };
-  const addToFavoriteDisabled =
-    loading ||
-    !rawList.length ||
-    (selectedRowKeys.length === 0 && addToFavoriteActive);
 
-  const rowSelection = addToFavoriteActive ? rowSelectionConfig : null;
   return (
     <>
       <Row justify="space-between">
-        <Col span={4}>
-          <EditFavoriteListButton
-            addToFavoriteDisabled={addToFavoriteDisabled}
-            addToFavoriteActive={addToFavoriteActive}
-            cvCounts={selectedRowKeys.length}
-            onPrimaryClick={onAddToFavoriteButtonClick}
-            onCancelClick={cancelAddingToFavorite}
-          />
-        </Col>
+        <Col span={4}></Col>
         <Col span={20}>
           <FiltersSet
             disabled={loading}
@@ -184,26 +163,32 @@ const CvListContainer = ({
 
 CvListContainer.propTypes = {
   rawList: PropTypes.arrayOf(PropTypes.object),
-  favoriteCvList: PropTypes.arrayOf(PropTypes.object),
+  pagination: PropTypes.objectOf(PropTypes.number),
+  filters: PropTypes.objectOf(PropTypes.string, PropTypes.number),
   setRawList: PropTypes.func,
-  setFavoriteList: PropTypes.func
+  setPagination: PropTypes.func,
+  setFiltersAction: PropTypes.func
 };
 
 CvListContainer.defaultProps = {
   rawList: [],
-  favoriteCvList: [],
+  pagination: {},
+  filters: {},
   setRawList: () => {},
-  setFavoriteList: () => {}
+  setPagination: () => {},
+  setFiltersAction: () => {}
 };
 
-const mapStateToProps = ({ cvReducer: { favoriteCvList, rawList } }) => ({
-  favoriteCvList,
-  rawList
+const mapStateToProps = ({ cvReducer: { rawList, pagination, filters } }) => ({
+  rawList,
+  pagination,
+  filters
 });
 
 const mapDispatchToProps = dispatch => ({
   setRawList: rawList => dispatch(setRawListAction(rawList)),
-  setFavoriteList: favoriteList => dispatch(setFavoriteListAction(favoriteList))
+  setPagination: pagination => dispatch(setPaginationAction(pagination)),
+  setFilters: filters => dispatch(setFiltersAction(filters))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CvListContainer);
