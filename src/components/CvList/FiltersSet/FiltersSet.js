@@ -17,6 +17,8 @@ const FiltersSet = ({
   requestToServer,
   setFilters,
   filters,
+  onFinishFilters,
+  onResetFilters,
   setRawList
 }) => {
   // const [filtersState, setFiltersToState] = useState({});
@@ -57,41 +59,10 @@ const FiltersSet = ({
     });
   };
 
-  const onFinish = onConfirmFilters => {
-    const {
-      salarySlider,
-      ageSlider,
-      sex: sexArr = [],
-      hasphoto: hasPhotoArr = [],
-      experienceid: experienceIdArr = [],
-      ...filtersSet
-    } = onConfirmFilters;
-    const objectSex = sexArr.length === 1 ? { sex: sexArr[0] } : {};
-    const objectPhoto =
-      hasPhotoArr.length === 1 ? { hasPhoto: hasPhotoArr[0] } : {};
-    const objectExperience =
-      experienceIdArr.length === 1 ? { experienceId: experienceIdArr[0] } : {};
-
-    const filtersToSend = {
-      ...filtersSet,
-      ...objectSex,
-      ...objectPhoto,
-      ...objectExperience
-    };
-    setRawList();
-    setFilters({ ...filters, ...onConfirmFilters });
-    requestToServer(filtersToSend);
-  };
-  const onResetFilters = () => {
-    setFilters();
-    setRawList();
-    requestToServer(DEFAULT_FILTERS);
-  };
-
   return (
     <Form
       form={form}
-      onFinish={onFinish}
+      onFinish={onFinishFilters}
       name="filterSet"
       initialValues={filters}
     >
@@ -267,7 +238,7 @@ FiltersSet.propTypes = {
     salarySlider: PropTypes.array,
     ageSlider: PropTypes.array
   }),
-  onFinish: PropTypes.func,
+  onFinishFilters: PropTypes.func,
   onResetFilters: PropTypes.func,
   requestToServer: PropTypes.func,
   setFilters: PropTypes.func,
@@ -277,7 +248,7 @@ FiltersSet.propTypes = {
 FiltersSet.defaultProps = {
   disabled: false,
   filters: {},
-  onFinish: () => {},
+  onFinishFilters: () => {},
   onResetFilters: () => {},
   requestToServer: () => {},
   setFilters: () => {},

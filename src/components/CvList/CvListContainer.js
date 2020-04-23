@@ -13,6 +13,7 @@ import openNotification from "../../views/NotificationComponent";
 import { getCvByRequest } from "../../services/cvRequests";
 import FiltersSet from "./FiltersSet/FiltersSet";
 import { preventEmptyValues } from "../../utils/index";
+import { DEFAULT_FILTERS } from "../../constants/filters";
 
 const CvListContainer = ({
   rawList,
@@ -109,12 +110,47 @@ const CvListContainer = ({
 
   const onCvInformationClose = () => setCvInfoVisible(false);
 
+  const onFinishFilters = onConfirmFilters => {
+    const {
+      salarySlider,
+      ageSlider,
+      sex: sexArr = [],
+      hasphoto: hasPhotoArr = [],
+      experienceid: experienceIdArr = [],
+      ...filtersSet
+    } = onConfirmFilters;
+    const objectSex = sexArr.length === 1 ? { sex: sexArr[0] } : {};
+    const objectPhoto =
+      hasPhotoArr.length === 1 ? { hasPhoto: hasPhotoArr[0] } : {};
+    const objectExperience =
+      experienceIdArr.length === 1 ? { experienceId: experienceIdArr[0] } : {};
+
+    const filtersToSend = {
+      ...filtersSet,
+      ...objectSex,
+      ...objectPhoto,
+      ...objectExperience
+    };
+    setRawList([]);
+    setFilters({ ...filters, ...onConfirmFilters });
+    newRequest(filtersToSend);
+  };
+  const onResetFilters = () => {
+    setFilters();
+    setRawList();
+    newRequest(DEFAULT_FILTERS);
+  };
+
   return (
     <>
       <Row justify="space-between">
         <Col span={4} />
         <Col span={20}>
-          <FiltersSet disabled={loading} requestToServer={newRequest} />
+          <FiltersSet
+            disabled={loading}
+            onFinishFilters={onFinishFilters}
+            onResetFilters={onResetFilters}
+          />
         </Col>
       </Row>
       <CvTable
