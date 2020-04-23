@@ -78,7 +78,7 @@ const FiltersSet = ({
       ...objectPhoto,
       ...objectExperience
     };
-    setRawList([]);
+    setRawList();
     setFilters({ ...filters, ...onConfirmFilters });
     requestToServer(filtersToSend);
   };
