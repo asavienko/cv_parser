@@ -17,9 +17,8 @@ const FiltersSet = ({
   requestToServer,
   setFilters,
   filters,
-  onFinishFilters,
-  onResetFilters,
-  setRawList
+  setRawList,
+  rawList
 }) => {
   // const [filtersState, setFiltersToState] = useState({});
   //
@@ -59,10 +58,40 @@ const FiltersSet = ({
     });
   };
 
+  const onFinish = onConfirmFilters => {
+    const {
+      salarySlider,
+      ageSlider,
+      sex: sexArr = [],
+      hasphoto: hasPhotoArr = [],
+      experienceid: experienceIdArr = [],
+      ...filtersSet
+    } = onConfirmFilters;
+    const objectSex = sexArr.length === 1 ? { sex: sexArr[0] } : {};
+    const objectPhoto =
+      hasPhotoArr.length === 1 ? { hasPhoto: hasPhotoArr[0] } : {};
+    const objectExperience =
+      experienceIdArr.length === 1 ? { experienceId: experienceIdArr[0] } : {};
+
+    const filtersToSend = {
+      ...filtersSet,
+      ...objectSex,
+      ...objectPhoto,
+      ...objectExperience
+    };
+
+    setFilters({ ...filters, ...onConfirmFilters });
+    requestToServer(filtersToSend, true);
+  };
+  const onResetFilters = () => {
+    setFilters();
+    requestToServer(DEFAULT_FILTERS, true);
+  };
+
   return (
     <Form
       form={form}
-      onFinish={onFinishFilters}
+      onFinish={onFinish}
       name="filterSet"
       initialValues={filters}
     >
@@ -238,7 +267,7 @@ FiltersSet.propTypes = {
     salarySlider: PropTypes.array,
     ageSlider: PropTypes.array
   }),
-  onFinishFilters: PropTypes.func,
+  onFinish: PropTypes.func,
   onResetFilters: PropTypes.func,
   requestToServer: PropTypes.func,
   setFilters: PropTypes.func,
@@ -248,15 +277,16 @@ FiltersSet.propTypes = {
 FiltersSet.defaultProps = {
   disabled: false,
   filters: {},
-  onFinishFilters: () => {},
+  onFinish: () => {},
   onResetFilters: () => {},
   requestToServer: () => {},
   setFilters: () => {},
   setRawList: () => {}
 };
 
-const mapStateToProps = ({ cvReducer: { filters } }) => ({
-  filters
+const mapStateToProps = ({ cvReducer: { filters, rawList } }) => ({
+  filters,
+  rawList
 });
 
 const mapDispatchToProps = dispatch => ({

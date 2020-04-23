@@ -13,7 +13,6 @@ import openNotification from "../../views/NotificationComponent";
 import { getCvByRequest } from "../../services/cvRequests";
 import FiltersSet from "./FiltersSet/FiltersSet";
 import { preventEmptyValues } from "../../utils/index";
-import { DEFAULT_FILTERS } from "../../constants/filters";
 
 const CvListContainer = ({
   rawList,
@@ -30,7 +29,7 @@ const CvListContainer = ({
   const [renderCounter, setRenderCounter] = useState(0);
 
   const newRequest = useCallback(
-    (newFilters = {}) => {
+    (newFilters = {}, clearStore) => {
       const { salarySlider, ageSlider, ...filtersWithoutSlider } = newFilters;
       setLoading(true);
       getCvByRequest(preventEmptyValues(filtersWithoutSlider))
@@ -43,13 +42,20 @@ const CvListContainer = ({
           };
           setPagination(newPagination);
           setDisplayedCvList(Documents);
-          setRawList([
-            ...rawList,
-            {
-              pagination: newPagination,
-              documents: Documents
-            }
-          ]);
+          clearStore
+            ? setRawList([
+                {
+                  pagination: newPagination,
+                  documents: Documents
+                }
+              ])
+            : setRawList([
+                ...rawList,
+                {
+                  pagination: newPagination,
+                  documents: Documents
+                }
+              ]);
         })
         .catch(() =>
           openNotification({
@@ -110,47 +116,12 @@ const CvListContainer = ({
 
   const onCvInformationClose = () => setCvInfoVisible(false);
 
-  const onFinishFilters = onConfirmFilters => {
-    const {
-      salarySlider,
-      ageSlider,
-      sex: sexArr = [],
-      hasphoto: hasPhotoArr = [],
-      experienceid: experienceIdArr = [],
-      ...filtersSet
-    } = onConfirmFilters;
-    const objectSex = sexArr.length === 1 ? { sex: sexArr[0] } : {};
-    const objectPhoto =
-      hasPhotoArr.length === 1 ? { hasPhoto: hasPhotoArr[0] } : {};
-    const objectExperience =
-      experienceIdArr.length === 1 ? { experienceId: experienceIdArr[0] } : {};
-
-    const filtersToSend = {
-      ...filtersSet,
-      ...objectSex,
-      ...objectPhoto,
-      ...objectExperience
-    };
-    setRawList([]);
-    setFilters({ ...filters, ...onConfirmFilters });
-    newRequest(filtersToSend);
-  };
-  const onResetFilters = () => {
-    setFilters();
-    setRawList();
-    newRequest(DEFAULT_FILTERS);
-  };
-
   return (
     <>
       <Row justify="space-between">
         <Col span={4} />
         <Col span={20}>
-          <FiltersSet
-            disabled={loading}
-            onFinishFilters={onFinishFilters}
-            onResetFilters={onResetFilters}
-          />
+          <FiltersSet disabled={loading} requestToServer={newRequest} />
         </Col>
       </Row>
       <CvTable
