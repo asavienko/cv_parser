@@ -5,11 +5,12 @@ import {
   SET_PAGINATION,
   SET_RAW_LIST
 } from "../constants/constantsActions";
+import { DEFAULT_FILTERS } from "../constants/filters";
 
 const initState = {
   favoriteCvList: [],
   rawList: [],
-  filters: { keywords: "" },
+  filters: { ...DEFAULT_FILTERS },
   pagination: {},
   dictionaryCity: []
 };

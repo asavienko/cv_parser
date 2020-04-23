@@ -18,7 +18,7 @@ function CvInformation({ visible, onCvInformationClose, resumeId }) {
           setString(response);
         })
       : setString("");
-  }, [visible, string]);
+  }, [visible, string, resumeId]);
 
   return (
     <StyledDrawer

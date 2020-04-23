@@ -23,4 +23,3 @@ export function setFiltersAction(filters = {}) {
 export function setPaginationAction(pagination) {
   return { type: SET_PAGINATION, pagination };
 }
-

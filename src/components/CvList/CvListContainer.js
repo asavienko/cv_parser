@@ -30,30 +30,22 @@ const CvListContainer = ({
 
   const newRequest = useCallback(
     (newFilters = {}) => {
+      const { salarySlider, ageSlider, ...filtersWithoutSlider } = newFilters;
       setLoading(true);
-      getCvByRequest(preventEmptyValues(newFilters))
+      getCvByRequest(preventEmptyValues(filtersWithoutSlider))
         .then((response = {}) => {
-          const { Documents, Total, Raw } = response;
-          const { Count } = JSON.parse(Raw);
-          let newPagination;
-
-          setPagination(state => {
-            newPagination = {
-              ...state,
-              current: newFilters.pg,
-              total: Total,
-              pageSize: Count
-            };
-            return newPagination;
-          });
+          const { Documents, Total } = response;
+          const newPagination = {
+            current: newFilters.pg || 1,
+            total: Total,
+            pageSize: Documents.length
+          };
           setPagination(newPagination);
-
-          setFilters(newFilters);
           setDisplayedCvList(Documents);
           setRawList([
             ...rawList,
             {
-              filters: { ...filters, ...newFilters },
+              pagination: newPagination,
               documents: Documents
             }
           ]);
@@ -68,15 +60,15 @@ const CvListContainer = ({
           setLoading(false);
         });
     },
-    [filters, rawList, setRawList]
+    [rawList, setRawList, setPagination]
   );
 
   const findTheSameRawListInStore = ({
     rawList: rawListFromStore = [],
-    filters: currentFilters
+    page
   }) =>
     rawListFromStore.length &&
-    rawListFromStore.find(obj => obj.filters.pg === currentFilters.pg);
+    rawListFromStore.find(obj => obj.pagination.current === page);
 
   useEffect(() => {
     if (!renderCounter && !rawList.length) {
@@ -87,15 +79,13 @@ const CvListContainer = ({
     if (!renderCounter && rawList.length) {
       const foundResult = findTheSameRawListInStore({
         rawList,
-        filters
+        page: pagination.current
       });
       foundResult
-        ? setDisplayedCvList(foundResult.documents) ||
-          setFilters(filters) ||
-          setPagination(pagination)
+        ? setDisplayedCvList(foundResult.documents) || setPagination(pagination)
         : newRequest(filters);
     }
-  }, [rawList, newRequest, filters, renderCounter]);
+  }, [filters, pagination, setPagination, rawList, newRequest, renderCounter]);
 
   const handleChange = newPagination => {
     const currentFilters = { ...filters, pg: newPagination.current };
@@ -103,12 +93,10 @@ const CvListContainer = ({
     setFilters(currentFilters);
     const foundResult = findTheSameRawListInStore({
       rawList,
-      filters: currentFilters
+      page: newPagination.current
     });
     return foundResult
-      ? setDisplayedCvList(foundResult.documents) ||
-          setFilters(filters) ||
-          setPagination(pagination)
+      ? setDisplayedCvList(foundResult.documents)
       : newRequest(currentFilters);
   };
 
@@ -121,27 +109,12 @@ const CvListContainer = ({
 
   const onCvInformationClose = () => setCvInfoVisible(false);
 
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-
-  const onSelectChange = value => {
-    setSelectedRowKeys(value);
-  };
-
-  const rowSelectionConfig = {
-    selectedRowKeys,
-    onChange: onSelectChange
-  };
-
   return (
     <>
       <Row justify="space-between">
-        <Col span={4}></Col>
+        <Col span={4} />
         <Col span={20}>
-          <FiltersSet
-            disabled={loading}
-            requestToServer={newRequest}
-            setFilters={setFilters}
-          />
+          <FiltersSet disabled={loading} requestToServer={newRequest} />
         </Col>
       </Row>
       <CvTable
@@ -163,10 +136,22 @@ const CvListContainer = ({
 CvListContainer.propTypes = {
   rawList: PropTypes.arrayOf(PropTypes.object),
   pagination: PropTypes.objectOf(PropTypes.number),
-  filters: PropTypes.objectOf(PropTypes.string, PropTypes.number),
+  filters: PropTypes.shape({
+    keywords: PropTypes.string,
+    searchType: PropTypes.string,
+    sort: PropTypes.string,
+    period: PropTypes.number,
+    pg: PropTypes.number,
+    salaryFrom: PropTypes.number,
+    salaryTo: PropTypes.number,
+    ageFrom: PropTypes.number,
+    ageTo: PropTypes.number,
+    salarySlider: PropTypes.array,
+    ageSlider: PropTypes.array
+  }),
   setRawList: PropTypes.func,
   setPagination: PropTypes.func,
-  setFiltersAction: PropTypes.func
+  setFilters: PropTypes.func
 };
 
 CvListContainer.defaultProps = {
@@ -175,7 +160,7 @@ CvListContainer.defaultProps = {
   filters: {},
   setRawList: () => {},
   setPagination: () => {},
-  setFiltersAction: () => {}
+  setFilters: () => {}
 };
 
 const mapStateToProps = ({ cvReducer: { rawList, pagination, filters } }) => ({
