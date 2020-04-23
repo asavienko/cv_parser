@@ -1,32 +1,17 @@
-import React from "react";
-import { Button, Checkbox, Col, Form, Popover, Row, Slider } from "antd";
+import React, {useEffect} from "react";
+import {Button, Checkbox, Col, Form, Popover, Row, Slider} from "antd";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import {
-  AgeInput,
-  SalaryInput,
-  StyledDivider,
-  StyledDividerSpan,
-  StyledPopoverContent
-} from "./FiltersSet.styles";
-import { setFiltersAction, setRawListAction } from "../../../actions/cvActions";
-import { DEFAULT_FILTERS } from "../../../constants/filters";
+import {connect} from "react-redux";
+import {AgeInput, SalaryInput, StyledDivider, StyledDividerSpan, StyledPopoverContent} from "./FiltersSet.styles";
+import {setFiltersAction, setRawListAction} from "../../../actions/cvActions";
+import {DEFAULT_FILTERS} from "../../../constants/filters";
 
-const FiltersSet = ({
-  disabled,
-  requestToServer,
-  setFilters,
-  filters,
-  setRawList,
-  rawList
-}) => {
-  // const [filtersState, setFiltersToState] = useState({});
-  //
-  // useEffect(() => {
-  //   setFiltersToState(filters);
-  // });
-
+const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    form.setFieldsValue(filters);
+  });
 
   const onSalarySliderChange = ([salaryFrom, salaryTo]) => {
     form.setFieldsValue({ salaryFrom, salaryTo });
@@ -89,17 +74,12 @@ const FiltersSet = ({
   };
 
   return (
-    <Form
-      form={form}
-      onFinish={onFinish}
-      name="filterSet"
-      initialValues={filters}
-    >
+    <Form form={form} onFinish={onFinish} name="filterSet">
       <Row justify="space-between">
         <Row gutter={24}>
           <Col>
             <Popover
-              content={
+              content={(
                 <StyledPopoverContent>
                   <Form.Item name="salarySlider">
                     <Slider
@@ -109,8 +89,7 @@ const FiltersSet = ({
                       step={100}
                       onChange={onSalarySliderChange}
                       tipFormatter={value =>
-                        `${value} грн`.replace(/(100000)/, "$1+")
-                      }
+                        `${value} грн`.replace(/(100000)/, "$1+")}
                     />
                   </Form.Item>
                   <Row>
@@ -128,13 +107,12 @@ const FiltersSet = ({
                         step={100}
                         onChange={onSalaryToChange}
                         formatter={value =>
-                          `${value}`.replace(/(100000)/, "$1+")
-                        }
+                          `${value}`.replace(/(100000)/, "$1+")}
                       />
                     </Form.Item>
                   </Row>
                 </StyledPopoverContent>
-              }
+              )}
               title="Ожидаемая зарплата"
               trigger="click"
               key="salary"
@@ -144,7 +122,7 @@ const FiltersSet = ({
           </Col>
           <Col>
             <Popover
-              content={
+              content={(
                 <StyledPopoverContent>
                   <Form.Item name="ageSlider">
                     <Slider
@@ -164,7 +142,7 @@ const FiltersSet = ({
                     </Form.Item>
                   </Row>
                 </StyledPopoverContent>
-              }
+              )}
               title="Возраст кандидата"
               trigger="click"
               key="age"
@@ -174,7 +152,7 @@ const FiltersSet = ({
           </Col>
           <Col>
             <Popover
-              content={
+              content={(
                 <Form.Item name="sex">
                   <Checkbox.Group
                     options={[
@@ -183,7 +161,7 @@ const FiltersSet = ({
                     ]}
                   />
                 </Form.Item>
-              }
+              )}
               title="Пол"
               trigger="click"
               key="sex"
@@ -193,7 +171,7 @@ const FiltersSet = ({
           </Col>
           <Col>
             <Popover
-              content={
+              content={(
                 <Form.Item name="hasphoto">
                   <Checkbox.Group
                     options={[
@@ -202,7 +180,7 @@ const FiltersSet = ({
                     ]}
                   />
                 </Form.Item>
-              }
+              )}
               title="Фото"
               trigger="click"
               key="hasPhoto"
@@ -212,7 +190,7 @@ const FiltersSet = ({
           </Col>
           <Col>
             <Popover
-              content={
+              content={(
                 <Form.Item name="experienceid">
                   <Checkbox.Group onChange={onExperienceChange}>
                     <Checkbox value={1}>От 1-го до 2-х лет</Checkbox>
@@ -220,7 +198,7 @@ const FiltersSet = ({
                     <Checkbox value={3}> Более 5-ти лет</Checkbox>
                   </Checkbox.Group>
                 </Form.Item>
-              }
+              )}
               title="Опыт работы на данной позиции"
               trigger="click"
               key="experience"
@@ -267,21 +245,15 @@ FiltersSet.propTypes = {
     salarySlider: PropTypes.array,
     ageSlider: PropTypes.array
   }),
-  onFinish: PropTypes.func,
-  onResetFilters: PropTypes.func,
   requestToServer: PropTypes.func,
-  setFilters: PropTypes.func,
-  setRawList: PropTypes.func
+  setFilters: PropTypes.func
 };
 
 FiltersSet.defaultProps = {
   disabled: false,
   filters: {},
-  onFinish: () => {},
-  onResetFilters: () => {},
   requestToServer: () => {},
-  setFilters: () => {},
-  setRawList: () => {}
+  setFilters: () => {}
 };
 
 const mapStateToProps = ({ cvReducer: { filters, rawList } }) => ({
