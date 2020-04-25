@@ -12,7 +12,11 @@ import {
 import openNotification from "../../views/NotificationComponent";
 import { getCvByRequest } from "../../services/cvRequests";
 import FiltersSet from "./FiltersSet/FiltersSet";
-import { preventEmptyValues } from "../../utils/index";
+import {
+  convertFiltersForRequest,
+  preventEmptyValues
+} from "../../utils/index";
+import { DEFAULT_FILTERS } from "../../constants/filters";
 
 const CvListContainer = ({
   rawList,
@@ -30,9 +34,11 @@ const CvListContainer = ({
 
   const newRequest = useCallback(
     (newFilters = {}, clearStore) => {
-      const { salarySlider, ageSlider, ...filtersWithoutSlider } = newFilters;
       setLoading(true);
-      getCvByRequest(preventEmptyValues(filtersWithoutSlider))
+      getCvByRequest({
+        ...convertFiltersForRequest(DEFAULT_FILTERS),
+        ...convertFiltersForRequest(newFilters)
+      })
         .then((response = {}) => {
           const { Documents, Total } = response;
           const newPagination = {

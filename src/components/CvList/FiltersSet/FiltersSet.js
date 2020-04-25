@@ -1,10 +1,17 @@
-import React, {useEffect} from "react";
-import {Button, Checkbox, Col, Form, Popover, Row, Slider} from "antd";
+import React, { useEffect } from "react";
+import { Button, Checkbox, Col, Form, Popover, Row, Slider } from "antd";
 import PropTypes from "prop-types";
-import {connect} from "react-redux";
-import {AgeInput, SalaryInput, StyledDivider, StyledDividerSpan, StyledPopoverContent} from "./FiltersSet.styles";
-import {setFiltersAction, setRawListAction} from "../../../actions/cvActions";
-import {DEFAULT_FILTERS} from "../../../constants/filters";
+import { connect } from "react-redux";
+import {
+  AgeInput,
+  SalaryInput,
+  StyledDivider,
+  StyledDividerSpan,
+  StyledPopoverContent
+} from "./FiltersSet.styles";
+import { setFiltersAction, setRawListAction } from "../../../actions/cvActions";
+import { DEFAULT_FILTERS } from "../../../constants/filters";
+import { convertFiltersForRequest } from "../../../utils";
 
 const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
   const [form] = Form.useForm();
@@ -43,30 +50,9 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
     });
   };
 
-  const onFinish = onConfirmFilters => {
-    const {
-      salarySlider,
-      ageSlider,
-      sex: sexArr = [],
-      hasphoto: hasPhotoArr = [],
-      experienceid: experienceIdArr = [],
-      ...filtersSet
-    } = onConfirmFilters;
-    const objectSex = sexArr.length === 1 ? { sex: sexArr[0] } : {};
-    const objectPhoto =
-      hasPhotoArr.length === 1 ? { hasPhoto: hasPhotoArr[0] } : {};
-    const objectExperience =
-      experienceIdArr.length === 1 ? { experienceId: experienceIdArr[0] } : {};
-
-    const filtersToSend = {
-      ...filtersSet,
-      ...objectSex,
-      ...objectPhoto,
-      ...objectExperience
-    };
-
-    setFilters({ ...filters, ...onConfirmFilters });
-    requestToServer(filtersToSend, true);
+  const onFinish = newFilters => {
+    setFilters({ ...filters, ...newFilters });
+    requestToServer(newFilters, true);
   };
   const onResetFilters = () => {
     setFilters();
@@ -79,7 +65,7 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
         <Row gutter={24}>
           <Col>
             <Popover
-              content={(
+              content={
                 <StyledPopoverContent>
                   <Form.Item name="salarySlider">
                     <Slider
@@ -89,7 +75,8 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
                       step={100}
                       onChange={onSalarySliderChange}
                       tipFormatter={value =>
-                        `${value} грн`.replace(/(100000)/, "$1+")}
+                        `${value} грн`.replace(/(100000)/, "$1+")
+                      }
                     />
                   </Form.Item>
                   <Row>
@@ -107,12 +94,13 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
                         step={100}
                         onChange={onSalaryToChange}
                         formatter={value =>
-                          `${value}`.replace(/(100000)/, "$1+")}
+                          `${value}`.replace(/(100000)/, "$1+")
+                        }
                       />
                     </Form.Item>
                   </Row>
                 </StyledPopoverContent>
-              )}
+              }
               title="Ожидаемая зарплата"
               trigger="click"
               key="salary"
@@ -122,7 +110,7 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
           </Col>
           <Col>
             <Popover
-              content={(
+              content={
                 <StyledPopoverContent>
                   <Form.Item name="ageSlider">
                     <Slider
@@ -142,7 +130,7 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
                     </Form.Item>
                   </Row>
                 </StyledPopoverContent>
-              )}
+              }
               title="Возраст кандидата"
               trigger="click"
               key="age"
@@ -152,7 +140,7 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
           </Col>
           <Col>
             <Popover
-              content={(
+              content={
                 <Form.Item name="sex">
                   <Checkbox.Group
                     options={[
@@ -161,7 +149,7 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
                     ]}
                   />
                 </Form.Item>
-              )}
+              }
               title="Пол"
               trigger="click"
               key="sex"
@@ -171,7 +159,7 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
           </Col>
           <Col>
             <Popover
-              content={(
+              content={
                 <Form.Item name="hasphoto">
                   <Checkbox.Group
                     options={[
@@ -180,7 +168,7 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
                     ]}
                   />
                 </Form.Item>
-              )}
+              }
               title="Фото"
               trigger="click"
               key="hasPhoto"
@@ -190,7 +178,7 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
           </Col>
           <Col>
             <Popover
-              content={(
+              content={
                 <Form.Item name="experienceid">
                   <Checkbox.Group onChange={onExperienceChange}>
                     <Checkbox value={1}>От 1-го до 2-х лет</Checkbox>
@@ -198,7 +186,7 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
                     <Checkbox value={3}> Более 5-ти лет</Checkbox>
                   </Checkbox.Group>
                 </Form.Item>
-              )}
+              }
               title="Опыт работы на данной позиции"
               trigger="click"
               key="experience"
