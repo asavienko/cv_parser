@@ -33,7 +33,7 @@ const CvListContainer = ({
   const [renderCounter, setRenderCounter] = useState(0);
 
   const newRequest = useCallback(
-    (newFilters = {}, clearStore) => {
+    (newFilters = {}) => {
       setLoading(true);
       getCvByRequest({
         ...convertFiltersForRequest(DEFAULT_FILTERS),
@@ -46,22 +46,17 @@ const CvListContainer = ({
             total,
             pageSize: documents.length
           };
+
           setPagination(newPagination);
           setDisplayedCvList(documents);
-          clearStore
-            ? setRawList([
-                {
-                  pagination: newPagination,
-                  documents
-                }
-              ])
-            : setRawList([
-                ...rawList,
-                {
-                  pagination: newPagination,
-                  documents
-                }
-              ]);
+
+          setRawList([
+            ...rawList,
+            {
+              pagination: newPagination,
+              documents
+            }
+          ]);
         })
         .catch(() =>
           openNotification({
@@ -185,7 +180,7 @@ const mapStateToProps = ({ cvReducer: { rawList, pagination, filters } }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setRawList: rawList => dispatch(setRawListAction(rawList)),
+  setRawList: newList => dispatch(setRawListAction(newList)),
   setPagination: pagination => dispatch(setPaginationAction(pagination)),
   setFilters: filters => dispatch(setFiltersAction(filters))
 });

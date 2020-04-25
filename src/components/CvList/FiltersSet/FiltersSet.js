@@ -11,9 +11,14 @@ import {
 } from "./FiltersSet.styles";
 import { setFiltersAction, setRawListAction } from "../../../actions/cvActions";
 import { DEFAULT_FILTERS } from "../../../constants/filters";
-import { convertFiltersForRequest } from "../../../utils";
 
-const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
+const FiltersSet = ({
+  disabled,
+  requestToServer,
+  setRawList,
+  setFilters,
+  filters
+}) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -52,10 +57,12 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
 
   const onFinish = newFilters => {
     setFilters({ ...filters, ...newFilters });
-    requestToServer(newFilters, true);
+    setRawList();
+    requestToServer(newFilters);
   };
   const onResetFilters = () => {
     setFilters();
+    setRawList();
     requestToServer(DEFAULT_FILTERS, true);
   };
 
@@ -234,14 +241,16 @@ FiltersSet.propTypes = {
     ageSlider: PropTypes.array
   }),
   requestToServer: PropTypes.func,
-  setFilters: PropTypes.func
+  setFilters: PropTypes.func,
+  setRawList: PropTypes.func
 };
 
 FiltersSet.defaultProps = {
   disabled: false,
   filters: {},
   requestToServer: () => {},
-  setFilters: () => {}
+  setFilters: () => {},
+  setRawList: () => {}
 };
 
 const mapStateToProps = ({ cvReducer: { filters, rawList } }) => ({
