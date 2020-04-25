@@ -40,26 +40,26 @@ const CvListContainer = ({
         ...convertFiltersForRequest(newFilters)
       })
         .then((response = {}) => {
-          const { Documents, Total } = response;
+          const { Documents: documents, Total: total } = response;
           const newPagination = {
             current: newFilters.pg || 1,
-            total: Total,
-            pageSize: Documents.length
+            total,
+            pageSize: documents.length
           };
           setPagination(newPagination);
-          setDisplayedCvList(Documents);
+          setDisplayedCvList(documents);
           clearStore
             ? setRawList([
                 {
                   pagination: newPagination,
-                  documents: Documents
+                  documents
                 }
               ])
             : setRawList([
                 ...rawList,
                 {
                   pagination: newPagination,
-                  documents: Documents
+                  documents
                 }
               ]);
         })
@@ -81,7 +81,9 @@ const CvListContainer = ({
     page
   }) =>
     rawListFromStore.length &&
-    rawListFromStore.find(obj => obj.pagination.current === page);
+    rawListFromStore.find(
+      ({ pagination: { current = {} } }) => current === page
+    );
 
   useEffect(() => {
     if (!renderCounter && !rawList.length) {
