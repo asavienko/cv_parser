@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Checkbox, Col, Form, Popover, Row, Slider } from "antd";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -11,24 +11,14 @@ import {
 } from "./FiltersSet.styles";
 import { setFiltersAction, setRawListAction } from "../../../actions/cvActions";
 import { DEFAULT_FILTERS } from "../../../constants/filters";
+import { convertFiltersForRequest } from "../../../utils";
 
-const initialValues = {
-  salaryFrom: 0,
-  salaryTo: 100000,
-  salarySlider: [0, 100000],
-  ageFrom: 0,
-  ageTo: 100,
-  ageSlider: [0, 100]
-};
-
-const FiltersSet = ({
-  disabled,
-  requestToServer,
-  setFilters,
-  filtersFromStore,
-  setRawList
-}) => {
+const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    form.setFieldsValue(filters);
+  });
 
   const onSalarySliderChange = ([salaryFrom, salaryTo]) => {
     form.setFieldsValue({ salaryFrom, salaryTo });
@@ -60,43 +50,17 @@ const FiltersSet = ({
     });
   };
 
-  const onFinish = ({
-    salarySlider,
-    ageSlider,
-    sex: sexArr = [],
-    hasphoto: hasPhotoArr = [],
-    experienceid: experienceIdArr = [],
-    ...filters
-  }) => {
-    const objectSex = sexArr.length === 1 ? { sex: sexArr[0] } : {};
-    const objectPhoto =
-      hasPhotoArr.length === 1 ? { hasPhoto: hasPhotoArr[0] } : {};
-    const objectExperience =
-      experienceIdArr.length === 1 ? { experienceId: experienceIdArr[0] } : {};
-
-    const filtersToSend = {
-      ...filters,
-      ...objectSex,
-      ...objectPhoto,
-      ...objectExperience
-    };
-    setRawList();
-    setFilters(filtersToSend);
-    requestToServer(filtersToSend);
+  const onFinish = newFilters => {
+    setFilters({ ...filters, ...newFilters });
+    requestToServer(newFilters, true);
   };
   const onResetFilters = () => {
-    setFilters({});
-    setRawList();
-    requestToServer(DEFAULT_FILTERS);
+    setFilters();
+    requestToServer(DEFAULT_FILTERS, true);
   };
 
   return (
-    <Form
-      form={form}
-      onFinish={onFinish}
-      name="filterSet"
-      initialValues={initialValues}
-    >
+    <Form form={form} onFinish={onFinish} name="filterSet">
       <Row justify="space-between">
         <Row gutter={24}>
           <Col>
@@ -256,31 +220,38 @@ const FiltersSet = ({
 
 FiltersSet.propTypes = {
   disabled: PropTypes.bool,
-  filtersFromStore: PropTypes.objectOf(PropTypes.string, PropTypes.number),
-  onFinish: PropTypes.func,
-  onResetFilters: PropTypes.func,
+  filters: PropTypes.shape({
+    keywords: PropTypes.string,
+    searchType: PropTypes.string,
+    sort: PropTypes.string,
+    period: PropTypes.number,
+    pg: PropTypes.number,
+    salaryFrom: PropTypes.number,
+    salaryTo: PropTypes.number,
+    ageFrom: PropTypes.number,
+    ageTo: PropTypes.number,
+    salarySlider: PropTypes.array,
+    ageSlider: PropTypes.array
+  }),
   requestToServer: PropTypes.func,
-  setFilters: PropTypes.func,
-  setRawList: PropTypes.func
+  setFilters: PropTypes.func
 };
 
 FiltersSet.defaultProps = {
   disabled: false,
-  filtersFromStore: {},
-  onFinish: () => {},
-  onResetFilters: () => {},
+  filters: {},
   requestToServer: () => {},
-  setFilters: () => {},
-  setRawList: () => {}
+  setFilters: () => {}
 };
+
+const mapStateToProps = ({ cvReducer: { filters, rawList } }) => ({
+  filters,
+  rawList
+});
 
 const mapDispatchToProps = dispatch => ({
   setFilters: filters => dispatch(setFiltersAction(filters)),
   setRawList: rawList => dispatch(setRawListAction(rawList))
-});
-
-const mapStateToProps = ({ filters: filtersFromStore }) => ({
-  filtersFromStore
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FiltersSet);

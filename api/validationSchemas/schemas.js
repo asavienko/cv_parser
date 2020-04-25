@@ -3,7 +3,7 @@ const {
   PASSWORD_VALIDATION,
   PHONE_VALIDATION,
   LETTERS_VALIDATION,
-  LETTERS_NUMBERS_DOTS
+  LETTERS_NUMBERS_DOTS_QUOTES
 } = require("../constants/validation");
 
 const userSignUp = Joi.object({
@@ -41,10 +41,10 @@ const userSignIn = Joi.object({
     .pattern(PASSWORD_VALIDATION)
 });
 
-const header = Joi.object().pattern(LETTERS_NUMBERS_DOTS, [
+const header = Joi.object().pattern(LETTERS_NUMBERS_DOTS_QUOTES, [
   Joi.string()
-    .max(150)
-    .pattern(LETTERS_NUMBERS_DOTS),
+    .max(500)
+    .pattern(LETTERS_NUMBERS_DOTS_QUOTES),
   Joi.number()
 ]);
 

@@ -14,22 +14,19 @@ function HomeContainer({ dictionaryCity, setDictionaryCity }) {
   const [loadingSites, setLoadingSites] = useState(false);
 
   useEffect(() => {
-    if (!dictionaryCity.length) {
-      setLoadingSites(true);
-      getCityDictionary()
-        .then(response => {
-          setLoadingSites(false);
-          response.length && setDictionaryCity(response);
-        })
-        .catch(() => {
-          setLoadingSites(false);
-          openNotification({
-            type: "error",
-            message: "Не удалось загрузить списко городов"
-          });
-        });
-    }
-  }, [dictionaryCity, setDictionaryCity]);
+    if (dictionaryCity.length) return;
+    setLoadingSites(true);
+    getCityDictionary()
+      .then(response => {
+        response.length && setDictionaryCity(response);
+      })
+      .catch(() => {
+        openNotification({
+          type: "error",
+          message: "Не удалось загрузить списко городов"
+        }).finally(() => setLoadingSites(false));
+      });
+  }, [dictionaryCity.length, setDictionaryCity]);
 
   const onSelectFilter = (input, option) =>
     option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
@@ -73,7 +70,4 @@ const mapDispatchToProps = dispatch => ({
     dispatch(setDictionaryCityAction(dictionaryCity))
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(HomeContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);

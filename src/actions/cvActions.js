@@ -2,8 +2,10 @@ import {
   SET_DICTIONARY_CITY,
   SET_FAVORITE,
   SET_FILTERS,
+  SET_PAGINATION,
   SET_RAW_LIST
 } from "../constants/constantsActions";
+import { DEFAULT_FILTERS } from "../constants/filters";
 
 export function setFavoriteListAction(favoriteCvList) {
   return { type: SET_FAVORITE, favoriteCvList };
@@ -15,6 +17,10 @@ export function setRawListAction(rawList = []) {
 export function setDictionaryCityAction(dictionaryCity) {
   return { type: SET_DICTIONARY_CITY, dictionaryCity };
 }
-export function setFiltersAction(filters = {}) {
+export function setFiltersAction(filters = DEFAULT_FILTERS) {
   return { type: SET_FILTERS, filters };
+}
+
+export function setPaginationAction(pagination) {
+  return { type: SET_PAGINATION, pagination };
 }
