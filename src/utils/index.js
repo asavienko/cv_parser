@@ -13,16 +13,11 @@ export const convertFiltersForRequest = ({
   salaryTo = DEFAULT_FILTERS.salaryTo,
   ...filtersSet
 }) => {
-  const objectSex = sex.length === 1 ? { sex: sex[0] } : {};
-  const objectPhoto = hasphoto.length === 1 ? { hasPhoto: hasphoto[0] } : {};
-  const objectExperience =
-    experienceid.length === 1 ? { experienceId: experienceid[0] } : {};
-
   return {
     ...filtersSet,
-    ...objectSex,
-    ...objectPhoto,
-    ...objectExperience,
+    ...(sex.length === 1 ? { sex: sex[0] } : {}),
+    ...(hasphoto.length === 1 ? { hasPhoto: hasphoto[0] } : {}),
+    ...(experienceid.length === 1 ? { experienceId: experienceid[0] } : {}),
     ...(keywords ? { keywords } : {}),
     ...(ageFrom === DEFAULT_FILTERS.ageFrom ? {} : { ageFrom }),
     ...(ageTo === DEFAULT_FILTERS.ageTo ? {} : { ageTo }),

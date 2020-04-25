@@ -18,15 +18,13 @@ function HomeContainer({ dictionaryCity, setDictionaryCity }) {
     setLoadingSites(true);
     getCityDictionary()
       .then(response => {
-        setLoadingSites(false);
         response.length && setDictionaryCity(response);
       })
       .catch(() => {
-        setLoadingSites(false);
         openNotification({
           type: "error",
           message: "Не удалось загрузить списко городов"
-        });
+        }).finally(() => setLoadingSites(false));
       });
   }, [dictionaryCity.length, setDictionaryCity]);
 
