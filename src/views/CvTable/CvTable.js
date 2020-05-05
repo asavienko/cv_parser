@@ -58,11 +58,11 @@ function CvTable({
       title: "Действия",
       key: "action",
       width: 150,
-      render: ({ ResumeId }) => (
+      render: record => (
         <>
           <Popover content="Просмотреть резюме">
             <Button
-              onClick={() => lookResume(ResumeId)}
+              onClick={() => lookResume(record.ResumeId)}
               type="dashed"
               shape="circle"
               icon={<ReadOutlined />}
@@ -70,7 +70,7 @@ function CvTable({
           </Popover>
           <Popover content="Скачать резюме">
             <Button
-              href={`https://rabota.ua/service/cvexport?resumeId=${ResumeId}`}
+              href={`https://rabota.ua/service/cvexport?resumeId=${record.ResumeId}`}
               type="dashed"
               shape="circle"
               icon={<DownloadOutlined />}
@@ -78,7 +78,7 @@ function CvTable({
           </Popover>
           <Popover content="Сохранить">
             <Button
-              disabled={true}
+              disabled
               onClick={() => console.log()}
               type="dashed"
               shape="circle"
@@ -87,7 +87,7 @@ function CvTable({
           </Popover>
           <Popover content="Добавить в избранные">
             <Button
-              disabled={true}
+              disabled
               onClick={() => console.log()}
               type="dashed"
               shape="circle"
@@ -102,7 +102,11 @@ function CvTable({
   return (
     <StyledTable
       size="small"
-      pagination={{ ...pagination }}
+      pagination={{
+        ...pagination,
+        showTotal: (total, range) =>
+          total ? `${range[1] - range[0]} из ${total}` : ""
+      }}
       loading={loading}
       // lookResume={lookResume}
       dataSource={cvData}

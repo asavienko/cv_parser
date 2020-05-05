@@ -16,10 +16,6 @@ import { convertFiltersForRequest } from "../../utils/index";
 import { DEFAULT_FILTERS } from "../../constants/filters";
 import EditFavorite from "./EditFavorite/EditFavorite";
 
-const showTotal = () => ({
-  showTotal: (total, range) => `${range} из ${total}`
-});
-
 const CvListContainer = ({
   rawList,
   setRawList,
@@ -49,10 +45,7 @@ const CvListContainer = ({
             pageSize: documents.length
           };
 
-          setPagination({
-            ...newPagination,
-            ...showTotal()
-          });
+          setPagination(newPagination);
           setDisplayedCvList(documents);
           setRawList(
             mergeExistedStore
@@ -105,15 +98,21 @@ const CvListContainer = ({
         page: pagination.current
       });
       foundResult
-        ? setDisplayedCvList(foundResult.documents) ||
-          setPagination({ ...pagination, ...showTotal() })
+        ? setDisplayedCvList(foundResult.documents) || setPagination(pagination)
         : newRequest(filters);
     }
-  }, [filters, pagination, setPagination, rawList, newRequest, renderCounter]);
+  }, [
+    filters,
+    pagination,
+    setPagination,
+    rawList.length,
+    newRequest,
+    renderCounter
+  ]);
 
   const handleChange = newPagination => {
     const currentFilters = { ...filters, pg: newPagination.current };
-    setPagination({ ...newPagination, ...showTotal() });
+    setPagination(newPagination);
     setFilters(currentFilters);
     const foundResult = findTheSameRawListInStore({
       rawList,
@@ -178,7 +177,6 @@ CvListContainer.propTypes = {
     pg: PropTypes.number,
     salaryFrom: PropTypes.number,
     salaryTo: PropTypes.number,
-
     ageFrom: PropTypes.number,
     ageTo: PropTypes.number,
     salarySlider: PropTypes.array,
