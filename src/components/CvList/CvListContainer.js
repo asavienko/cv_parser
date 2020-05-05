@@ -11,12 +11,14 @@ import {
 } from "../../actions/cvActions";
 import openNotification from "../../views/NotificationComponent";
 import { getCvByRequest } from "../../services/cvRequests";
-import FiltersSet from "./FiltersSet/FiltersSet";
+import FiltersSet from "./FiltersSet";
 import { convertFiltersForRequest } from "../../utils/index";
 import { DEFAULT_FILTERS } from "../../constants/filters";
 import EditFavorite from "./EditFavorite/EditFavorite";
 
-const showTotal = total => `Всего: ${total}`;
+const showTotal = () => ({
+  showTotal: (total, range) => `${range} из ${total}`
+});
 
 const CvListContainer = ({
   rawList,
@@ -49,7 +51,7 @@ const CvListContainer = ({
 
           setPagination({
             ...newPagination,
-            showTotal
+            ...showTotal()
           });
           setDisplayedCvList(documents);
           setRawList(
@@ -104,14 +106,14 @@ const CvListContainer = ({
       });
       foundResult
         ? setDisplayedCvList(foundResult.documents) ||
-          setPagination({ ...pagination, showTotal })
+          setPagination({ ...pagination, ...showTotal() })
         : newRequest(filters);
     }
   }, [filters, pagination, setPagination, rawList, newRequest, renderCounter]);
 
   const handleChange = newPagination => {
     const currentFilters = { ...filters, pg: newPagination.current };
-    setPagination({ ...newPagination, showTotal });
+    setPagination({ ...newPagination, ...showTotal() });
     setFilters(currentFilters);
     const foundResult = findTheSameRawListInStore({
       rawList,

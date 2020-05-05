@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
-import { Button, Checkbox, Col, Form, Row, Slider } from "antd";
+import React from "react";
+import { Button, Checkbox, Col, Form, Row, Select, Slider } from "antd";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
 import {
   AgeInput,
   SalaryInput,
@@ -11,55 +10,25 @@ import {
   StyledPopover,
   StyledPopoverContent
 } from "./FiltersSet.styles";
-import { setFiltersAction } from "../../../actions/cvActions";
-import { DEFAULT_FILTERS } from "../../../constants/filters";
+import { StyledResponsiveSelect } from "../../Home/Home.styles";
 
-const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
-  const [form] = Form.useForm();
-
-  useEffect(() => {
-    form.setFieldsValue(filters);
-  });
-
-  const onSalarySliderChange = ([salaryFrom, salaryTo]) => {
-    form.setFieldsValue({ salaryFrom, salaryTo });
-  };
-  const onSalaryFromChange = value => {
-    const [, sliderTo] = form.getFieldValue("salarySlider");
-    form.setFieldsValue({ salarySlider: [value, sliderTo] });
-  };
-  const onSalaryToChange = value => {
-    const [sliderFrom] = form.getFieldValue("salarySlider");
-    form.setFieldsValue({ salarySlider: [sliderFrom, value] });
-  };
-
-  const onAgeSliderChange = ([ageFrom, ageTo]) => {
-    form.setFieldsValue({ ageFrom, ageTo });
-  };
-  const onAgeFromChange = value => {
-    const [, sliderTo] = form.getFieldValue("ageSlider");
-    form.setFieldsValue({ ageSlider: [value, sliderTo] });
-  };
-  const onAgeToChange = value => {
-    const [sliderFrom] = form.getFieldValue("ageSlider");
-    form.setFieldsValue({ ageSlider: [sliderFrom, value] });
-  };
-
-  const onExperienceChange = checkedValue => {
-    form.setFieldsValue({
-      experienceid: [checkedValue[checkedValue.length - 1]]
-    });
-  };
-
-  const onFinish = newFilters => {
-    setFilters({ ...filters, ...newFilters });
-    requestToServer(newFilters, false);
-  };
-  const onResetFilters = () => {
-    setFilters();
-    requestToServer(DEFAULT_FILTERS, false);
-  };
-
+const FiltersSet = ({
+  form,
+  disabled,
+  requestToServer,
+  setFilters,
+  filters,
+  dictionaryCity,
+  onSalarySliderChange,
+  onSalaryFromChange,
+  onSalaryToChange,
+  onAgeSliderChange,
+  onAgeFromChange,
+  onAgeToChange,
+  onExperienceChange,
+  onFinish,
+  onResetFilters
+}) => {
   return (
     <Form form={form} onFinish={onFinish} name="filterSet">
       <Row justify="space-between">
@@ -68,7 +37,7 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
             <StyledPopover
               disabled={disabled}
               trigger="click"
-              content={(
+              content={
                 <StyledPopoverContent>
                   <Form.Item name="salarySlider">
                     <Slider
@@ -78,7 +47,8 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
                       step={100}
                       onChange={onSalarySliderChange}
                       tipFormatter={value =>
-                        `${value} грн`.replace(/(100000)/, "$1+")}
+                        `${value} грн`.replace(/(100000)/, "$1+")
+                      }
                     />
                   </Form.Item>
                   <Row>
@@ -96,12 +66,13 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
                         step={100}
                         onChange={onSalaryToChange}
                         formatter={value =>
-                          `${value}`.replace(/(100000)/, "$1+")}
+                          `${value}`.replace(/(100000)/, "$1+")
+                        }
                       />
                     </Form.Item>
                   </Row>
                 </StyledPopoverContent>
-              )}
+              }
               title="Ожидаемая зарплата"
               key="salary"
             >
@@ -111,7 +82,7 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
           <StyledCol disabled={disabled}>
             <StyledPopover
               disabled={disabled}
-              content={(
+              content={
                 <StyledPopoverContent>
                   <Form.Item name="ageSlider">
                     <Slider
@@ -131,7 +102,7 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
                     </Form.Item>
                   </Row>
                 </StyledPopoverContent>
-              )}
+              }
               title="Возраст кандидата"
               trigger="click"
               key="age"
@@ -142,7 +113,7 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
           <StyledCol disabled={disabled}>
             <StyledPopover
               disabled={disabled}
-              content={(
+              content={
                 <Form.Item name="sex">
                   <Checkbox.Group
                     options={[
@@ -151,7 +122,7 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
                     ]}
                   />
                 </Form.Item>
-              )}
+              }
               title="Пол"
               trigger="click"
               key="sex"
@@ -162,7 +133,7 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
           <StyledCol disabled={disabled}>
             <StyledPopover
               disabled={disabled}
-              content={(
+              content={
                 <Form.Item name="hasphoto">
                   <Checkbox.Group
                     options={[
@@ -171,7 +142,7 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
                     ]}
                   />
                 </Form.Item>
-              )}
+              }
               title="Фото"
               trigger="click"
               key="hasPhoto"
@@ -182,7 +153,7 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
           <StyledCol disabled={disabled}>
             <StyledPopover
               disabled={disabled}
-              content={(
+              content={
                 <Form.Item name="experienceid">
                   <Checkbox.Group onChange={onExperienceChange}>
                     <Checkbox value={1}>От 1-го до 2-х лет</Checkbox>
@@ -190,12 +161,42 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
                     <Checkbox value={3}> Более 5-ти лет</Checkbox>
                   </Checkbox.Group>
                 </Form.Item>
-              )}
+              }
               title="Опыт работы на данной позиции"
               trigger="click"
               key="experience"
             >
               <Button disabled={disabled}>Опыт работы</Button>
+            </StyledPopover>
+          </StyledCol>
+          <StyledCol disabled={disabled}>
+            <StyledPopover
+              disabled={disabled}
+              content={
+                <Form.Item name="regionId">
+                  <StyledResponsiveSelect
+                    defaultActiveFirstOption
+                    showSearch
+                    notFoundContent="Город не найден"
+                    loading={disabled}
+                    size="large"
+                  >
+                    <Select.Option value="Вся Украина" key={0}>
+                      Вся Украина
+                    </Select.Option>
+                    {dictionaryCity.map(record => (
+                      <Select.Option value={record.ru} key={record.id}>
+                        {record.ru}
+                      </Select.Option>
+                    ))}
+                  </StyledResponsiveSelect>
+                </Form.Item>
+              }
+              title="Выберите город"
+              trigger="click"
+              key="city"
+            >
+              <Button disabled={disabled}>Город</Button>
             </StyledPopover>
           </StyledCol>
         </Row>
@@ -223,6 +224,7 @@ const FiltersSet = ({ disabled, requestToServer, setFilters, filters }) => {
 };
 
 FiltersSet.propTypes = {
+  form: PropTypes.objectOf(PropTypes.any),
   disabled: PropTypes.bool,
   filters: PropTypes.shape({
     keywords: PropTypes.string,
@@ -238,23 +240,35 @@ FiltersSet.propTypes = {
     ageSlider: PropTypes.array
   }),
   requestToServer: PropTypes.func,
-  setFilters: PropTypes.func
+  setFilters: PropTypes.func,
+  dictionaryCity: PropTypes.arrayOf(PropTypes.object),
+  onSalarySliderChange: PropTypes.func,
+  onSalaryFromChange: PropTypes.func,
+  onSalaryToChange: PropTypes.func,
+  onAgeSliderChange: PropTypes.func,
+  onAgeFromChange: PropTypes.func,
+  onAgeToChange: PropTypes.func,
+  onExperienceChange: PropTypes.func,
+  onFinish: PropTypes.func,
+  onResetFilters: PropTypes.func
 };
 
 FiltersSet.defaultProps = {
+  form: {},
   disabled: false,
   filters: {},
   requestToServer: () => {},
-  setFilters: () => {}
+  setFilters: () => {},
+  dictionaryCity: [{ id: 0, ru: "Вся Украина" }],
+  onSalarySliderChange: () => {},
+  onSalaryFromChange: () => {},
+  onSalaryToChange: () => {},
+  onAgeSliderChange: () => {},
+  onAgeFromChange: () => {},
+  onAgeToChange: () => {},
+  onExperienceChange: () => {},
+  onFinish: () => {},
+  onResetFilters: () => {}
 };
 
-const mapStateToProps = ({ cvReducer: { filters, rawList } }) => ({
-  filters,
-  rawList
-});
-
-const mapDispatchToProps = dispatch => ({
-  setFilters: filters => dispatch(setFiltersAction(filters))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(FiltersSet);
+export default FiltersSet;

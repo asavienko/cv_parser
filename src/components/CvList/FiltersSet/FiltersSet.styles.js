@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Button, Col, Divider, InputNumber, Popover, Radio } from "antd";
+import {Col, Divider, InputNumber, Popover, Radio} from "antd";
 
 export const SalaryInput = styled(InputNumber)`
   width: 90px;
@@ -34,8 +34,8 @@ export const StyledPopoverContent = styled.div`
 `;
 
 export const StyledPopover = styled(Popover)`
-  pointer-events: ${({ disabled }) => (disabled ? `none` : `unset`)};
-`;
+         pointer-events: ${({ disabled }) => (disabled ? `none` : `unset`)};
+       `;
 
 export const StyledCol = styled(Col)`
   cursor: ${({ disabled }) => (disabled ? `not-allowed` : `unset`)};

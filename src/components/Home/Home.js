@@ -13,7 +13,7 @@ const Home = ({
   onSelectFilter,
   onSelectChange,
   dictionaryCity,
-  loadingSites
+  loadingCites
 }) => (
   <Row span={22}>
     <Col xs={24} sm={24} lg={7} xl={6}>
@@ -23,7 +23,7 @@ const Home = ({
         filterOption={onSelectFilter}
         onChange={onSelectChange}
         notFoundContent="Город не найден"
-        loading={loadingSites}
+        loading={loadingCites}
         size="large"
       >
         <Select.Option value="Вся Украина" key={0}>
@@ -58,14 +58,14 @@ Home.propTypes = {
   onSelectFilter: PropTypes.func,
   onSelectChange: PropTypes.func,
   dictionaryCity: PropTypes.arrayOf(PropTypes.object),
-  loadingSites: PropTypes.bool
+  loadingCites: PropTypes.bool
 };
 Home.defaultProps = {
   onSearchPressed: () => {},
   onSelectFilter: () => {},
   onSelectChange: () => {},
   dictionaryCity: [{ id: 0, ru: "Харьков" }],
-  loadingSites: false
+  loadingCites: false
 };
 
 export default Home;

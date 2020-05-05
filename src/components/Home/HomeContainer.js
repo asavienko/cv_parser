@@ -11,20 +11,22 @@ function HomeContainer({ dictionaryCity, setDictionaryCity }) {
     regionId: 0,
     keywords: ""
   });
-  const [loadingSites, setLoadingSites] = useState(false);
+  const [loadingCites, setLoadingCites] = useState(false);
 
   useEffect(() => {
     if (dictionaryCity.length) return;
-    setLoadingSites(true);
+    setLoadingCites(true);
     getCityDictionary()
       .then(response => {
         response.length && setDictionaryCity(response);
+        setLoadingCites(false);
       })
       .catch(() => {
+        setLoadingCites(false);
         openNotification({
           type: "error",
           message: "Не удалось загрузить списко городов"
-        }).finally(() => setLoadingSites(false));
+        });
       });
   }, [dictionaryCity.length, setDictionaryCity]);
 
@@ -46,7 +48,7 @@ function HomeContainer({ dictionaryCity, setDictionaryCity }) {
       onSelectFilter={onSelectFilter}
       onSelectChange={onSelectChange}
       dictionaryCity={dictionaryCity}
-      loadingSites={loadingSites}
+      loadingCites={loadingCites}
     />
   );
 }

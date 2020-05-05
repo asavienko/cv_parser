@@ -78,7 +78,7 @@ function CvTable({
           </Popover>
           <Popover content="Сохранить">
             <Button
-              disabled="true"
+              disabled={true}
               onClick={() => console.log()}
               type="dashed"
               shape="circle"
@@ -87,7 +87,7 @@ function CvTable({
           </Popover>
           <Popover content="Добавить в избранные">
             <Button
-              disabled="true"
+              disabled={true}
               onClick={() => console.log()}
               type="dashed"
               shape="circle"
