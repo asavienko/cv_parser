@@ -16,6 +16,8 @@ import { convertFiltersForRequest } from "../../utils/index";
 import { DEFAULT_FILTERS } from "../../constants/filters";
 import EditFavorite from "./EditFavorite/EditFavorite";
 
+const showTotal = total => `Всего: ${total}`;
+
 const CvListContainer = ({
   rawList,
   setRawList,
@@ -45,7 +47,10 @@ const CvListContainer = ({
             pageSize: documents.length
           };
 
-          setPagination(newPagination);
+          setPagination({
+            ...newPagination,
+            showTotal
+          });
           setDisplayedCvList(documents);
           setRawList(
             mergeExistedStore
@@ -98,14 +103,15 @@ const CvListContainer = ({
         page: pagination.current
       });
       foundResult
-        ? setDisplayedCvList(foundResult.documents) || setPagination(pagination)
+        ? setDisplayedCvList(foundResult.documents) ||
+          setPagination({ ...pagination, showTotal })
         : newRequest(filters);
     }
   }, [filters, pagination, setPagination, rawList, newRequest, renderCounter]);
 
   const handleChange = newPagination => {
     const currentFilters = { ...filters, pg: newPagination.current };
-    setPagination(newPagination);
+    setPagination({ ...newPagination, showTotal });
     setFilters(currentFilters);
     const foundResult = findTheSameRawListInStore({
       rawList,
@@ -170,6 +176,7 @@ CvListContainer.propTypes = {
     pg: PropTypes.number,
     salaryFrom: PropTypes.number,
     salaryTo: PropTypes.number,
+
     ageFrom: PropTypes.number,
     ageTo: PropTypes.number,
     salarySlider: PropTypes.array,
