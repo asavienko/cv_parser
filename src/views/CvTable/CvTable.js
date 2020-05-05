@@ -33,6 +33,7 @@ function CvTable({
       title: "Должность",
       dataIndex: "Speciality",
       key: "speciality",
+      ellipsis: true,
       render: speciality => <EllipsisTooltip title={speciality} />
     },
     {
@@ -56,7 +57,7 @@ function CvTable({
     {
       title: "Действия",
       key: "action",
-      width: 130,
+      width: 150,
       render: ({ ResumeId }) => (
         <>
           <Popover content="Просмотреть резюме">
