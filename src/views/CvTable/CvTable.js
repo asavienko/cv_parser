@@ -1,12 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Button, Popover } from "antd";
+import ReadOutlined from "@ant-design/icons/lib/icons/ReadOutlined";
+import DownloadOutlined from "@ant-design/icons/lib/icons/DownloadOutlined";
+import SaveOutlined from "@ant-design/icons/lib/icons/SaveOutlined";
+import StarOutlined from "@ant-design/icons/lib/icons/StarOutlined";
 import { StyledTable } from "./CvTable.styles";
 import EllipsisTooltip from "./EllipsisTooltip";
 
 function CvTable({
   cvData,
   loading,
-  onRow,
+  lookResume,
   handleChange,
   rowSelection,
   pagination
@@ -47,6 +52,49 @@ function CvTable({
       dataIndex: "UpdatedDate",
       key: "lastModified",
       width: 140
+    },
+    {
+      title: "Действия",
+      key: "action",
+      width: 130,
+      render: ({ ResumeId }) => (
+        <>
+          <Popover content="Просмотреть резюме">
+            <Button
+              onClick={() => lookResume(ResumeId)}
+              type="dashed"
+              shape="circle"
+              icon={<ReadOutlined />}
+            />
+          </Popover>
+          <Popover content="Скачать резюме">
+            <Button
+              href={`https://rabota.ua/service/cvexport?resumeId=${ResumeId}`}
+              type="dashed"
+              shape="circle"
+              icon={<DownloadOutlined />}
+            />
+          </Popover>
+          <Popover content="Сохранить">
+            <Button
+              disabled="true"
+              onClick={() => console.log()}
+              type="dashed"
+              shape="circle"
+              icon={<SaveOutlined />}
+            />
+          </Popover>
+          <Popover content="Добавить в избранные">
+            <Button
+              disabled="true"
+              onClick={() => console.log()}
+              type="dashed"
+              shape="circle"
+              icon={<StarOutlined />}
+            />
+          </Popover>
+        </>
+      )
     }
   ];
 
@@ -55,7 +103,7 @@ function CvTable({
       size="small"
       pagination={{ ...pagination }}
       loading={loading}
-      onRow={onRow}
+      // lookResume={lookResume}
       dataSource={cvData}
       onChange={handleChange}
       columns={columns}
@@ -71,7 +119,7 @@ CvTable.propTypes = {
   cvData: PropTypes.arrayOf(PropTypes.object),
   loading: PropTypes.bool,
   rowSelection: PropTypes.bool,
-  onRow: PropTypes.func,
+  lookResume: PropTypes.func,
   handleChange: PropTypes.func,
   pagination: PropTypes.objectOf(PropTypes.number)
 };
@@ -79,7 +127,7 @@ CvTable.defaultProps = {
   cvData: [{}],
   loading: false,
   rowSelection: false,
-  onRow: () => {},
+  lookResume: () => {},
   handleChange: () => {},
   pagination: { total: 0, pageSize: 0, current: 1 }
 };

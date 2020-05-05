@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import * as numeral from "numeral";
 import PropTypes from "prop-types";
 import CvTable from "../../views/CvTable";
-import EditFavoriteListButton from "../../views/EditFavoriteListButton";
+import EditFavoriteListButton from "../CvList/EditFavorite/EditFavoriteListButton";
 import CvInformation from "../../views/CvInformation";
 import { setFavoriteListAction } from "../../actions/cvActions";
 
