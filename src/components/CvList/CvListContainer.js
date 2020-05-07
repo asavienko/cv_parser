@@ -1,19 +1,15 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { connect } from "react-redux";
+import React, {useCallback, useEffect, useState} from "react";
+import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import { Col, Row } from "antd";
+import {Col, Row} from "antd";
 import CvInformation from "../../views/CvInformation";
 import CvTable from "../../views/CvTable";
-import {
-  setFiltersAction,
-  setPaginationAction,
-  setRawListAction
-} from "../../actions/cvActions";
+import {setFiltersAction, setPaginationAction, setRawListAction} from "../../actions/cvActions";
 import openNotification from "../../views/NotificationComponent";
-import { getCvByRequest } from "../../services/cvRequests";
+import {getCvByRequest} from "../../services/cvRequests";
 import FiltersSet from "./FiltersSet";
-import { convertFiltersForRequest } from "../../utils/index";
-import { DEFAULT_FILTERS } from "../../constants/filters";
+import {convertFiltersForRequest} from "../../utils/index";
+import {DEFAULT_FILTERS} from "../../constants/filters";
 import EditFavorite from "./EditFavorite/EditFavorite";
 
 const CvListContainer = ({

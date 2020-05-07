@@ -1,6 +1,6 @@
 export const DEFAULT_FILTERS = {
   keywords: "",
-  // regionId: 0,
+  regionId: 0,
   period: 6,
   searchType: "everywhere",
   sort: "date",

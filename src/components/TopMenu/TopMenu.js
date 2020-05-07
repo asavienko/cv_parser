@@ -3,6 +3,7 @@ import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import { Menu } from "antd";
 import PropTypes from "prop-types";
+import SaveOutlined from "@ant-design/icons/lib/icons/SaveOutlined";
 import { clearCookieStorage } from "../../services/cookieStorage";
 import {
   employLogo,
@@ -38,8 +39,12 @@ function TopMenu({ location: { pathname } }) {
         <Item key="home">
           <Link to="/">Главная</Link>
         </Item>
-        <Item key="favorites">
-          <Link to="/favorites">Сохраненные</Link>
+        <Item key="saved">
+          <Link to="/saved">
+            Сохраненные 
+            {' '}
+            <SaveOutlined />
+          </Link>
         </Item>
         <Item key="list">
           <Link to="/list">Список</Link>

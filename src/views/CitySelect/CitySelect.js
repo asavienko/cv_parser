@@ -1,6 +1,6 @@
-import {Select} from "antd";
+import { Select } from "antd";
 import React from "react";
-import {StyledResponsiveSelect} from "./CitySelect.style";
+import { StyledResponsiveSelect } from "./CitySelect.style";
 
 const CitySelect = ({
   onSelectFilter,
@@ -27,5 +27,10 @@ const CitySelect = ({
     ))}
   </StyledResponsiveSelect>
 );
+
+CitySelect.defaultProps = {
+  onSelectFilter: () => {},
+  onSelectChange: () => {}
+};
 
 export default CitySelect;

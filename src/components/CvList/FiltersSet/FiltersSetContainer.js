@@ -17,6 +17,7 @@ const FiltersSetContainer = ({
 
   useEffect(() => {
     form.setFieldsValue(filters);
+    // if(!dictionaryCity.lengh){}
   });
 
   const onSalarySliderChange = ([salaryFrom, salaryTo]) => {
@@ -79,14 +80,6 @@ const FiltersSetContainer = ({
   );
 };
 
-const mapStateToProps = ({
-  cvReducer: { filters, rawList, dictionaryCity }
-}) => ({
-  filters,
-  rawList,
-  dictionaryCity
-});
-
 FiltersSetContainer.propTypes = {
   disabled: PropTypes.bool,
   filters: PropTypes.shape({
@@ -115,8 +108,17 @@ FiltersSetContainer.defaultProps = {
   dictionaryCity: [{ id: 0, ru: "Вся Украина" }]
 };
 
+const mapStateToProps = ({
+  cvReducer: { filters, rawList, dictionaryCity }
+}) => ({
+  filters,
+  rawList,
+  dictionaryCity
+});
+
 const mapDispatchToProps = dispatch => ({
-  setFilters: filters => dispatch(setFiltersAction(filters))
+  setFilters: filters => dispatch(setFiltersAction(filters)),
+  setDictionaryCity: dictionaryCity => dispatch(dictionaryCity(dictionaryCity))
 });
 
 export default connect(

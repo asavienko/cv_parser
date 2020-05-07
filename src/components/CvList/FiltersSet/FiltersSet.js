@@ -102,12 +102,12 @@ const FiltersSet = ({
             <StyledPopover
               disabled={disabled}
               content={
-                <CitySelect
-                  disabled={disabled}
-                  dictionaryCity={dictionaryCity}
-                  onSelectFilter
-                  onSelectChange
-                />
+                <Form.Item name="regionId">
+                  <CitySelect
+                    disabled={disabled}
+                    dictionaryCity={dictionaryCity}
+                  />
+                </Form.Item>
               }
               title="Выберите город"
               trigger="click"

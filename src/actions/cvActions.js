@@ -14,7 +14,7 @@ export function setRawListAction(rawList = []) {
   return { type: SET_RAW_LIST, rawList };
 }
 
-export function setDictionaryCityAction(dictionaryCity) {
+export function setDictionaryCityAction(dictionaryCity = []) {
   return { type: SET_DICTIONARY_CITY, dictionaryCity };
 }
 export function setFiltersAction(filters = DEFAULT_FILTERS) {

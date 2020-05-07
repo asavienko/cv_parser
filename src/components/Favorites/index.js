@@ -1,3 +1,3 @@
-import Favorites from "./Favorites";
+import Saved from "./Saved";
 
-export default Favorites;
+export default Saved;

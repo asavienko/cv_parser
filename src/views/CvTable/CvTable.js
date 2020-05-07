@@ -1,12 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Button, Popover } from "antd";
+import {Popover} from "antd";
 import ReadOutlined from "@ant-design/icons/lib/icons/ReadOutlined";
 import DownloadOutlined from "@ant-design/icons/lib/icons/DownloadOutlined";
-import SaveOutlined from "@ant-design/icons/lib/icons/SaveOutlined";
 import StarOutlined from "@ant-design/icons/lib/icons/StarOutlined";
-import { StyledTable } from "./CvTable.styles";
-import EllipsisTooltip from "./EllipsisTooltip";
+import {StyledButton, StyledTable} from "./CvTable.styles";
 
 function CvTable({
   cvData,
@@ -33,8 +31,7 @@ function CvTable({
       title: "Должность",
       dataIndex: "Speciality",
       key: "speciality",
-      ellipsis: true,
-      render: speciality => <EllipsisTooltip title={speciality} />
+      ellipsis: true
     },
     {
       title: "Город",
@@ -57,40 +54,34 @@ function CvTable({
     {
       title: "Действия",
       key: "action",
-      width: 150,
+      width: 110,
       render: record => (
         <>
           <Popover content="Просмотреть резюме">
-            <Button
+            <StyledButton
               onClick={() => lookResume(record.ResumeId)}
               type="dashed"
               shape="circle"
+              size="small"
               icon={<ReadOutlined />}
             />
           </Popover>
           <Popover content="Скачать резюме">
-            <Button
+            <StyledButton
               href={`https://rabota.ua/service/cvexport?resumeId=${record.ResumeId}`}
               type="dashed"
               shape="circle"
+              size="small"
               icon={<DownloadOutlined />}
             />
           </Popover>
-          <Popover content="Сохранить">
-            <Button
-              disabled
-              onClick={() => console.log()}
-              type="dashed"
-              shape="circle"
-              icon={<SaveOutlined />}
-            />
-          </Popover>
           <Popover content="Добавить в избранные">
-            <Button
+            <StyledButton
               disabled
               onClick={() => console.log()}
               type="dashed"
               shape="circle"
+              size="small"
               icon={<StarOutlined />}
             />
           </Popover>
