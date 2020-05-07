@@ -101,14 +101,7 @@ const CvListContainer = ({
         ? setDisplayedCvList(foundResult.documents) || setPagination(pagination)
         : newRequest(filters);
     }
-  }, [
-    filters,
-    pagination,
-    setPagination,
-    rawList.length,
-    newRequest,
-    renderCounter
-  ]);
+  }, [filters, pagination, setPagination, rawList, newRequest, renderCounter]);
 
   const handleChange = newPagination => {
     const currentFilters = { ...filters, pg: newPagination.current };

@@ -1,12 +1,9 @@
 import React from "react";
-import { Col, Row, Select } from "antd";
+import { Col, Row } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import PropTypes from "prop-types";
-import {
-  ResponsiveInput,
-  StyledButton,
-  StyledResponsiveSelect
-} from "./Home.styles";
+import { ResponsiveInput, StyledButton } from "./Home.styles";
+import CitySelect from "../../views/CitySelect/CitySelect";
 
 const Home = ({
   onSearchPressed,
@@ -17,24 +14,12 @@ const Home = ({
 }) => (
   <Row span={22}>
     <Col xs={24} sm={24} lg={7} xl={6}>
-      <StyledResponsiveSelect
-        defaultValue="Вся Украина"
-        showSearch
-        filterOption={onSelectFilter}
-        onChange={onSelectChange}
-        notFoundContent="Город не найден"
-        loading={loadingCites}
-        size="large"
-      >
-        <Select.Option value="Вся Украина" key={0}>
-          Вся Украина
-        </Select.Option>
-        {dictionaryCity.map(record => (
-          <Select.Option value={record.ru} key={record.id}>
-            {record.ru}
-          </Select.Option>
-        ))}
-      </StyledResponsiveSelect>
+      <CitySelect
+        onSelectFilter={onSelectFilter}
+        onSelectChange={onSelectChange}
+        loadingCites={loadingCites}
+        dictionaryCity={dictionaryCity}
+      />
     </Col>
     <Col xs={24} sm={24} lg={14} xl={16}>
       <ResponsiveInput placeholder="Введите ключивые слова" size="large" />
