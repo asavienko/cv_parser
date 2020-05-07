@@ -1,24 +1,44 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Form } from "antd";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { DEFAULT_FILTERS } from "../../../constants/filters";
 import FiltersSet from "./FiltersSet";
-import { setFiltersAction } from "../../../actions/cvActions";
+import {
+  setDictionaryCityAction,
+  setFiltersAction
+} from "../../../actions/cvActions";
+import { getCityDictionary } from "../../../services/dictionaryService";
+import openNotification from "../../../views/NotificationComponent";
 
 const FiltersSetContainer = ({
   disabled,
   requestToServer,
   setFilters,
   filters,
-  dictionaryCity
+  dictionaryCity,
+  setDictionaryCity
 }) => {
   const [form] = Form.useForm();
 
+  const [cityLoader, setCityLoader] = useState(false);
+
   useEffect(() => {
     form.setFieldsValue(filters);
-    // if(!dictionaryCity.lengh){}
-  });
+    if (!dictionaryCity.lengh) {
+      setCityLoader(true);
+      getCityDictionary()
+        .then(list => setDictionaryCity(list))
+        .catch(e => {
+          console.log(e);
+          openNotification({
+            type: "error",
+            message: "Не удалось загрузить списко городов"
+          });
+        })
+        .finally(() => setCityLoader(false));
+    }
+  }, [form, filters, dictionaryCity.lengh, setDictionaryCity]);
 
   const onSalarySliderChange = ([salaryFrom, salaryTo]) => {
     form.setFieldsValue({ salaryFrom, salaryTo });
@@ -51,6 +71,7 @@ const FiltersSetContainer = ({
   };
 
   const onFinish = newFilters => {
+    console.log(form.getFieldsValue());
     setFilters({ ...filters, ...newFilters });
     requestToServer(newFilters, false);
   };
@@ -67,6 +88,7 @@ const FiltersSetContainer = ({
       setFilters={setFilters}
       filters={filters}
       dictionaryCity={dictionaryCity}
+      cityLoader={cityLoader}
       onSalarySliderChange={onSalarySliderChange}
       onSalaryFromChange={onSalaryFromChange}
       onSalaryToChange={onSalaryToChange}
@@ -97,7 +119,8 @@ FiltersSetContainer.propTypes = {
   }),
   requestToServer: PropTypes.func,
   setFilters: PropTypes.func,
-  dictionaryCity: PropTypes.arrayOf(PropTypes.object)
+  dictionaryCity: PropTypes.arrayOf(PropTypes.object),
+  setDictionaryCity: PropTypes.func
 };
 
 FiltersSetContainer.defaultProps = {
@@ -105,7 +128,8 @@ FiltersSetContainer.defaultProps = {
   filters: {},
   requestToServer: () => {},
   setFilters: () => {},
-  dictionaryCity: [{ id: 0, ru: "Вся Украина" }]
+  dictionaryCity: [{ id: 0, ru: "Вся Украина" }],
+  setDictionaryCity: () => {}
 };
 
 const mapStateToProps = ({
@@ -118,7 +142,8 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = dispatch => ({
   setFilters: filters => dispatch(setFiltersAction(filters)),
-  setDictionaryCity: dictionaryCity => dispatch(dictionaryCity(dictionaryCity))
+  setDictionaryCity: dictionaryCity =>
+    dispatch(setDictionaryCityAction(dictionaryCity))
 });
 
 export default connect(

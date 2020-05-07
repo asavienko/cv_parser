@@ -6,22 +6,24 @@ const CitySelect = ({
   onSelectFilter,
   onSelectChange,
   loadingCites,
-  dictionaryCity
+  dictionaryCity,
+  ...props
 }) => (
   <StyledResponsiveSelect
-    defaultValue="Вся Украина"
+    defaultValue={0}
     showSearch
     filterOption={onSelectFilter}
     onChange={onSelectChange}
     notFoundContent="Город не найден"
     loading={loadingCites}
     size="large"
+    {...props}
   >
-    <Select.Option value="Вся Украина" key={0}>
+    <Select.Option value={0} key={0}>
       Вся Украина
     </Select.Option>
     {dictionaryCity.map(record => (
-      <Select.Option value={record.ru} key={record.id}>
+      <Select.Option value={record.id} key={record.id}>
         {record.ru}
       </Select.Option>
     ))}

@@ -1,7 +1,12 @@
 import React from "react";
 import { Button, Col, Form, Row } from "antd";
 import PropTypes from "prop-types";
-import { StyledCol, StyledDivider, StyledPopover } from "./FiltersSet.styles";
+import {
+  StyledCityWrapper,
+  StyledCol,
+  StyledDivider,
+  StyledPopover
+} from "./FiltersSet.styles";
 import SalarySliderWithInputs from "./ViewComponents/SalarySliderWithInputs";
 import AgeSliderWithInputs from "./ViewComponents/AgeSliderWithInputs";
 import HasPhotoCheckboxGroup from "./ViewComponents/HasPhotoCheckboxGroup";
@@ -13,6 +18,7 @@ const FiltersSet = ({
   form,
   disabled,
   dictionaryCity,
+  cityLoader,
   onSalarySliderChange,
   onSalaryFromChange,
   onSalaryToChange,
@@ -31,13 +37,13 @@ const FiltersSet = ({
             <StyledPopover
               disabled={disabled}
               trigger="click"
-              content={(
+              content={
                 <SalarySliderWithInputs
                   onSalarySliderChange={onSalarySliderChange}
                   onSalaryFromChange={onSalaryFromChange}
                   onSalaryToChange={onSalaryToChange}
                 />
-              )}
+              }
               title="Ожидаемая зарплата"
               key="salary"
             >
@@ -47,13 +53,13 @@ const FiltersSet = ({
           <StyledCol disabled={disabled}>
             <StyledPopover
               disabled={disabled}
-              content={(
+              content={
                 <AgeSliderWithInputs
                   onAgeSliderChange={onAgeSliderChange}
                   onAgeFromChange={onAgeFromChange}
                   onAgeToChange={onAgeToChange}
                 />
-              )}
+              }
               title="Возраст кандидата"
               trigger="click"
               key="age"
@@ -86,11 +92,11 @@ const FiltersSet = ({
           <StyledCol disabled={disabled}>
             <StyledPopover
               disabled={disabled}
-              content={(
+              content={
                 <ExperienceCheckboxGroup
                   onExperienceChange={onExperienceChange}
                 />
-              )}
+              }
               title="Опыт работы на данной позиции"
               trigger="click"
               key="experience"
@@ -101,14 +107,17 @@ const FiltersSet = ({
           <StyledCol disabled={disabled}>
             <StyledPopover
               disabled={disabled}
-              content={(
-                <Form.Item name="regionId">
-                  <CitySelect
-                    disabled={disabled}
-                    dictionaryCity={dictionaryCity}
-                  />
-                </Form.Item>
-              )}
+              content={
+                <StyledCityWrapper>
+                  <Form.Item name="regionId" shouldUpdate>
+                    <CitySelect
+                      disabled={disabled}
+                      dictionaryCity={dictionaryCity}
+                      loadingCites={cityLoader || disabled}
+                    />
+                  </Form.Item>
+                </StyledCityWrapper>
+              }
               title="Выберите город"
               trigger="click"
               key="city"
@@ -144,6 +153,7 @@ FiltersSet.propTypes = {
   form: PropTypes.objectOf(PropTypes.any),
   disabled: PropTypes.bool,
   dictionaryCity: PropTypes.arrayOf(PropTypes.object),
+  cityLoader: PropTypes.bool,
   onSalarySliderChange: PropTypes.func,
   onSalaryFromChange: PropTypes.func,
   onSalaryToChange: PropTypes.func,
@@ -159,6 +169,7 @@ FiltersSet.defaultProps = {
   form: {},
   disabled: false,
   dictionaryCity: [{ id: 0, ru: "Вся Украина" }],
+  cityLoader: false,
   onSalarySliderChange: () => {},
   onSalaryFromChange: () => {},
   onSalaryToChange: () => {},

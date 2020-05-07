@@ -7,6 +7,8 @@ const joiMiddleware = () => ({ path, body, headers }, res, next) => {
   const responseHeaders = useSchema.header.validate(headers);
   const response = { ...responseBody, ...responseHeaders };
   const error = _.get(response, "error", {});
+  console.log(error);
+  console.log(error.details);
   error.name ? res.status(422).json({ err: error.name }) : next();
 };
 

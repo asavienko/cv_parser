@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import { Menu } from "antd";
 import PropTypes from "prop-types";
 import SaveOutlined from "@ant-design/icons/lib/icons/SaveOutlined";
+import HomeOutlined from "@ant-design/icons/lib/icons/HomeOutlined";
+import SearchOutlined from "@ant-design/icons/lib/icons/SearchOutlined";
+import LogoutOutlined from "@ant-design/icons/lib/icons/LogoutOutlined";
 import { clearCookieStorage } from "../../services/cookieStorage";
 import {
   employLogo,
@@ -37,21 +40,31 @@ function TopMenu({ location: { pathname } }) {
       </HeaderLayer>
       <StyledMenu mode="horizontal" show={StateShowMenu}>
         <Item key="home">
-          <Link to="/">Главная</Link>
+          <Link to="/">
+            <HomeOutlined />
+            {"  "}
+            Главная
+          </Link>
         </Item>
         <Item key="saved">
           <Link to="/saved">
-            Сохраненные 
-            {' '}
             <SaveOutlined />
+            {"  "}
+            Сохраненные
           </Link>
         </Item>
         <Item key="list">
-          <Link to="/list">Список</Link>
+          <Link to="/list">
+            <SearchOutlined />
+            {"  "}
+            Список
+          </Link>
         </Item>
         <StyledLink key="logout">
           <Link to="/sign-in" onClick={clearCookieStorage}>
             Выйти
+            {"  "}
+            <LogoutOutlined />
           </Link>
         </StyledLink>
       </StyledMenu>
