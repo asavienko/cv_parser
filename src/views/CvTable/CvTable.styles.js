@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Table } from "antd";
+import { Button, Table } from "antd";
 
 export const StyledTable = styled(Table)`
   .ant-table-body {
@@ -24,4 +24,8 @@ export const StyledTable = styled(Table)`
   .ant-table-content::-webkit-scrollbar-thumb:hover {
     background: rgba(0, 0, 0, 0.55);
   }
+`;
+
+export const StyledButton = styled(Button)`
+  margin-right: 5px;
 `;

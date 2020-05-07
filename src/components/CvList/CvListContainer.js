@@ -11,12 +11,10 @@ import {
 } from "../../actions/cvActions";
 import openNotification from "../../views/NotificationComponent";
 import { getCvByRequest } from "../../services/cvRequests";
-import FiltersSet from "./FiltersSet/FiltersSet";
-import {
-  convertFiltersForRequest,
-  preventEmptyValues
-} from "../../utils/index";
+import FiltersSet from "./FiltersSet";
+import { convertFiltersForRequest } from "../../utils/index";
 import { DEFAULT_FILTERS } from "../../constants/filters";
+import EditFavorite from "./EditFavorite/EditFavorite";
 
 const CvListContainer = ({
   rawList,
@@ -33,7 +31,7 @@ const CvListContainer = ({
   const [renderCounter, setRenderCounter] = useState(0);
 
   const newRequest = useCallback(
-    (newFilters = {}, clearStore) => {
+    (newFilters = {}, mergeExistedStore = true) => {
       setLoading(true);
       getCvByRequest({
         ...convertFiltersForRequest(DEFAULT_FILTERS),
@@ -46,22 +44,16 @@ const CvListContainer = ({
             total,
             pageSize: documents.length
           };
+
           setPagination(newPagination);
           setDisplayedCvList(documents);
-          clearStore
-            ? setRawList([
-                {
-                  pagination: newPagination,
-                  documents
-                }
-              ])
-            : setRawList([
-                ...rawList,
-                {
-                  pagination: newPagination,
-                  documents
-                }
-              ]);
+          setRawList([
+            mergeExistedStore ? [...rawList] : [],
+            {
+              pagination: newPagination,
+              documents
+            }
+          ]);
         })
         .catch(() =>
           openNotification({
@@ -115,19 +107,28 @@ const CvListContainer = ({
       : newRequest(currentFilters);
   };
 
-  const onRow = ({ ResumeId: resumeIdFromRow }) => ({
-    onClick: () => {
-      setCvInfoVisible(true);
-      setResumeId(resumeIdFromRow);
-    }
-  });
+  const lookResume = resumeIdFromRow => {
+    setCvInfoVisible(!cvInfoVisible);
+    setResumeId(resumeIdFromRow);
+  };
 
-  const onCvInformationClose = () => setCvInfoVisible(false);
+  const onCvInformationClose = () => setCvInfoVisible(!cvInfoVisible);
+
+  const [rowSelection, setRowSelection] = useState(undefined);
+
+  const setTableRawSelection = data => {
+    setRowSelection(data);
+  };
 
   return (
     <>
       <Row justify="space-between">
-        <Col span={4} />
+        <Col span={4}>
+          <EditFavorite
+            loading={loading}
+            setTableRawSelection={setTableRawSelection}
+          />
+        </Col>
         <Col span={20}>
           <FiltersSet disabled={loading} requestToServer={newRequest} />
         </Col>
@@ -135,9 +136,10 @@ const CvListContainer = ({
       <CvTable
         cvData={displayedCvList}
         loading={loading}
-        onRow={onRow}
+        lookResume={lookResume}
         handleChange={handleChange}
         pagination={pagination}
+        rowSelection={rowSelection}
       />
       <CvInformation
         visible={cvInfoVisible}
@@ -185,7 +187,7 @@ const mapStateToProps = ({ cvReducer: { rawList, pagination, filters } }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setRawList: rawList => dispatch(setRawListAction(rawList)),
+  setRawList: newList => dispatch(setRawListAction(newList)),
   setPagination: pagination => dispatch(setPaginationAction(pagination)),
   setFilters: filters => dispatch(setFiltersAction(filters))
 });

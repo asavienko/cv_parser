@@ -3,11 +3,11 @@ import { connect } from "react-redux";
 import * as numeral from "numeral";
 import PropTypes from "prop-types";
 import CvTable from "../../views/CvTable";
-import EditFavoriteListButton from "../../views/EditFavoriteListButton";
+import EditFavoriteListButton from "../CvList/EditFavorite/EditFavoriteListButton";
 import CvInformation from "../../views/CvInformation";
 import { setFavoriteListAction } from "../../actions/cvActions";
 
-function Favorites({ favoriteCvList, setFavoriteList }) {
+function Saved({ favoriteCvList, setFavoriteList }) {
   const [addToFavoriteActive, setAddToFavoriteActive] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [salaryRange, setSalaryRange] = useState([]);
@@ -120,12 +120,12 @@ function Favorites({ favoriteCvList, setFavoriteList }) {
   );
 }
 
-Favorites.propTypes = {
+Saved.propTypes = {
   favoriteCvList: PropTypes.arrayOf(PropTypes.object),
   setFavoriteList: PropTypes.func
 };
 
-Favorites.defaultProps = {
+Saved.defaultProps = {
   favoriteCvList: [],
   setFavoriteList: () => {}
 };
@@ -138,4 +138,4 @@ const mapDispatchToProps = dispatch => ({
   setFavoriteList: favoriteList => dispatch(setFavoriteListAction(favoriteList))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Favorites);
+export default connect(mapStateToProps, mapDispatchToProps)(Saved);

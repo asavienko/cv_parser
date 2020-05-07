@@ -53,6 +53,9 @@ const getCvByRequest = Joi.object({
   keywords: Joi.string()
     .allow("")
     .max(100),
+  regionId: Joi.number()
+    .min(0)
+    .max(10 ** 10),
   period: Joi.number()
     .min(1)
     .max(7),

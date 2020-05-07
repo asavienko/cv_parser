@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { useHistory } from "react-router-dom";
 import { setDictionaryCityAction } from "../../actions/cvActions";
 import openNotification from "../../views/NotificationComponent";
 import Home from "./Home";
@@ -11,42 +12,42 @@ function HomeContainer({ dictionaryCity, setDictionaryCity }) {
     regionId: 0,
     keywords: ""
   });
-  const [loadingSites, setLoadingSites] = useState(false);
+  const [loadingCites, setLoadingCites] = useState(false);
 
   useEffect(() => {
     if (dictionaryCity.length) return;
-    setLoadingSites(true);
+    setLoadingCites(true);
     getCityDictionary()
       .then(response => {
         response.length && setDictionaryCity(response);
+        setLoadingCites(false);
       })
       .catch(() => {
+        setLoadingCites(false);
         openNotification({
           type: "error",
           message: "Не удалось загрузить списко городов"
-        }).finally(() => setLoadingSites(false));
+        });
       });
   }, [dictionaryCity.length, setDictionaryCity]);
-
-  const onSelectFilter = (input, option) =>
-    option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 
   const onSelectChange = value => {
     const editedSearchRequest = searchRequest;
     editedSearchRequest.regionId = value;
     setSearchRequest(editedSearchRequest);
   };
-  const onSearchPressed = async searchValue => {
-    console.log(searchValue);
+
+  const history = useHistory();
+  const onSearchPressed = () => {
+    history.push("/list");
   };
 
   return (
     <Home
       onSearchPressed={onSearchPressed}
-      onSelectFilter={onSelectFilter}
       onSelectChange={onSelectChange}
       dictionaryCity={dictionaryCity}
-      loadingSites={loadingSites}
+      loadingCites={loadingCites}
     />
   );
 }
