@@ -31,13 +31,13 @@ const FiltersSet = ({
             <StyledPopover
               disabled={disabled}
               trigger="click"
-              content={
+              content={(
                 <SalarySliderWithInputs
                   onSalarySliderChange={onSalarySliderChange}
                   onSalaryFromChange={onSalaryFromChange}
                   onSalaryToChange={onSalaryToChange}
                 />
-              }
+              )}
               title="Ожидаемая зарплата"
               key="salary"
             >
@@ -47,13 +47,13 @@ const FiltersSet = ({
           <StyledCol disabled={disabled}>
             <StyledPopover
               disabled={disabled}
-              content={
+              content={(
                 <AgeSliderWithInputs
                   onAgeSliderChange={onAgeSliderChange}
                   onAgeFromChange={onAgeFromChange}
                   onAgeToChange={onAgeToChange}
                 />
-              }
+              )}
               title="Возраст кандидата"
               trigger="click"
               key="age"
@@ -86,11 +86,11 @@ const FiltersSet = ({
           <StyledCol disabled={disabled}>
             <StyledPopover
               disabled={disabled}
-              content={
+              content={(
                 <ExperienceCheckboxGroup
                   onExperienceChange={onExperienceChange}
                 />
-              }
+              )}
               title="Опыт работы на данной позиции"
               trigger="click"
               key="experience"
@@ -101,14 +101,14 @@ const FiltersSet = ({
           <StyledCol disabled={disabled}>
             <StyledPopover
               disabled={disabled}
-              content={
+              content={(
                 <Form.Item name="regionId">
                   <CitySelect
                     disabled={disabled}
                     dictionaryCity={dictionaryCity}
                   />
                 </Form.Item>
-              }
+              )}
               title="Выберите город"
               trigger="click"
               key="city"
