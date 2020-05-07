@@ -7,7 +7,6 @@ import CitySelect from "../../views/CitySelect/CitySelect";
 
 const Home = ({
   onSearchPressed,
-  onSelectFilter,
   onSelectChange,
   dictionaryCity,
   loadingCites
@@ -15,7 +14,6 @@ const Home = ({
   <Row span={22}>
     <Col xs={24} sm={24} lg={7} xl={6}>
       <CitySelect
-        onSelectFilter={onSelectFilter}
         onSelectChange={onSelectChange}
         loadingCites={loadingCites}
         dictionaryCity={dictionaryCity}
@@ -40,14 +38,12 @@ const Home = ({
 
 Home.propTypes = {
   onSearchPressed: PropTypes.func,
-  onSelectFilter: PropTypes.func,
   onSelectChange: PropTypes.func,
   dictionaryCity: PropTypes.arrayOf(PropTypes.object),
   loadingCites: PropTypes.bool
 };
 Home.defaultProps = {
   onSearchPressed: () => {},
-  onSelectFilter: () => {},
   onSelectChange: () => {},
   dictionaryCity: [{ id: 0, ru: "Харьков" }],
   loadingCites: false

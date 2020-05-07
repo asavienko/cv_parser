@@ -1,11 +1,8 @@
-import { Button, Dropdown, Menu } from "antd";
-import React, { useEffect, useState } from "react";
-import { CloseOutlined } from "@ant-design/icons";
+import {Button, Dropdown, Menu} from "antd";
+import React from "react";
+import {CloseOutlined} from "@ant-design/icons";
 import PropTypes from "prop-types";
-import {
-  StyledCloseButton,
-  StyledDivWrapper
-} from "./EditFavoriteListButton.styles";
+import {StyledCloseButton, StyledDivWrapper} from "./EditFavoriteListButton.styles";
 
 export default function EditFavoriteListButton({
   onPrimaryClick,

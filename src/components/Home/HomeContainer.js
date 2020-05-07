@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { useHistory } from "react-router-dom";
 import { setDictionaryCityAction } from "../../actions/cvActions";
 import openNotification from "../../views/NotificationComponent";
 import Home from "./Home";
@@ -30,22 +31,20 @@ function HomeContainer({ dictionaryCity, setDictionaryCity }) {
       });
   }, [dictionaryCity.length, setDictionaryCity]);
 
-  const onSelectFilter = (input, option) =>
-    option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-
   const onSelectChange = value => {
     const editedSearchRequest = searchRequest;
     editedSearchRequest.regionId = value;
     setSearchRequest(editedSearchRequest);
   };
-  const onSearchPressed = async searchValue => {
-    console.log(searchValue);
+
+  const history = useHistory();
+  const onSearchPressed = () => {
+    history.push("/list");
   };
 
   return (
     <Home
       onSearchPressed={onSearchPressed}
-      onSelectFilter={onSelectFilter}
       onSelectChange={onSelectChange}
       dictionaryCity={dictionaryCity}
       loadingCites={loadingCites}

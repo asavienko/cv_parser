@@ -71,7 +71,6 @@ const FiltersSetContainer = ({
   };
 
   const onFinish = newFilters => {
-    console.log(form.getFieldsValue());
     setFilters({ ...filters, ...newFilters });
     requestToServer(newFilters, false);
   };
