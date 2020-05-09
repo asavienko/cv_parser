@@ -109,13 +109,11 @@ const FiltersSet = ({
               disabled={disabled}
               content={
                 <StyledCityWrapper>
-                  <Form.Item name="regionId" shouldUpdate>
-                    <CitySelect
-                      disabled={disabled}
-                      dictionaryCity={dictionaryCity}
-                      loadingCites={cityLoader || disabled}
-                    />
-                  </Form.Item>
+                  <CitySelect
+                    disabled={disabled}
+                    dictionaryCity={dictionaryCity}
+                    loadingCites={cityLoader || disabled}
+                  />
                 </StyledCityWrapper>
               }
               title="Выберите город"

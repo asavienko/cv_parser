@@ -74,7 +74,7 @@ const CvListContainer = ({
   }) =>
     rawListFromStore.length &&
     rawListFromStore.find(
-      ({ pagination: { current = {} } }) => current === page
+      ({ pagination: { current } = {} }) => current === page
     );
 
   useEffect(() => {
@@ -151,7 +151,7 @@ const CvListContainer = ({
 };
 
 CvListContainer.propTypes = {
-  rawList: PropTypes.arrayOf(PropTypes.object),
+  rawList: PropTypes.array,
   pagination: PropTypes.objectOf(PropTypes.number),
   filters: PropTypes.shape({
     keywords: PropTypes.string,

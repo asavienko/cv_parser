@@ -85,7 +85,6 @@ const FiltersSetContainer = ({
       disabled={disabled}
       requestToServer={requestToServer}
       setFilters={setFilters}
-      filters={filters}
       dictionaryCity={dictionaryCity}
       cityLoader={cityLoader}
       onSalarySliderChange={onSalarySliderChange}

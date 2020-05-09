@@ -26,6 +26,7 @@ export const StyledTable = styled(Table)`
   }
 `;
 
-export const StyledButton = styled(Button)`
-  margin-right: 5px;
+export const StyledButtonWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
