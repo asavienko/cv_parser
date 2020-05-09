@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Col, Form, Row } from "antd";
+import { Col, Form, Row } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import PropTypes from "prop-types";
 import { ResponsiveInput, StyledButton } from "./Home.styles";

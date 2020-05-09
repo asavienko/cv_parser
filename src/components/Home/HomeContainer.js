@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
+import { Form } from "antd";
 import {
   setDictionaryCityAction,
   setFiltersAction
@@ -9,7 +10,6 @@ import {
 import openNotification from "../../views/NotificationComponent";
 import Home from "./Home";
 import { getCityDictionary } from "../../services/dictionaryService";
-import { Form } from "antd";
 
 function HomeContainer({
   dictionaryCity,
@@ -40,7 +40,7 @@ function HomeContainer({
           message: "Не удалось загрузить списко городов"
         });
       });
-  }, [dictionaryCity.length, setDictionaryCity]);
+  }, [dictionaryCity.length, setDictionaryCity, filters, form]);
 
   const onSelectChange = value => {
     const editedSearchRequest = searchRequest;

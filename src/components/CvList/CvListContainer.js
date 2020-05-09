@@ -48,7 +48,7 @@ const CvListContainer = ({
           setPagination(newPagination);
           setDisplayedCvList(documents);
           setRawList([
-            mergeExistedStore ? [...rawList] : [],
+            ...(mergeExistedStore ? [...rawList] : []),
             {
               pagination: newPagination,
               documents
@@ -151,7 +151,7 @@ const CvListContainer = ({
 };
 
 CvListContainer.propTypes = {
-  rawList: PropTypes.array,
+  rawList: PropTypes.arrayOf(PropTypes.object),
   pagination: PropTypes.objectOf(PropTypes.number),
   filters: PropTypes.shape({
     keywords: PropTypes.string,

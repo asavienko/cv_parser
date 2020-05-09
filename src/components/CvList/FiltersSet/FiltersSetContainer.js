@@ -30,7 +30,7 @@ const FiltersSetContainer = ({
       getCityDictionary()
         .then(list => setDictionaryCity(list))
         .catch(e => {
-          console.log(e);
+          console.error(e);
           openNotification({
             type: "error",
             message: "Не удалось загрузить списко городов"
@@ -70,8 +70,9 @@ const FiltersSetContainer = ({
     });
   };
 
-  const onFinish = newFilters => {
-    setFilters({ ...filters, ...newFilters });
+  const onFinish = filtersFromForm => {
+    const newFilters = { ...filters, ...filtersFromForm };
+    setFilters(newFilters);
     requestToServer(newFilters, false);
   };
   const onResetFilters = () => {
