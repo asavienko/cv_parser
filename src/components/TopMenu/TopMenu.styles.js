@@ -27,7 +27,7 @@ export const HeaderLayer = styled.div`
   }
 `;
 
-export const StyledLink = styled(Item)`
+export const StyledMenuItem = styled(Item)`
   margin-left: auto;
   padding-right: 20px;
 `;

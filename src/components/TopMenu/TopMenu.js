@@ -11,7 +11,7 @@ import {
   employLogo,
   HeaderLayer,
   linesLayout,
-  StyledLink,
+  StyledMenuItem,
   StyledMenu
 } from "./TopMenu.styles";
 
@@ -49,38 +49,31 @@ function TopMenu() {
         <Item key="/">
           <Link to="/">
             <HomeOutlined />
-            {"  "}
             Главная
           </Link>
         </Item>
         <Item key="/saved">
           <Link to="/saved">
             <SaveOutlined />
-            {"  "}
             Сохраненные
           </Link>
         </Item>
         <Item key="/list">
           <Link to="/list">
             <SearchOutlined />
-            {"  "}
             Список
           </Link>
         </Item>
-        <StyledLink key="/sign-in">
-          <Link to="/sign-in" onClick={clearCookieStorage}>
-            Выйти
-            {"  "}
-            <LogoutOutlined />
-          </Link>
-        </StyledLink>
+        <StyledMenuItem
+          key="/sign-in"
+          icon={<LogoutOutlined />}
+          onClick={clearCookieStorage}
+        >
+          <Link to="/sign-in">Выйти</Link>
+        </StyledMenuItem>
       </StyledMenu>
     </>
   );
 }
-
-TopMenu.propTypes = { location: PropTypes.objectOf(PropTypes.string) };
-
-TopMenu.defaultProps = { location: { pathName: "/" } };
 
 export default TopMenu;

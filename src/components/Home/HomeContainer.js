@@ -5,7 +5,8 @@ import { useHistory } from "react-router-dom";
 import { Form } from "antd";
 import {
   setDictionaryCityAction,
-  setFiltersAction
+  setFiltersAction,
+  setRawListAction
 } from "../../actions/cvActions";
 import openNotification from "../../views/NotificationComponent";
 import Home from "./Home";
@@ -15,7 +16,8 @@ function HomeContainer({
   dictionaryCity,
   setDictionaryCity,
   filters,
-  setFilters
+  setFilters,
+  setRawList
 }) {
   const [searchRequest, setSearchRequest] = useState({
     regionId: 0,
@@ -51,6 +53,7 @@ function HomeContainer({
   const history = useHistory();
   const onSearchSubmit = newFilters => {
     setFilters(newFilters);
+    setRawList();
     history.push("/list");
   };
 
@@ -69,13 +72,15 @@ function HomeContainer({
 HomeContainer.propTypes = {
   dictionaryCity: PropTypes.arrayOf(PropTypes.object),
   setDictionaryCity: PropTypes.func,
-  setFilters: PropTypes.func
+  setFilters: PropTypes.func,
+  setRawList: PropTypes.func
 };
 
 HomeContainer.defaultProps = {
   dictionaryCity: [{ id: 0, ru: "Харьков" }],
   setDictionaryCity: () => {},
-  setFilters: () => {}
+  setFilters: () => {},
+  setRawList: () => {}
 };
 
 const mapStateToProps = ({ cvReducer: { dictionaryCity, filters } }) => ({
@@ -86,7 +91,8 @@ const mapStateToProps = ({ cvReducer: { dictionaryCity, filters } }) => ({
 const mapDispatchToProps = dispatch => ({
   setFilters: filters => dispatch(setFiltersAction(filters)),
   setDictionaryCity: dictionaryCity =>
-    dispatch(setDictionaryCityAction(dictionaryCity))
+    dispatch(setDictionaryCityAction(dictionaryCity)),
+  setRawList: newList => dispatch(setRawListAction(newList))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);

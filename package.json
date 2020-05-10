@@ -14,7 +14,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.0.3",
     "@hapi/joi": "^17.0.0",
-    "antd": "^4.0.4",
+    "antd": "^4.2.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cheerio": "^1.0.0-rc.3",
@@ -22,7 +22,6 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-jwt": "^5.3.1",
-    "husky": "^4.2.3",
     "js-cookie": "^2.2.1",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
@@ -64,7 +63,8 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^1.7.0",
-    "prettier-eslint": "^9.0.1"
+    "prettier-eslint": "^9.0.1",
+    "husky": "^4.2.3"
   },
   "husky": {
     "hooks": {
