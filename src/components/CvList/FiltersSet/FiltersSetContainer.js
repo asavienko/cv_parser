@@ -25,12 +25,11 @@ const FiltersSetContainer = ({
 
   useEffect(() => {
     form.setFieldsValue(filters);
-    if (!dictionaryCity.lengh) {
+    if (!dictionaryCity.length) {
       setCityLoader(true);
       getCityDictionary()
         .then(list => setDictionaryCity(list))
-        .catch(e => {
-          console.error(e);
+        .catch(() => {
           openNotification({
             type: "error",
             message: "Не удалось загрузить списко городов"

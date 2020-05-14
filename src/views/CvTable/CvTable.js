@@ -1,10 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Button, Popover } from "antd";
-import ReadOutlined from "@ant-design/icons/lib/icons/ReadOutlined";
-import DownloadOutlined from "@ant-design/icons/lib/icons/DownloadOutlined";
-import StarOutlined from "@ant-design/icons/lib/icons/StarOutlined";
-import { StyledTable, StyledButtonWrapper } from "./CvTable.styles";
+import {
+  DownloadOutlined,
+  StarOutlined,
+  ReadOutlined
+} from "@ant-design/icons/lib/icons";
+import { StyledButtonWrapper, StyledTable } from "./CvTable.styles";
 
 function CvTable({
   cvData,

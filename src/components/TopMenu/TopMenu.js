@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu } from "antd";
-import PropTypes from "prop-types";
-import SaveOutlined from "@ant-design/icons/lib/icons/SaveOutlined";
-import HomeOutlined from "@ant-design/icons/lib/icons/HomeOutlined";
-import SearchOutlined from "@ant-design/icons/lib/icons/SearchOutlined";
-import LogoutOutlined from "@ant-design/icons/lib/icons/LogoutOutlined";
+import {
+  LogoutOutlined,
+  SaveOutlined,
+  SearchOutlined,
+  HomeOutlined
+} from "@ant-design/icons/lib/icons";
 import { clearCookieStorage } from "../../services/cookieStorage";
 import {
   employLogo,

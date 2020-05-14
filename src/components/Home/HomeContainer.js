@@ -44,12 +44,6 @@ function HomeContainer({
       });
   }, [dictionaryCity.length, setDictionaryCity, filters, form]);
 
-  const onSelectChange = value => {
-    const editedSearchRequest = searchRequest;
-    editedSearchRequest.regionId = value;
-    setSearchRequest(editedSearchRequest);
-  };
-
   const history = useHistory();
   const onSearchSubmit = newFilters => {
     setFilters(newFilters);
@@ -60,7 +54,6 @@ function HomeContainer({
   return (
     <Home
       onSearchSubmit={onSearchSubmit}
-      onSelectChange={onSelectChange}
       dictionaryCity={dictionaryCity}
       loadingCites={loadingCites}
       filters={filters}
