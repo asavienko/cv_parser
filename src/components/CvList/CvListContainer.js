@@ -48,7 +48,7 @@ const CvListContainer = ({
           setPagination(newPagination);
           setDisplayedCvList(documents);
           setRawList([
-            mergeExistedStore ? [...rawList] : [],
+            ...(mergeExistedStore ? [...rawList] : []),
             {
               pagination: newPagination,
               documents
@@ -74,7 +74,7 @@ const CvListContainer = ({
   }) =>
     rawListFromStore.length &&
     rawListFromStore.find(
-      ({ pagination: { current = {} } }) => current === page
+      ({ pagination: { current } = {} }) => current === page
     );
 
   useEffect(() => {

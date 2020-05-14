@@ -25,12 +25,11 @@ const FiltersSetContainer = ({
 
   useEffect(() => {
     form.setFieldsValue(filters);
-    if (!dictionaryCity.lengh) {
+    if (!dictionaryCity.length) {
       setCityLoader(true);
       getCityDictionary()
         .then(list => setDictionaryCity(list))
-        .catch(e => {
-          console.log(e);
+        .catch(() => {
           openNotification({
             type: "error",
             message: "Не удалось загрузить списко городов"
@@ -70,8 +69,9 @@ const FiltersSetContainer = ({
     });
   };
 
-  const onFinish = newFilters => {
-    setFilters({ ...filters, ...newFilters });
+  const onFinish = filtersFromForm => {
+    const newFilters = { ...filters, ...filtersFromForm };
+    setFilters(newFilters);
     requestToServer(newFilters, false);
   };
   const onResetFilters = () => {
@@ -85,7 +85,6 @@ const FiltersSetContainer = ({
       disabled={disabled}
       requestToServer={requestToServer}
       setFilters={setFilters}
-      filters={filters}
       dictionaryCity={dictionaryCity}
       cityLoader={cityLoader}
       onSalarySliderChange={onSalarySliderChange}

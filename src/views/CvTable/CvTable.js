@@ -1,10 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {Popover} from "antd";
-import ReadOutlined from "@ant-design/icons/lib/icons/ReadOutlined";
-import DownloadOutlined from "@ant-design/icons/lib/icons/DownloadOutlined";
-import StarOutlined from "@ant-design/icons/lib/icons/StarOutlined";
-import {StyledButton, StyledTable} from "./CvTable.styles";
+import { Button, Popover } from "antd";
+import {
+  DownloadOutlined,
+  StarOutlined,
+  ReadOutlined
+} from "@ant-design/icons/lib/icons";
+import { StyledButtonWrapper, StyledTable } from "./CvTable.styles";
 
 function CvTable({
   cvData,
@@ -56,9 +58,9 @@ function CvTable({
       key: "action",
       width: 110,
       render: record => (
-        <>
+        <StyledButtonWrapper>
           <Popover content="Просмотреть резюме">
-            <StyledButton
+            <Button
               onClick={() => lookResume(record.ResumeId)}
               type="dashed"
               shape="circle"
@@ -67,7 +69,7 @@ function CvTable({
             />
           </Popover>
           <Popover content="Скачать резюме">
-            <StyledButton
+            <Button
               href={`https://rabota.ua/service/cvexport?resumeId=${record.ResumeId}`}
               type="dashed"
               shape="circle"
@@ -76,7 +78,7 @@ function CvTable({
             />
           </Popover>
           <Popover content="Добавить в избранные">
-            <StyledButton
+            <Button
               disabled
               onClick={() => console.log()}
               type="dashed"
@@ -85,7 +87,7 @@ function CvTable({
               icon={<StarOutlined />}
             />
           </Popover>
-        </>
+        </StyledButtonWrapper>
       )
     }
   ];

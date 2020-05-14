@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Button, Table } from "antd";
+import { Table } from "antd";
 
 export const StyledTable = styled(Table)`
   .ant-table-body {
@@ -26,6 +26,7 @@ export const StyledTable = styled(Table)`
   }
 `;
 
-export const StyledButton = styled(Button)`
-  margin-right: 5px;
+export const StyledButtonWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
