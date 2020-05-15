@@ -3,12 +3,12 @@ import { connect } from "react-redux";
 import * as numeral from "numeral";
 import PropTypes from "prop-types";
 import CvTable from "../../views/CvTable";
-import EditFavoriteListButton from "../CvList/EditFavorite/EditFavoriteListButton";
+import SaveResultsButton from "../CvList/SaveResults/SaveResultsButton";
 import CvInformation from "../../views/CvInformation";
-import { setFavoriteListAction } from "../../actions/cvActions";
+import { setSavedListAction } from "../../actions/cvActions";
 
-function Saved({ favoriteCvList, setFavoriteList }) {
-  const [addToFavoriteActive, setAddToFavoriteActive] = useState(false);
+function Saved({ savedCvList, setSavedList }) {
+  const [saveActive, setSaveActive] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [salaryRange, setSalaryRange] = useState([]);
   const [salaryFilterRange, setSalaryFilterRange] = useState([]);
@@ -17,8 +17,8 @@ function Saved({ favoriteCvList, setFavoriteList }) {
   // const [cvData, setCvList] = useState([]);
   const [filteredInfo, setFilteredInfo] = useState({});
   useEffect(() => {
-    if (favoriteCvList.length) {
-      const salary = favoriteCvList.map(({ salary }) =>
+    if (savedCvList.length) {
+      const salary = savedCvList.map(({ salary }) =>
         numeral(salary).value()
       );
       const min = Math.min(...salary);
@@ -26,7 +26,7 @@ function Saved({ favoriteCvList, setFavoriteList }) {
       setSalaryFilterRange([min, max]);
       setSalaryRange([min, max]);
     }
-  }, [favoriteCvList]);
+  }, [savedCvList]);
   const onRow = record => ({
     onClick: () => setCvInfo({ visible: true, cvInformation: record })
   });
@@ -38,7 +38,7 @@ function Saved({ favoriteCvList, setFavoriteList }) {
   };
   const onSalaryRangeSet = () => {
     /* const [min, max] = salaryRange;
-  const filteredArray = favoriteCvList.filter(({ salary }) => {
+  const filteredArray = savedCvList.filter(({ salary }) => {
      return numeral(salary).value() >= min && numeral(salary).value() <= max;
    });
    setCvList(filteredArray);
@@ -46,7 +46,7 @@ function Saved({ favoriteCvList, setFavoriteList }) {
   };
 
   const onSalaryRangeReset = () => {
-    // setCvList(favoriteCvList);
+    // setCvList(savedCvList);
     setSalaryRange(salaryFilterRange);
   };
   const handleChange = (pagination, filters, sorter) => {
@@ -56,23 +56,25 @@ function Saved({ favoriteCvList, setFavoriteList }) {
     setSortedInfo(sorter);
     */
   };
-  const saveFavoriteList = () => {
-    const editedCvList = favoriteCvList.filter(cv => {
+  /*
+  const saveResultsList = () => {
+    const editedCvList = savedCvList.filter(cv => {
       const hasSelectedKey = selectedRowKeys.some(key => cv.key === key);
       return !hasSelectedKey;
     });
     setSelectedRowKeys([]);
-    setFavoriteList(editedCvList);
-    setAddToFavoriteActive(false);
+    setSavedList(editedCvList);
+    setSaveActive(false);
   };
-  const editFavoriteList = () => {
-    setAddToFavoriteActive(true);
+  */
+  const editSavedList = () => {
+    setSaveActive(true);
   };
-  const onAddToFavoriteButtonClick = () => {
-    addToFavoriteActive ? saveFavoriteList() : editFavoriteList();
+  const onAddSaveButtonClick = () => {
+    saveActive ? setSavedList() : editSavedList();
   };
-  const cancelAddingToFavorite = () => {
-    setAddToFavoriteActive(false);
+  const cancelSaving = () => {
+    setSaveActive(false);
     setSelectedRowKeys([]);
   };
   const onSelectChange = value => {
@@ -82,25 +84,25 @@ function Saved({ favoriteCvList, setFavoriteList }) {
     selectedRowKeys,
     onChange: onSelectChange
   };
-  const addToFavoriteDisabled =
-    selectedRowKeys.length === 0 && addToFavoriteActive;
-  // loading || (selectedRowKeys.length === 0 && addToFavoriteActive);
+  const saveDisabled =
+    selectedRowKeys.length === 0 && saveActive;
+  // loading || (selectedRowKeys.length === 0 && saveActive);
 
-  const rowSelection = addToFavoriteActive && rowSelectionConfig;
+  const rowSelection = saveActive && rowSelectionConfig;
   return (
     <>
-      <EditFavoriteListButton
-        addToFavoriteDisabled={addToFavoriteDisabled}
-        addToFavoriteActive={addToFavoriteActive}
+      <SaveResultsButton
+        saveDisabled={saveDisabled}
+        saveActive={saveActive}
         cvCounts={selectedRowKeys.length}
-        onPrimaryClick={onAddToFavoriteButtonClick}
-        onCancelClick={cancelAddingToFavorite}
+        onPrimaryClick={onAddSaveButtonClick}
+        onCancelClick={cancelSaving}
         type="danger"
         buttonName="Удалить"
         mainButtonText="Удалить"
       />
       <CvTable
-        cvData={favoriteCvList}
+        cvData={savedCvList}
         salaryFilterRange={salaryFilterRange}
         onSalaryRangeSet={onSalaryRangeSet}
         onSalaryRangeReset={onSalaryRangeReset}
@@ -121,21 +123,21 @@ function Saved({ favoriteCvList, setFavoriteList }) {
 }
 
 Saved.propTypes = {
-  favoriteCvList: PropTypes.arrayOf(PropTypes.object),
-  setFavoriteList: PropTypes.func
+  savedCvList: PropTypes.arrayOf(PropTypes.object),
+  setSavedList: PropTypes.func
 };
 
 Saved.defaultProps = {
-  favoriteCvList: [],
-  setFavoriteList: () => {}
+  savedCvList: [],
+  setSavedList: () => {}
 };
 
-const mapStateToProps = ({ cvReducer: { favoriteCvList } }) => ({
-  favoriteCvList
+const mapStateToProps = ({ cvReducer: { savedCvList } }) => ({
+  savedCvList
 });
 
 const mapDispatchToProps = dispatch => ({
-  setFavoriteList: favoriteList => dispatch(setFavoriteListAction(favoriteList))
+  setSavedList: savedList => dispatch(setSavedListAction(savedList))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Saved);

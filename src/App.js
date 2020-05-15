@@ -9,7 +9,7 @@ import EmailNotVerified from "./components/EmailNotVerified";
 import { PreventSignedInRoute, SecuredRoute } from "./views/ReusableRoutes";
 import { checkUser } from "./utils/userUtils";
 import { StyledContent, StyledDiv, StyledLayout } from "./App.styles";
-import Saved from "./components/Favorites/Saved";
+import Saved from "./components/Saved/Saved";
 
 function App() {
   useEffect(() => {

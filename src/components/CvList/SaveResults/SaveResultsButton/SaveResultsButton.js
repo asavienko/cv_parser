@@ -2,13 +2,13 @@ import {Button, Dropdown, Menu} from "antd";
 import React from "react";
 import {CloseOutlined} from "@ant-design/icons";
 import PropTypes from "prop-types";
-import {StyledCloseButton, StyledDivWrapper} from "./EditFavoriteListButton.styles";
+import {StyledCloseButton, StyledDivWrapper} from "./SaveResultsButton.styles";
 
-export default function EditFavoriteListButton({
+export default function SaveResultsButton({
   onPrimaryClick,
   onCancelClick,
-  addToFavoriteDisabled,
-  addToFavoriteActive,
+  saveDisabled,
+  saveActive,
   selectedCvCounter,
   mainButtonText,
   type,
@@ -22,11 +22,11 @@ export default function EditFavoriteListButton({
 
   return (
     <StyledDivWrapper>
-      {!addToFavoriteDisabled && addToFavoriteActive ? (
+      {!saveDisabled && saveActive ? (
         <>
           <Dropdown.Button
             type={type}
-            disabled={addToFavoriteDisabled}
+            disabled={saveDisabled}
             overlay={menu}
             placement="bottomCenter"
           >
@@ -42,7 +42,7 @@ export default function EditFavoriteListButton({
       ) : (
         <Button
           type={type}
-          disabled={addToFavoriteDisabled}
+          disabled={saveDisabled}
           onClick={onPrimaryClick}
         >
           {buttonName}
@@ -52,22 +52,22 @@ export default function EditFavoriteListButton({
   );
 }
 
-EditFavoriteListButton.propTypes = {
+SaveResultsButton.propTypes = {
   onPrimaryClick: PropTypes.func,
   onCancelClick: PropTypes.func,
-  addToFavoriteDisabled: PropTypes.bool,
-  addToFavoriteActive: PropTypes.bool,
+  saveDisabled: PropTypes.bool,
+  saveActive: PropTypes.bool,
   selectedCvCounter: PropTypes.number,
   mainButtonText: PropTypes.string,
   type: PropTypes.string,
   buttonName: PropTypes.string
 };
 
-EditFavoriteListButton.defaultProps = {
+SaveResultsButton.defaultProps = {
   onPrimaryClick: () => {},
   onCancelClick: () => {},
-  addToFavoriteDisabled: false,
-  addToFavoriteActive: false,
+  saveDisabled: false,
+  saveActive: false,
   selectedCvCounter: 0,
   mainButtonText: "Сохранить",
   type: "primary",

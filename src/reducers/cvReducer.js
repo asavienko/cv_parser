@@ -1,6 +1,6 @@
 import {
   SET_DICTIONARY_CITY,
-  SET_FAVORITE,
+  SET_SAVED,
   SET_FILTERS,
   SET_PAGINATION,
   SET_RAW_LIST
@@ -8,7 +8,7 @@ import {
 import { DEFAULT_FILTERS } from "../constants/filters";
 
 const initState = {
-  favoriteCvList: [],
+  savedCvLists: [],
   rawList: [],
   filters: { ...DEFAULT_FILTERS },
   pagination: {},
@@ -17,8 +17,8 @@ const initState = {
 
 function cvReducer(state = initState, action) {
   switch (action.type) {
-    case SET_FAVORITE:
-      return { ...state, favoriteCvList: action.favoriteCvList };
+    case SET_SAVED:
+      return { ...state, savedCvLists: action.savedCvLists };
     case SET_RAW_LIST:
       return { ...state, rawList: action.rawList };
     case SET_FILTERS:
