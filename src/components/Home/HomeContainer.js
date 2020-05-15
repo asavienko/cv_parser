@@ -19,10 +19,6 @@ function HomeContainer({
   setFilters,
   setRawList
 }) {
-  const [searchRequest, setSearchRequest] = useState({
-    regionId: 0,
-    keywords: ""
-  });
   const [loadingCites, setLoadingCites] = useState(false);
   const [form] = Form.useForm();
 

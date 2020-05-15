@@ -37,7 +37,7 @@ const FiltersSetContainer = ({
         })
         .finally(() => setCityLoader(false));
     }
-  }, [form, filters, dictionaryCity.lengh, setDictionaryCity]);
+  }, [form, filters, dictionaryCity.length, setDictionaryCity]);
 
   const onSalarySliderChange = ([salaryFrom, salaryTo]) => {
     form.setFieldsValue({ salaryFrom, salaryTo });

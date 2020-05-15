@@ -9,7 +9,6 @@ const CitySelect = ({ onSelectChange, loadingCites, dictionaryCity }) => {
   return (
     <Form.Item name="regionId">
       <StyledResponsiveSelect
-        defaultValue={0}
         showSearch
         filterOption={onSelectFilter}
         onChange={onSelectChange}
