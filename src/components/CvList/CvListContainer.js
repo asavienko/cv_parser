@@ -117,8 +117,8 @@ const CvListContainer = ({
   const [selectedRows, setSelectedRows] = useState([]);
   const [rowSelection, setRowSelection] = useState(undefined);
   const rowSelectionConfig = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      setSelectedRows(selectedRows);
+    onChange: (selectedRowKeys, selectedRowsFromTable) => {
+      setSelectedRows(selectedRowsFromTable);
     }
   };
   const handleRowSelectionChange = (set = false) => {
