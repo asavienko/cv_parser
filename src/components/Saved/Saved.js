@@ -95,7 +95,7 @@ function Saved({ savedCvList, setSavedList }) {
         saveDisabled={saveDisabled}
         saveActive={saveActive}
         cvCounts={selectedRowKeys.length}
-        onPrimaryClick={onAddSaveButtonClick}
+        onStartSelectClick={onAddSaveButtonClick}
         onCancelClick={cancelSaving}
         type="danger"
         buttonName="Удалить"

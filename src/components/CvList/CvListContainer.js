@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { Col, Row } from "antd";
+import { Col, Row, Popconfirm } from "antd";
 import CvInformation from "../../views/CvInformation";
 import CvTable from "../../views/CvTable";
 import {
@@ -114,10 +114,29 @@ const CvListContainer = ({
 
   const onCvInformationClose = () => setCvInfoVisible(!cvInfoVisible);
 
+  const [selectedRows, setSelectedRows] = useState([]);
   const [rowSelection, setRowSelection] = useState(undefined);
+  const rowSelectionConfig = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      setSelectedRows(selectedRows);
+    }
+  };
+  const handleRowSelectionChange = (set = false) => {
+    set
+      ? setRowSelection(rowSelectionConfig)
+      : setRowSelection(undefined) || setSelectedRows([]);
+  };
 
-  const setTableRawSelection = data => {
-    setRowSelection(data);
+  const [popconfirmVisible, setPopconfirmVisible] = useState(false);
+  const onSave = () => {
+    setPopconfirmVisible(true);
+  };
+  const cancelPopconfirm = () => {
+    setPopconfirmVisible(false);
+  };
+  const confirmPopconfirm = () => {
+    console.log({ selectedRows, filters });
+    setPopconfirmVisible(false);
   };
 
   return (
@@ -126,7 +145,19 @@ const CvListContainer = ({
         <Col span={4}>
           <SaveResults
             loading={loading}
-            setTableRawSelection={setTableRawSelection}
+            handleRowSelectionChange={handleRowSelectionChange}
+            selectedResultsNumber={selectedRows.length}
+            onSave={onSave}
+          />
+
+          <Popconfirm
+            title={`Подтвердите сохранение ${selectedRows.length} резюме.`}
+            placement="bottomLeft"
+            visible={popconfirmVisible}
+            onConfirm={confirmPopconfirm}
+            onCancel={cancelPopconfirm}
+            okText="Да"
+            cancelText="Отмена"
           />
         </Col>
         <Col span={20}>

@@ -24,6 +24,6 @@ const getCvByRequest = body => postRequest(cvUrls().getCvByRequest, body);
 
 const getCvInfo = id => postRequest(cvUrls().getCvInfo, { id });
 
-const getCvPage = id => postRequest(cvUrls().getCvPage, { id });
+// const getCvPage = id => postRequest(cvUrls().getCvPage, { id });
 
 export { getTotalCv, getCvByRequest, getCvInfo };

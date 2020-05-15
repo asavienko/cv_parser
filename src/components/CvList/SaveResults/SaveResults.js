@@ -2,27 +2,33 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import SaveResultsButton from "./SaveResultsButton";
 
-const SaveResults = ({ loading, setTableRawSelection }) => {
+const SaveResults = ({
+  loading,
+  handleRowSelectionChange,
+  selectedResultsNumber,
+  onSave
+}) => {
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {}, []);
-  const onPrimaryClick = () => {
-    setTableRawSelection({});
+  const onStartSelectClick = () => {
+    handleRowSelectionChange(true);
     setIsActive(true);
   };
 
   const onCancelClick = () => {
-    setTableRawSelection(undefined);
+    handleRowSelectionChange(false);
     setIsActive(false);
   };
 
   return (
     <SaveResultsButton
       saveActive={isActive}
-      onPrimaryClick={onPrimaryClick}
+      onStartSelectClick={onStartSelectClick}
       onCancelClick={onCancelClick}
       saveDisabled={loading}
-      // selectedCvCounter={selectedCvCounter}
+      selectedResultsNumber={selectedResultsNumber}
+      onSave={onSave}
       // mainButtonText={mainButtonText}
     />
   );
@@ -30,12 +36,16 @@ const SaveResults = ({ loading, setTableRawSelection }) => {
 
 SaveResults.propTypes = {
   loading: PropTypes.bool,
-  setTableRawSelection: PropTypes.func
+  handleRowSelectionChange: PropTypes.func,
+  onSave: PropTypes.func,
+  selectedResultsNumber: PropTypes.number
 };
 
 SaveResults.defaultProps = {
   loading: false,
-  setTableRawSelection: () => {}
+  handleRowSelectionChange: () => {},
+  onSave: () => {},
+  selectedResultsNumber: 0
 };
 
 export default SaveResults;
