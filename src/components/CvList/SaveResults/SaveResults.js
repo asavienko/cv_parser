@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import EditFavoriteListButton from "./EditFavoriteListButton";
+import SaveResultsButton from "./SaveResultsButton";
 
-const EditFavorite = ({ loading, setTableRawSelection }) => {
+const SaveResults = ({ loading, setTableRawSelection }) => {
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {}, []);
@@ -17,27 +17,25 @@ const EditFavorite = ({ loading, setTableRawSelection }) => {
   };
 
   return (
-    <EditFavoriteListButton
-      addToFavoriteActive={isActive}
+    <SaveResultsButton
+      saveActive={isActive}
       onPrimaryClick={onPrimaryClick}
       onCancelClick={onCancelClick}
-      addToFavoriteDisabled={loading}
+      saveDisabled={loading}
       // selectedCvCounter={selectedCvCounter}
       // mainButtonText={mainButtonText}
-      // type={type}
-      // buttonName={buttonName}
     />
   );
 };
 
-EditFavorite.propTypes = {
+SaveResults.propTypes = {
   loading: PropTypes.bool,
   setTableRawSelection: PropTypes.func
 };
 
-EditFavorite.defaultProps = {
+SaveResults.defaultProps = {
   loading: false,
   setTableRawSelection: () => {}
 };
 
-export default EditFavorite;
+export default SaveResults;

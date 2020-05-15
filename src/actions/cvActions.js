@@ -1,14 +1,14 @@
 import {
   SET_DICTIONARY_CITY,
-  SET_FAVORITE,
+  SET_SAVED,
   SET_FILTERS,
   SET_PAGINATION,
   SET_RAW_LIST
 } from "../constants/constantsActions";
 import { DEFAULT_FILTERS } from "../constants/filters";
 
-export function setFavoriteListAction(favoriteCvList) {
-  return { type: SET_FAVORITE, favoriteCvList };
+export function setSavedListAction(savedCvLists) {
+  return { type: SET_SAVED, savedCvLists };
 }
 export function setRawListAction(rawList = []) {
   return { type: SET_RAW_LIST, rawList };

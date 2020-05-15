@@ -14,7 +14,7 @@ import { getCvByRequest } from "../../services/cvRequests";
 import FiltersSet from "./FiltersSet";
 import { convertFiltersForRequest } from "../../utils/index";
 import { DEFAULT_FILTERS } from "../../constants/filters";
-import EditFavorite from "./EditFavorite/EditFavorite";
+import SaveResults from "./SaveResults/SaveResults";
 
 const CvListContainer = ({
   rawList,
@@ -124,7 +124,7 @@ const CvListContainer = ({
     <>
       <Row justify="space-between">
         <Col span={4}>
-          <EditFavorite
+          <SaveResults
             loading={loading}
             setTableRawSelection={setTableRawSelection}
           />
