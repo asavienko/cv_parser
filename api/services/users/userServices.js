@@ -5,24 +5,28 @@ const uniqid = require("uniqid");
 const connectDb = require("../../database/connectMongoDb");
 const { sameEmailCheck, userPipelines } = require("./helpers");
 
+const getUsersCollection = async () => {
+  const client = await connectDb();
+  return client.db("rabotaua").collection("users");
+};
+
 const create = async userParam => {
   const collection = await getUsersCollection();
   const [checkEmail] = await collection
     .aggregate(userPipelines.getSameEmail(userParam.email))
     .toArray();
-  if (checkEmail) throw `Email "${userParam.email}" уже занят`;
-
+  if (checkEmail) throw new Error(`Email "${userParam.email}" уже занят`);
+  const { password, ...newUserParamas } = userParam;
   // hash password
-  if (userParam.password) {
-    userParam.hash = bcrypt.hashSync(userParam.password, 10);
-    userParam.createdDate = new Date();
-    delete userParam.password;
+  if (password) {
+    newUserParamas.hash = bcrypt.hashSync(userParam.password, 10);
+    newUserParamas.createdDate = new Date();
   }
 
   // save user
-  userParam._id = uniqid();
-  userParam.emailVerified = false;
-  await collection.insertOne(userParam);
+  newUserParamas._id = uniqid();
+  newUserParamas.emailVerified = false;
+  await collection.insertOne(newUserParamas);
 };
 
 const authenticate = async ({ email, password }) => {
@@ -35,22 +39,17 @@ const authenticate = async ({ email, password }) => {
     const token = jwt.sign({ sub: _id }, SECRET);
     return { ...userWithoutHashAndId, token };
   }
-};
-
-const getUsersCollection = async () => {
-  const client = await connectDb();
-  return client.db("rabotaua").collection("users");
+  return false;
 };
 
 const getAll = async () => {
   const collection = await getUsersCollection();
-  return await collection.aggregate(userPipelines.getAll()).toArray();
+  return collection.aggregate(userPipelines.getAll()).toArray();
 };
 
 const getById = async _id => {
   const collection = await getUsersCollection();
-  const user = await collection.aggregate(userPipelines.getById(_id)).toArray();
-  return user;
+  return collection.aggregate(userPipelines.getById(_id)).toArray();
 };
 
 const update = async (_id, userParam) => {
@@ -58,22 +57,22 @@ const update = async (_id, userParam) => {
   const user = await collection.findOne({ _id });
 
   // validate
-  if (!user) throw "Юзер не найден";
+  if (!user) throw Error("Юзер не найден");
 
   const checkEmail = sameEmailCheck({ user, userParam, collection });
 
   if (checkEmail) {
-    throw `Email "${userParam.email}" уже занят`;
+    throw Error(`Email "${userParam.email}" уже занят`);
   }
 
+  const { password, ...newUserParams } = { ...userParam };
   // hash password if it was entered
-  if (userParam.password) {
-    userParam.hash = bcrypt.hashSync(userParam.password, 10);
-    delete userParam.password;
+  if (password) {
+    newUserParams.hash = bcrypt.hashSync(userParam.password, 10);
   }
 
   // copy userParam properties to user
-  await collection.updateOne({ _id }, { userParam });
+  await collection.updateOne({ _id }, { newUserParams });
 };
 
 const remove = async _id => {

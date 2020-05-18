@@ -19,7 +19,7 @@ const userPipelines = {
     { $project: { email: 1 } },
     { $count: "count" }
   ],
-  authenticate: email => [{ $match: { email } }, { $project: { _id: 0 } }]
+  authenticate: email => [{ $match: { email } }]
 };
 
 module.exports = { sameEmailCheck, userPipelines, getIdFromToken };

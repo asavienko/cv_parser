@@ -1,8 +1,9 @@
 import React from "react";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Button, Form, Row, Spin } from "antd";
-import { PASSWORD_POLICY } from "../../constants/validation";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import { PASSWORD_POLICY } from "../../constants/validation";
 import { StyledInput } from "../../styles";
 import openNotification from "../../views/NotificationComponent";
 import { redirectFromSignInFunction } from "../../utils/userUtils";
@@ -11,7 +12,9 @@ import { formLayout } from "./SignIn.styles";
 
 class SignIn extends React.Component {
   state = { loading: false };
+
   formRef = React.createRef();
+
   handleSubmit = () => {
     const { history } = this.props;
 
@@ -43,16 +46,18 @@ class SignIn extends React.Component {
       .then(values => {
         signInFunction(values);
       })
-      .catch(error => console.log(error));
+      .catch(() => {});
   };
 
   render() {
+    const { loading } = this.state;
     return (
-      <Spin spinning={this.state.loading}>
+      <Spin spinning={loading}>
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form {...formLayout} onFinish={this.handleSubmit} ref={this.formRef}>
           <Form.Item
-            name={"email"}
-            validateTrigger={"onBlur"}
+            name="email"
+            validateTrigger="onBlur"
             rules={[
               {
                 type: "email",
@@ -64,7 +69,7 @@ class SignIn extends React.Component {
             <StyledInput prefix={<MailOutlined />} placeholder="Email" />
           </Form.Item>
           <Form.Item
-            name={"password"}
+            name="password"
             rules={[
               {
                 pattern: PASSWORD_POLICY,
@@ -76,7 +81,7 @@ class SignIn extends React.Component {
                 message: "Пожалуйста введита Ваш пароль"
               }
             ]}
-            validateTrigger={"onBlur"}
+            validateTrigger="onBlur"
           >
             <StyledInput
               prefix={<LockOutlined />}
@@ -98,5 +103,13 @@ class SignIn extends React.Component {
     );
   }
 }
+
+SignIn.propTypes = {
+  history: PropTypes.objectOf(PropTypes.any)
+};
+
+SignIn.defaultProps = {
+  history: {}
+};
 
 export default SignIn;

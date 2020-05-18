@@ -6,11 +6,14 @@ const SaveResults = ({
   loading,
   handleRowSelectionChange,
   selectedResultsNumber,
-  onSave
+  onSave,
+  rowSelection
 }) => {
   const [isActive, setIsActive] = useState(false);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    !rowSelection && setIsActive(false);
+  }, [rowSelection]);
   const onStartSelectClick = () => {
     handleRowSelectionChange(true);
     setIsActive(true);
@@ -36,6 +39,7 @@ const SaveResults = ({
 
 SaveResults.propTypes = {
   loading: PropTypes.bool,
+  rowSelection: PropTypes.bool,
   handleRowSelectionChange: PropTypes.func,
   onSave: PropTypes.func,
   selectedResultsNumber: PropTypes.number
@@ -43,6 +47,7 @@ SaveResults.propTypes = {
 
 SaveResults.defaultProps = {
   loading: false,
+  rowSelection: false,
   handleRowSelectionChange: () => {},
   onSave: () => {},
   selectedResultsNumber: 0

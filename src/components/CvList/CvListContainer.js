@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { Col, Row, Popconfirm } from "antd";
+import { Col, message, Popconfirm, Row } from "antd";
 import CvInformation from "../../views/CvInformation";
 import CvTable from "../../views/CvTable";
 import {
@@ -15,6 +15,7 @@ import FiltersSet from "./FiltersSet";
 import { convertFiltersForRequest } from "../../utils/index";
 import { DEFAULT_FILTERS } from "../../constants/filters";
 import SaveResults from "./SaveResults/SaveResults";
+import { postRequest } from "../../services/fetchUtils";
 
 const CvListContainer = ({
   rawList,
@@ -134,9 +135,21 @@ const CvListContainer = ({
   const cancelPopconfirm = () => {
     setPopconfirmVisible(false);
   };
+  const [idState, setIdSate] = useState();
   const confirmPopconfirm = () => {
-    console.log({ selectedRows, filters });
     setPopconfirmVisible(false);
+    const key = "loadingData";
+    message.loading({ content: "Загрузка...", key });
+    postRequest("/cv/save-list", { selectedRows, filters })
+      .then(res => {
+        !idState && setIdSate(res);
+        setRowSelection(undefined);
+        setSelectedRows([]);
+        message.success({ content: "Сохранено!", key, duration: 3 });
+      })
+      .catch(() => {
+        message.error({ content: "Что-то пошло не так", key, duration: 3 });
+      });
   };
 
   return (
@@ -148,6 +161,7 @@ const CvListContainer = ({
             handleRowSelectionChange={handleRowSelectionChange}
             selectedResultsNumber={selectedRows.length}
             onSave={onSave}
+            rowSelection={!!rowSelection}
           />
 
           <Popconfirm

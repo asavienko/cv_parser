@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Table } from "antd";
 
 export const StyledTable = styled(Table)`
+  min-width: 1000px !important;
   .ant-table-body {
     overflow: auto !important;
     height: ${() => `${window.innerHeight - 240}px`};
@@ -28,5 +29,5 @@ export const StyledTable = styled(Table)`
 
 export const StyledButtonWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
 `;

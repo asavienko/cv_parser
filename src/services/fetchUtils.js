@@ -3,6 +3,10 @@ import { getUserFromCookieStorage } from "./cookieStorage";
 const target =
   process.env.REACT_APP_WEBAPP_SERVICE_URL || "http://localhost:5000";
 
+const generateAuthHeader = (token = "") => {
+  return { Authorization: `Bearer ${token}` };
+};
+
 async function request(url, method, body) {
   try {
     const { token, _id } = getUserFromCookieStorage();
@@ -22,10 +26,11 @@ async function request(url, method, body) {
       headers,
       body: body ? JSON.stringify(body) : undefined
     });
-    if (!response.ok) throw new Error();
+    if (!response.ok) {
+      return Error();
+    }
     return response.json();
   } catch (e) {
-    console.error(e);
     throw new Error(e);
   }
 }
@@ -44,8 +49,4 @@ export const putRequest = async (url, body = {}) => {
 
 export const deleteRequest = async url => {
   return request(url, "DELETE");
-};
-
-export const generateAuthHeader = (token = "") => {
-  return { Authorization: `Bearer ${token}` };
 };
