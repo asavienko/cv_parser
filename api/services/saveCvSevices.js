@@ -1,6 +1,6 @@
 const connectDb = require("../database/connectMongoDb");
 
-const saveCvToDb = async ({ userId, dataToSave }) => {
+const createNewCvList = async ({ userId, dataToSave }) => {
   const client = await connectDb();
   const collection = client.db("rabotaua").collection("saved");
   return collection.insertOne({
@@ -11,4 +11,8 @@ const saveCvToDb = async ({ userId, dataToSave }) => {
   });
 };
 
-module.exports = { saveCvToDb };
+
+// const updateCvList = async ({listId, dataToPut})=>{}
+
+
+module.exports = { createNewCvList };

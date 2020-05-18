@@ -4,7 +4,7 @@ const router = express.Router();
 const fetch = require("node-fetch");
 const $ = require("cheerio");
 const parseResumeByRequest = require("../services/parser/parseResumeByRequest/parseResumeByRequest");
-const { saveCvToDb } = require("../services/saveCvSevices");
+const { createNewCvList } = require("../services/saveCvSevices");
 
 const getCvByRequest = (req, res, next) => {
   parseResumeByRequest(req.body)
@@ -30,8 +30,8 @@ const getCvInfo = async ({ body: { id } }, res) => {
   res.json(form.html());
 };
 
-const saveCv = ({ body, user }, res, next) => {
-  saveCvToDb({ userId: user.sub, dataToSave: body })
+const createCvList = ({ body, user }, res, next) => {
+  createNewCvList({ userId: user.sub, dataToSave: body })
     .then(({ insertedId }) => {
       const id = insertedId.toString();
       res.json({ id });
@@ -43,6 +43,9 @@ const saveCv = ({ body, user }, res, next) => {
 
 router.post("/get-by-request", getCvByRequest);
 router.post("/get-cv-info", getCvInfo);
-router.post("/save-list", saveCv);
+router.post("/list", createCvList);
+// router.get("/list");
+// router.delete("/list", createCvList);
+// router.post("/update-list");
 
 module.exports = router;

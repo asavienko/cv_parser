@@ -7,7 +7,7 @@ const parseAllResume = require("./api/routes/parser/parseAllResume");
 const parseResumeDetails = require("./api/routes/parser/parseResumeDetails");
 const errorHandler = require("./api/middleware/error-handler");
 const jwt = require("./api/middleware/jwt");
-// const joiMiddleware = require("./api/middleware/joi");
+const joiMiddleware = require("./api/middleware/joi");
 const usersApi = require("./api/routes/usersApi");
 const dictionariesApi = require("./api/routes/dictionariesApi");
 const cvApi = require("./api/routes/cvApi");
@@ -31,7 +31,7 @@ app.get("/parse-cvs", async (req, res) => {
   res.json({ minutes: 134 });
 });
 
-// app.use(joiMiddleware());
+app.use(joiMiddleware());
 app.use(jwt());
 
 app.use("/users", usersApi);

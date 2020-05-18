@@ -10,12 +10,11 @@ import {
   setRawListAction
 } from "../../actions/cvActions";
 import openNotification from "../../views/NotificationComponent";
-import { getCvByRequest } from "../../services/cvRequests";
+import { createCvList, getCvByRequest } from "../../services/cvRequests";
 import FiltersSet from "./FiltersSet";
 import { convertFiltersForRequest } from "../../utils/index";
 import { DEFAULT_FILTERS } from "../../constants/filters";
 import SaveResults from "./SaveResults/SaveResults";
-import { postRequest } from "../../services/fetchUtils";
 
 const CvListContainer = ({
   rawList,
@@ -135,12 +134,15 @@ const CvListContainer = ({
   const cancelPopconfirm = () => {
     setPopconfirmVisible(false);
   };
-  const [idState, setIdSate] = useState();
+  const [idState, setIdSate] = useState("");
   const confirmPopconfirm = () => {
     setPopconfirmVisible(false);
     const key = "loadingData";
     message.loading({ content: "Загрузка...", key });
-    postRequest("/cv/save-list", { selectedRows, filters })
+    createCvList({
+      selectedRows,
+      filters: convertFiltersForRequest(filters)
+    })
       .then(res => {
         !idState && setIdSate(res);
         setRowSelection(undefined);

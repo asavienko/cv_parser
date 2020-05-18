@@ -2,14 +2,18 @@ const {
   userSignUp,
   userSignIn,
   header,
-  getCvByRequest,
-  getCvInfo
+  filtersForRequest,
+  getCvInfo,
+  createList,
+  updateList
 } = require("./schemas");
 
 module.exports = {
   "/users/sign-up": userSignUp,
   "/users/sign-in": userSignIn,
   header,
-  "/cv/get-by-request": getCvByRequest,
-  "/cv/get-cv-info": getCvInfo
+  "/cv/get-by-request": filtersForRequest,
+  "/cv/get-cv-info": getCvInfo,
+  "/cv/list": createList,
+  "/cv/update-list": updateList
 };

@@ -49,7 +49,7 @@ const header = Joi.object().pattern(LETTERS_NUMBERS_DOTS_QUOTES, [
 ]);
 
 // max skip number 10 million
-const getCvByRequest = Joi.object({
+const filtersForRequest = Joi.object({
   keywords: Joi.string()
     .allow("")
     .max(100),
@@ -67,7 +67,7 @@ const getCvByRequest = Joi.object({
     .max(40),
   pg: Joi.number()
     .min(0)
-    .max(10 * Math.pow(10, 6)),
+    .max(10 ** 6 * 10),
   salaryFrom: Joi.number()
     .min(0)
     .max(1000000),
@@ -95,7 +95,22 @@ const getCvByRequest = Joi.object({
 const getCvInfo = Joi.object({
   id: Joi.number()
     .min(1)
-    .max(10 * Math.pow(10, 15))
+    .max(10 ** 15 * 10)
 });
 
-module.exports = { userSignUp, userSignIn, header, getCvByRequest, getCvInfo };
+const createList = Joi.object({
+  selectedRows: Joi.array(),
+  filters: filtersForRequest
+});
+
+const updateList = Joi.object({});
+
+module.exports = {
+  userSignUp,
+  userSignIn,
+  header,
+  filtersForRequest,
+  getCvInfo,
+  createList,
+  updateList
+};
