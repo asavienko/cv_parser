@@ -19,8 +19,10 @@ const putNewCvToList = async ({ listId, dataToPut }) => {
   return collection.updateOne(
     { _id: ObjectID(listId) },
     {
-      $push: selectedRows,
-      $set: filters
+      $addToSet: {
+        selectedRows: { $each: selectedRows }
+      },
+      $set: { filters }
     }
   );
 };
