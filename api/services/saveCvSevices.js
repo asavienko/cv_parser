@@ -1,3 +1,4 @@
+const { ObjectID } = require("mongodb");
 const connectDb = require("../database/connectMongoDb");
 
 const createNewCvList = async ({ userId, dataToSave }) => {
@@ -11,8 +12,17 @@ const createNewCvList = async ({ userId, dataToSave }) => {
   });
 };
 
+const putNewCvToList = async ({ listId, dataToPut }) => {
+  const { filters, selectedRows } = dataToPut;
+  const client = await connectDb();
+  const collection = client.db("rabotaua").collection("saved");
+  return collection.updateOne(
+    { _id: ObjectID(listId) },
+    {
+      $push: selectedRows,
+      $set: filters
+    }
+  );
+};
 
-// const updateCvList = async ({listId, dataToPut})=>{}
-
-
-module.exports = { createNewCvList };
+module.exports = { createNewCvList, putNewCvToList };

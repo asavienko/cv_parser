@@ -5,12 +5,17 @@ import { Col, message, Popconfirm, Row } from "antd";
 import CvInformation from "../../views/CvInformation";
 import CvTable from "../../views/CvTable";
 import {
+  setCurrentSearchId,
   setFiltersAction,
   setPaginationAction,
   setRawListAction
 } from "../../actions/cvActions";
 import openNotification from "../../views/NotificationComponent";
-import { createCvList, getCvByRequest } from "../../services/cvRequests";
+import {
+  createCvList,
+  getCvByRequest,
+  putCvToList
+} from "../../services/cvRequests";
 import FiltersSet from "./FiltersSet";
 import { convertFiltersForRequest } from "../../utils/index";
 import { DEFAULT_FILTERS } from "../../constants/filters";
@@ -22,7 +27,9 @@ const CvListContainer = ({
   pagination,
   setPagination,
   filters,
-  setFilters
+  setFilters,
+  currentSearchId,
+  setSearchId
 }) => {
   const [displayedCvList, setDisplayedCvList] = useState([]);
   const [cvInfoVisible, setCvInfoVisible] = useState(false);
@@ -134,17 +141,23 @@ const CvListContainer = ({
   const cancelPopconfirm = () => {
     setPopconfirmVisible(false);
   };
-  const [idState, setIdSate] = useState("");
   const confirmPopconfirm = () => {
     setPopconfirmVisible(false);
     const key = "loadingData";
     message.loading({ content: "Загрузка...", key });
-    createCvList({
-      selectedRows,
-      filters: convertFiltersForRequest(filters)
-    })
+    const checkIfSearchIdExistAndChoseRequest = searchId => {
+      const data = {
+        selectedRows,
+        filters: convertFiltersForRequest(filters)
+      };
+      return searchId
+        ? putCvToList({ data, currentSearchId: searchId })
+        : createCvList(data);
+    };
+    checkIfSearchIdExistAndChoseRequest(currentSearchId)
       .then(res => {
-        !idState && setIdSate(res);
+        console.log(res);
+        !currentSearchId && setSearchId(res);
         setRowSelection(undefined);
         setSelectedRows([]);
         message.success({ content: "Сохранено!", key, duration: 3 });
@@ -215,7 +228,9 @@ CvListContainer.propTypes = {
   }),
   setRawList: PropTypes.func,
   setPagination: PropTypes.func,
-  setFilters: PropTypes.func
+  setFilters: PropTypes.func,
+  currentSearchId: PropTypes.string,
+  setSearchId: PropTypes.func
 };
 
 CvListContainer.defaultProps = {
@@ -224,19 +239,25 @@ CvListContainer.defaultProps = {
   filters: {},
   setRawList: () => {},
   setPagination: () => {},
-  setFilters: () => {}
+  setFilters: () => {},
+  currentSearchId: "",
+  setSearchId: () => {}
 };
 
-const mapStateToProps = ({ cvReducer: { rawList, pagination, filters } }) => ({
+const mapStateToProps = ({
+  cvReducer: { rawList, pagination, filters, currentSearchId }
+}) => ({
   rawList,
   pagination,
-  filters
+  filters,
+  currentSearchId
 });
 
 const mapDispatchToProps = dispatch => ({
   setRawList: newList => dispatch(setRawListAction(newList)),
   setPagination: pagination => dispatch(setPaginationAction(pagination)),
-  setFilters: filters => dispatch(setFiltersAction(filters))
+  setFilters: filters => dispatch(setFiltersAction(filters)),
+  setSearchId: id => dispatch(setCurrentSearchId(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CvListContainer);

@@ -3,7 +3,8 @@ import {
   SET_SAVED,
   SET_FILTERS,
   SET_PAGINATION,
-  SET_RAW_LIST
+  SET_RAW_LIST,
+  SET_CURRENT_SEARCH_ID
 } from "../constants/constantsActions";
 import { DEFAULT_FILTERS } from "../constants/filters";
 
@@ -23,4 +24,7 @@ export function setFiltersAction(filters = DEFAULT_FILTERS) {
 
 export function setPaginationAction(pagination) {
   return { type: SET_PAGINATION, pagination };
+}
+export function setCurrentSearchId(currentSearchId) {
+  return { type: SET_CURRENT_SEARCH_ID, currentSearchId };
 }

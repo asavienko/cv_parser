@@ -4,8 +4,7 @@ const {
   header,
   filtersForRequest,
   getCvInfo,
-  createList,
-  updateList
+  cvList
 } = require("./schemas");
 
 module.exports = {
@@ -14,6 +13,6 @@ module.exports = {
   header,
   "/cv/get-by-request": filtersForRequest,
   "/cv/get-cv-info": getCvInfo,
-  "/cv/list": createList,
-  "/cv/update-list": updateList
+  "/cv/list": cvList
+  // "/cv/update-list": updateList
 };

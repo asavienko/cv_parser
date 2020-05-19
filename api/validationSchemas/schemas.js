@@ -98,12 +98,11 @@ const getCvInfo = Joi.object({
     .max(10 ** 15 * 10)
 });
 
-const createList = Joi.object({
+const cvList = Joi.object({
   selectedRows: Joi.array(),
-  filters: filtersForRequest
+  filters: filtersForRequest,
+  listId: Joi.string()
 });
-
-const updateList = Joi.object({});
 
 module.exports = {
   userSignUp,
@@ -111,6 +110,5 @@ module.exports = {
   header,
   filtersForRequest,
   getCvInfo,
-  createList,
-  updateList
+  cvList
 };
