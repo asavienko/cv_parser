@@ -41,12 +41,9 @@ class SignIn extends React.Component {
           });
         });
     };
-    this.formRef.current
-      .validateFields()
-      .then(values => {
-        signInFunction(values);
-      })
-      .catch(() => {});
+    this.formRef.current.validateFields().then(values => {
+      signInFunction(values);
+    });
   };
 
   render() {

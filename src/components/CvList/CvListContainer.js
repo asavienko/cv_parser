@@ -135,10 +135,7 @@ const CvListContainer = ({
   };
 
   const [popconfirmVisible, setPopconfirmVisible] = useState(false);
-  const onSave = () => {
-    setPopconfirmVisible(!popconfirmVisible);
-  };
-  const cancelPopconfirm = () => {
+  const switchPopconfirm = () => {
     setPopconfirmVisible(!popconfirmVisible);
   };
   const confirmPopconfirm = () => {
@@ -174,7 +171,7 @@ const CvListContainer = ({
             loading={loading}
             handleRowSelectionChange={handleRowSelectionChange}
             selectedResultsNumber={selectedRows.length}
-            onSave={onSave}
+            onSave={switchPopconfirm}
             rowSelection={!!rowSelection}
           />
 
@@ -183,7 +180,7 @@ const CvListContainer = ({
             placement="bottomLeft"
             visible={popconfirmVisible}
             onConfirm={confirmPopconfirm}
-            onCancel={cancelPopconfirm}
+            onCancel={switchPopconfirm}
             okText="Да"
             cancelText="Отмена"
           />

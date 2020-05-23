@@ -122,7 +122,7 @@ CvTable.propTypes = {
 CvTable.defaultProps = {
   cvData: [{}],
   loading: false,
-  rowSelection: undefined,
+  rowSelection: null,
   lookResume: () => {},
   handleChange: () => {},
   pagination: { total: 0, pageSize: 0, current: 1 }

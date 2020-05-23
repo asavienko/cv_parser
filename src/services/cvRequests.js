@@ -18,6 +18,8 @@ const createCvList = data => postRequest(cvUrls().cvList, data);
 const putCvToList = ({ data, currentSearchId }) =>
   putRequest(cvUrls().cvList, { listId: currentSearchId, ...data });
 
+
+// todo these routes
 // const getCvList = () => getRequest(cvUrls().cvList);
 //
 // const deleteCvList = id => deleteRequest(cvUrls(id).cvList);

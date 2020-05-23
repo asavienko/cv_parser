@@ -19,7 +19,6 @@ export default function SaveResultsButton({
   onSave
 }) {
   const showButtonProp = !saveDisabled && saveActive;
-  const allowSave = selectedResultsNumber > 0 && onSave;
   return (
     <StyledDivWrapper>
       {showButtonProp ? (
@@ -28,7 +27,7 @@ export default function SaveResultsButton({
             type={type}
             disabled={saveDisabled}
             placement="bottomCenter"
-            onClick={allowSave}
+            onClick={onSave}
           >
             {`${mainButtonText}: ${selectedResultsNumber} шт.`}
           </Button>
