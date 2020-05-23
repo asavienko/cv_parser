@@ -122,7 +122,7 @@ const CvListContainer = ({
   const onCvInformationClose = () => setCvInfoVisible(!cvInfoVisible);
 
   const [selectedRows, setSelectedRows] = useState([]);
-  const [rowSelection, setRowSelection] = useState(undefined);
+  const [rowSelection, setRowSelection] = useState(null);
   const rowSelectionConfig = {
     onChange: (selectedRowKeys, selectedRowsFromTable) => {
       setSelectedRows(selectedRowsFromTable);
@@ -136,16 +136,16 @@ const CvListContainer = ({
 
   const [popconfirmVisible, setPopconfirmVisible] = useState(false);
   const onSave = () => {
-    setPopconfirmVisible(true);
+    setPopconfirmVisible(!popconfirmVisible);
   };
   const cancelPopconfirm = () => {
-    setPopconfirmVisible(false);
+    setPopconfirmVisible(!popconfirmVisible);
   };
   const confirmPopconfirm = () => {
-    setPopconfirmVisible(false);
+    setPopconfirmVisible(!popconfirmVisible);
     const key = "loadingData";
     message.loading({ content: "Загрузка...", key });
-    const checkIfSearchIdExistAndChoseRequest = searchId => {
+    const cVListRequestBySearchId = searchId => {
       const data = {
         selectedRows,
         filters: convertFiltersForRequest(filters)
@@ -154,11 +154,10 @@ const CvListContainer = ({
         ? putCvToList({ data, currentSearchId: searchId })
         : createCvList(data);
     };
-    checkIfSearchIdExistAndChoseRequest(currentSearchId)
+    cVListRequestBySearchId(currentSearchId)
       .then(res => {
-        console.log(res);
         !currentSearchId && setSearchId(res);
-        setRowSelection(undefined);
+        setRowSelection(null);
         setSelectedRows([]);
         message.success({ content: "Сохранено!", key, duration: 3 });
       })
