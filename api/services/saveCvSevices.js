@@ -12,6 +12,7 @@ const createNewCvList = async ({ userId, dataToSave }) => {
   });
 };
 
+
 const putNewCvToList = async ({ listId, dataToPut }) => {
   const { filters, selectedRows } = dataToPut;
   const client = await connectDb();
