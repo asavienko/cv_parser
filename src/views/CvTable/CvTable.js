@@ -80,7 +80,6 @@ function CvTable({
           <Popover content="Добавить в избранные">
             <Button
               disabled
-              onClick={() => console.log()}
               type="dashed"
               shape="circle"
               size="small"
@@ -107,7 +106,6 @@ function CvTable({
       columns={columns}
       rowSelection={rowSelection}
       rowKey="ResumeId"
-      scroll={{ x: 1000 }}
       bordered
     />
   );
@@ -116,7 +114,7 @@ function CvTable({
 CvTable.propTypes = {
   cvData: PropTypes.arrayOf(PropTypes.object),
   loading: PropTypes.bool,
-  rowSelection: PropTypes.bool,
+  rowSelection: PropTypes.objectOf(PropTypes.any),
   lookResume: PropTypes.func,
   handleChange: PropTypes.func,
   pagination: PropTypes.objectOf(PropTypes.number)
@@ -124,7 +122,7 @@ CvTable.propTypes = {
 CvTable.defaultProps = {
   cvData: [{}],
   loading: false,
-  rowSelection: false,
+  rowSelection: null,
   lookResume: () => {},
   handleChange: () => {},
   pagination: { total: 0, pageSize: 0, current: 1 }

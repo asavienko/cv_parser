@@ -18,8 +18,8 @@ function Saved({ savedCvList, setSavedList }) {
   const [filteredInfo, setFilteredInfo] = useState({});
   useEffect(() => {
     if (savedCvList.length) {
-      const salary = savedCvList.map(({ salary }) =>
-        numeral(salary).value()
+      const salary = savedCvList.map(({ salary: fromList }) =>
+        numeral(fromList).value()
       );
       const min = Math.min(...salary);
       const max = Math.max(...salary);
@@ -49,7 +49,7 @@ function Saved({ savedCvList, setSavedList }) {
     // setCvList(savedCvList);
     setSalaryRange(salaryFilterRange);
   };
-  const handleChange = (pagination, filters, sorter) => {
+  const handleChange = (pagination, filters) => {
     setFilteredInfo(filters);
     /*
     todo use in request to api
@@ -84,8 +84,7 @@ function Saved({ savedCvList, setSavedList }) {
     selectedRowKeys,
     onChange: onSelectChange
   };
-  const saveDisabled =
-    selectedRowKeys.length === 0 && saveActive;
+  const saveDisabled = selectedRowKeys.length === 0 && saveActive;
   // loading || (selectedRowKeys.length === 0 && saveActive);
 
   const rowSelection = saveActive && rowSelectionConfig;
@@ -95,7 +94,7 @@ function Saved({ savedCvList, setSavedList }) {
         saveDisabled={saveDisabled}
         saveActive={saveActive}
         cvCounts={selectedRowKeys.length}
-        onPrimaryClick={onAddSaveButtonClick}
+        onStartSelectClick={onAddSaveButtonClick}
         onCancelClick={cancelSaving}
         type="danger"
         buttonName="Удалить"

@@ -1,29 +1,29 @@
-import { getRequest, postRequest } from "./fetchUtils";
+import { postRequest, putRequest } from "./fetchUtils";
 
 const cvUrls = () => ({
   getTotalCv: "/total-cvs",
-  getCvByRequest: "cv/get-by-request",
-  getCvInfo: "cv/get-cv-info",
-  getCvPage: "cv/get-cv-page"
+  getCvByRequest: "/cv/get-by-request",
+  getCvInfo: "/cv/get-cv-info",
+  getCvPage: "/cv/get-cv-page",
+  cvList: "cv/list",
+  updateCvList: "cv/update-list"
 });
-
-const getTotalCv = async ({ regionId: regionid, keywords }) => {
-  const url = new URL(cvUrls.getTotalCv);
-  url.search = new URLSearchParams({
-    regionid,
-    keywords,
-    period: 7,
-    searchtype: "everywhere",
-    moveability: 0,
-    sort: "date"
-  });
-  return await getRequest(url);
-};
 
 const getCvByRequest = body => postRequest(cvUrls().getCvByRequest, body);
 
 const getCvInfo = id => postRequest(cvUrls().getCvInfo, { id });
 
-const getCvPage = id => postRequest(cvUrls().getCvPage, { id });
+const createCvList = data => postRequest(cvUrls().cvList, data);
 
-export { getTotalCv, getCvByRequest, getCvInfo };
+const putCvToList = ({ data, currentSearchId }) =>
+  putRequest(cvUrls().cvList, { listId: currentSearchId, ...data });
+
+
+// todo these routes
+// const getCvList = () => getRequest(cvUrls().cvList);
+//
+// const deleteCvList = id => deleteRequest(cvUrls(id).cvList);
+//
+// const updateCvList = data => postRequest(cvUrls().updateCvList, data);
+
+export { getCvByRequest, getCvInfo, createCvList, putCvToList };

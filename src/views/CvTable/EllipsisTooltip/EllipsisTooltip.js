@@ -1,22 +1,19 @@
 import React, { useRef, useState } from "react";
 import { Tooltip } from "antd";
+import PropTypes from "prop-types";
 import { StyledSpan } from "./EllipsisTooltip.styles";
 
 function EllipsisTooltip({ title }) {
-
   const spanRef = useRef(null);
   const [visible, setVisible] = useState(false);
-  const handleVisibleChange = visible => {
+  const handleVisibleChange = componentIsVisible => {
     spanRef.current.clientWidth < spanRef.current.scrollWidth &&
-      setVisible(visible);
-  };
-  const stopPropagation = e => {
-    e.stopPropagation();
+      setVisible(componentIsVisible);
   };
 
   return (
     <Tooltip
-      title={() => <span onClick={stopPropagation}>{title}</span>}
+      title={title}
       visible={visible}
       onVisibleChange={handleVisibleChange}
     >
@@ -24,5 +21,12 @@ function EllipsisTooltip({ title }) {
     </Tooltip>
   );
 }
+
+EllipsisTooltip.propTypes = {
+  title: PropTypes.string
+};
+EllipsisTooltip.defaultProps = {
+  title: ""
+};
 
 export default EllipsisTooltip;

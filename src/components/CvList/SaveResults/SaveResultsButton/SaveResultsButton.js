@@ -1,40 +1,40 @@
-import {Button, Dropdown, Menu} from "antd";
+import { Button } from "antd";
 import React from "react";
-import {CloseOutlined} from "@ant-design/icons";
+import { CloseOutlined } from "@ant-design/icons";
 import PropTypes from "prop-types";
-import {StyledCloseButton, StyledDivWrapper} from "./SaveResultsButton.styles";
+import {
+  StyledCloseButton,
+  StyledDivWrapper
+} from "./SaveResultsButton.styles";
 
 export default function SaveResultsButton({
-  onPrimaryClick,
+  onStartSelectClick,
   onCancelClick,
   saveDisabled,
   saveActive,
-  selectedCvCounter,
+  selectedResultsNumber,
   mainButtonText,
   type,
-  buttonName
+  buttonName,
+  onSave
 }) {
-  const menu = () => (
-    <Menu>
-      <Menu.Item>Сохранить все результаты</Menu.Item>
-    </Menu>
-  );
-
+  const showButtonProp = !saveDisabled && saveActive;
   return (
     <StyledDivWrapper>
-      {!saveDisabled && saveActive ? (
+      {showButtonProp ? (
         <>
-          <Dropdown.Button
+          <Button
             type={type}
             disabled={saveDisabled}
-            overlay={menu}
             placement="bottomCenter"
+            onClick={onSave}
           >
-            {`${mainButtonText}: ${selectedCvCounter} шт.`}
-          </Dropdown.Button>
+            {`${mainButtonText}: ${selectedResultsNumber} шт.`}
+          </Button>
           <StyledCloseButton
             type="danger"
             shape="circle"
+            size="small"
             icon={<CloseOutlined />}
             onClick={onCancelClick}
           />
@@ -43,7 +43,7 @@ export default function SaveResultsButton({
         <Button
           type={type}
           disabled={saveDisabled}
-          onClick={onPrimaryClick}
+          onClick={onStartSelectClick}
         >
           {buttonName}
         </Button>
@@ -53,22 +53,24 @@ export default function SaveResultsButton({
 }
 
 SaveResultsButton.propTypes = {
-  onPrimaryClick: PropTypes.func,
+  onStartSelectClick: PropTypes.func,
   onCancelClick: PropTypes.func,
+  onSave: PropTypes.func,
   saveDisabled: PropTypes.bool,
   saveActive: PropTypes.bool,
-  selectedCvCounter: PropTypes.number,
+  selectedResultsNumber: PropTypes.number,
   mainButtonText: PropTypes.string,
   type: PropTypes.string,
   buttonName: PropTypes.string
 };
 
 SaveResultsButton.defaultProps = {
-  onPrimaryClick: () => {},
+  onStartSelectClick: () => {},
   onCancelClick: () => {},
+  onSave: () => {},
   saveDisabled: false,
   saveActive: false,
-  selectedCvCounter: 0,
+  selectedResultsNumber: 0,
   mainButtonText: "Сохранить",
   type: "primary",
   buttonName: "Сохранить"

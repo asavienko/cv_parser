@@ -3,11 +3,13 @@ import {
   SET_SAVED,
   SET_FILTERS,
   SET_PAGINATION,
-  SET_RAW_LIST
+  SET_RAW_LIST,
+  SET_CURRENT_SEARCH_ID
 } from "../constants/constantsActions";
 import { DEFAULT_FILTERS } from "../constants/filters";
 
 const initState = {
+  currentSearchId: "",
   savedCvLists: [],
   rawList: [],
   filters: { ...DEFAULT_FILTERS },
@@ -27,6 +29,8 @@ function cvReducer(state = initState, action) {
       return { ...state, dictionaryCity: action.dictionaryCity };
     case SET_PAGINATION:
       return { ...state, pagination: action.pagination };
+    case SET_CURRENT_SEARCH_ID:
+      return { ...state, currentSearchId: action.currentSearchId };
     default:
       return state;
   }
