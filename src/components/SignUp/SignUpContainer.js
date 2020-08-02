@@ -11,21 +11,19 @@ import openNotification from "../../views/NotificationComponent";
 class SignUpContainer extends React.Component {
   state = { confirmDirty: false, loading: false };
 
-  form = React.createRef();
-
   validatePhoneNumber = {
     validator(rule, value) {
-      !value || isPossiblePhoneNumber(value)
+      return !value || isPossiblePhoneNumber(value)
         ? Promise.resolve()
-        : Promise.reject(Error("Вы ввели не корректный номер"));
+        : Promise.reject("Вы ввели не корректный номер");
     }
   };
 
   compareToFirstPassword = ({ getFieldValue }) => ({
     validator(rule, value) {
-      !value || getFieldValue("password") === value
+      return !value || getFieldValue("password") === value
         ? Promise.resolve()
-        : Promise.reject(Error("Вы ввели разные пароли"));
+        : Promise.reject("Вы ввели разные пароли");
     }
   });
 
@@ -48,15 +46,17 @@ class SignUpContainer extends React.Component {
 
       await this.signUpUserUtil({ signUpData, signInData, history });
     };
+
+    const onValidationReject = () =>
+      openNotification({
+        type: "warning",
+        message: "Заполните все обязательные поля",
+        description: "Поля со звездочкой * обязательны для заполнения."
+      });
+
     validateFields()
-      .then(values => onSuccess(values))
-      .catch(() =>
-        openNotification({
-          type: "warning",
-          message: "Заполните все обязательные поля",
-          description: "Поля со звездочкой * обязательны для заполнения."
-        })
-      );
+      .then(onSuccess)
+      .catch(onValidationReject);
   };
 
   handleConfirmPasswordBlur = e => {
@@ -105,7 +105,7 @@ class SignUpContainer extends React.Component {
           openNotification({
             type: "error",
             message: "Что-то пошло не так",
-            description: "error"
+            description: error.err
           });
       });
   };

@@ -22,7 +22,7 @@ const SignUp = ({
   const [form] = Form.useForm();
   return (
     <Spin spinning={loading}>
-      <Form onFinish={()=> handleSubmit(form)} {...formItemLayout} form={form}>
+      <Form onFinish={() => handleSubmit(form)} {...formItemLayout} form={form}>
         <Form.Item
           name="email"
           label="E-mail"

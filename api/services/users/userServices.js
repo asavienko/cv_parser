@@ -72,7 +72,7 @@ const update = async (_id, userParam) => {
   }
 
   // copy userParam properties to user
-  await collection.updateOne({ _id }, { newUserParams });
+  await collection.updateOne({ _id }, { ...newUserParams });
 };
 
 const remove = async _id => {

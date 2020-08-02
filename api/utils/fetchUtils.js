@@ -36,7 +36,6 @@ const request = async (
     }
     return json;
   } catch (e) {
-    console.log(e);
     throw new Error(e);
   }
 };
