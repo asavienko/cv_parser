@@ -1,16 +1,12 @@
 import React from "react";
-import ru from "react-phone-number-input/locale/ru";
 import { Button, Form, Input, Spin } from "antd";
 import PropTypes from "prop-types";
 import {
   LETTERS_VALIDATION,
   PASSWORD_POLICY
 } from "../../constants/validation";
-import {
-  buttonItemLayout,
-  formItemLayout,
-  StyledPhoneInput
-} from "./SignUp.styles";
+import { buttonItemLayout, formItemLayout } from "./SignUp.styles";
+import PhoneNumberInputComponent from "./PhoneNumberInputComponent.js";
 
 const SignUp = ({
   handleSubmit,
@@ -85,11 +81,7 @@ const SignUp = ({
             validatePhoneNumber
           ]}
         >
-          <StyledPhoneInput
-            country="UA"
-            labels={ru}
-            placeholder="Ваш телефон"
-          />
+          <PhoneNumberInputComponent />
         </Form.Item>
         <Form.Item
           name="name"

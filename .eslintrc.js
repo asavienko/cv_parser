@@ -24,6 +24,7 @@ module.exports = {
       { allowTernary: true, allowShortCircuit: true }
     ],
     "react/state-in-constructor": 0,
-    "no-underscore-dangle": 0
+    "no-underscore-dangle": 0,
+    "import/extensions": 0
   }
 };
